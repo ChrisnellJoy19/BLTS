@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/Homepage.css"; // Import the CSS file
 
 const Homepage = () => {
@@ -14,7 +15,7 @@ const Homepage = () => {
         <span className="site-title">DILG Marinduque</span>
       </div>  
         <div className="nav-items">
-          <a href="#" className="nav-item">Login</a>
+          <Link to="/login" className="nav-item">Login</Link>
           <a href="#" className="nav-item">Sign Up</a>
           <a href="#" className="nav-item">About Us</a>
         </div>
