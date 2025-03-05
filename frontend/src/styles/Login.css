@@ -13,17 +13,30 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding: 0;
   }
-  
+
   .header {
     font-size: 15px;
-    padding: 20px;
+    padding: 15px;
     width: 100%;
-    text-align: left;
     font-weight: bold;
     background: #1d3557;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 250px; /* Add space between text and icon */
   }
+
+  .home-icon {
+    width: 24px; /* Adjust size */
+    height: 24px;
+  }
+
+  .home-icon img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+
 
   /* Left Section Footer */
   .left-footer {
@@ -53,6 +66,32 @@
     align-items: center;
     padding-left: 60px;
   }
+
+    /* Right Section Header (Login Title & Subtitle) */
+  .right-header {
+    position: absolute;
+    margin-left: 31%;
+    top: 5px;
+    left: 50px;
+    text-align: left;
+  }
+
+  .login-title {
+    color:rgba(209, 36, 6, 0.897);
+    font-style: Arial;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .login-subtitle {
+    font-size: 16px;
+    font-family: Arial;
+    margin-top: 0;
+    font-weight: 600;
+    color: #000000;
+  }
+
   
   .login-container {
     background: #ffffff;
@@ -60,31 +99,22 @@
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 350px;
+    width: 250px;
+    margin-top: 25%;
+    margin-left: 30%;
   }
 
   /* Logo inside login container */
   .blts-login-logo {
-    width: 200px; /* Adjust size as needed */
+    width: 400px; /* Adjust size as needed */
     height: auto;
     display: block;
-    margin: 0 auto 15px; /* Centers the logo and adds space below */
+    margin-left: 60%; /* Centers the logo and adds space below */
   }
   
-  .login-title {
-    color: #d35400;
-    font-size: 22px;
-    font-weight: bold;
-  }
-  
-  .login-subtitle {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-  }
   
   .login-form input {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
@@ -93,13 +123,13 @@
   }
   
   .login-btn {
-    width: 100%;
-    background: linear-gradient(45deg, #e74c3c, #e67e22);
+    width: 50%;
+    background: linear-gradient(45deg, #ca1a07, #e67e22);
     color: white;
     border: none;
     padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     transition: 0.3s;
   }

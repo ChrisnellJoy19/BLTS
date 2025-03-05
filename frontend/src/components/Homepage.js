@@ -16,8 +16,8 @@ const Homepage = () => {
       </div>  
         <div className="nav-items">
           <Link to="/login" className="nav-item">Login</Link>
-          <a href="#" className="nav-item">Sign Up</a>
-          <a href="#" className="nav-item">About Us</a>
+          <Link to="/sign_up" className ="nav-item">Sign Up</Link>
+          <Link to="/about" className ="nav-item">About Us</Link>
         </div>
       </nav>
 
