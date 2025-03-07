@@ -6,7 +6,8 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     municipality: "",
     barangay: "",
-    adminYear: "",
+    startYear: "",
+    endYear: "",
     captain: "",
     secretary: "",
     email: "",
@@ -41,27 +42,33 @@ const SignUp = () => {
 
       {/* Right Section */}
       <div className="right-section">
-        <div className="signup-container">
-          {/* BLTS Logo */}
-          <img src="/images/blts_logo.png" alt="BLTS Logo" className="blts-signup-logo" />
+        <div className="login-container">
+          {/* BLTS Logo inside login container */}
+          <img src="/images/blts_logo.png" alt="BLTS Logo" className="blts-login-logo" />
 
           <h2 className="signup-title">Register Account</h2>
           <p className="signup-subtitle">Create Your BLTS Profile</p>
 
           <form className="signup-form" onSubmit={handleSubmit}>
-            <select name="municipality" onChange={handleChange} required>
+            <select name="municipality" placeholder= "Select Municipality" onChange={handleChange} required>
               <option value="">Select Municipality...</option>
-              <option value="Municipality 1">Municipality 1</option>
-              <option value="Municipality 2">Municipality 2</option>
+              <option value="Municipality 1">Boac</option>
+              <option value="Municipality 2">Gasan</option>
+              <option value="Municipality 3">Buenavista</option>
+              <option value="Municipality 4">Torijjos</option>
+              <option value="Municipality 5">Santa Cruz</option>
+              <option value="Municipality 6">Mogpog</option>
             </select>
 
-            <select name="barangay" onChange={handleChange} required>
+            <select name="barangay" placeholder= "Select Barangay" onChange={handleChange} required>
               <option value="">Select Barangay...</option>
               <option value="Barangay 1">Barangay 1</option>
               <option value="Barangay 2">Barangay 2</option>
             </select>
-
-            <input type="text" name="adminYear" placeholder="Administrative Year (Start-End)" onChange={handleChange} required />
+            <div className="flex gap-2">
+            <input type="date" name="startYear" onChange={handleChange} className="w-1/2 p-2 border rounded" />
+            <input type="date" name="endYear" onChange={handleChange} className="w-1/2 p-2 border rounded" />
+          </div>
             <input type="text" name="captain" placeholder="Punong Barangay" onChange={handleChange} required />
             <input type="text" name="secretary" placeholder="Barangay Secretary" onChange={handleChange} required />
             <input type="email" name="email" placeholder="Email" onChange={handleChange} required />

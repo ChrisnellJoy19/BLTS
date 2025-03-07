@@ -30,7 +30,7 @@
   .left-footer {
     position: absolute; /* Fixes the footer at the bottom */
     bottom: 0;
-    width: 33.4%;
+    width: 35%;
     height: 50px;
     background: #163a56;
     text-align: center;
@@ -54,26 +54,29 @@
     background: #f4f4f4;
 }
 
+/* Increased the width of the container */
 .signup-container {
     background: white;
-    padding: 30px;
-    border-radius: 8px;
+    padding: 40px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 500px; /* Adjusted width to be wider */
     text-align: center;
 }
 
-/* BLTS Logo */
+/* Logo inside login container */
 .blts-signup-logo {
-    width: 80px;
-    margin-bottom: 15px;
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto 15px;
 }
 
 /* Title & Subtitle */
 .signup-title {
+    color: #d35400;
     font-size: 22px;
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
 .signup-subtitle {
@@ -83,19 +86,20 @@
 }
 
 /* Form Styles */
-.signup-form {
+.signup-row {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    justify-content: space-between;
 }
 
-.signup-form select,
-.signup-form input {
+.signup-row select,
+.signup-row input {
     width: 100%;
+    flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    font-size:14px;
 }
 
 .signup-form input:focus {
@@ -106,7 +110,7 @@
 /* Upload Logo */
 .upload-logo {
     background: #f9f9f9;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
     border: 2px dashed #ccc;
     cursor: pointer;
@@ -121,13 +125,14 @@
 
 /* Register Button */
 .signup-btn {
-    background-color: #ff3b3b;
+    width: 100%;
+    background: linear-gradient(45deg, #e74c3c, #e67e22);
     color: white;
     border: none;
-    padding: 12px;
+    padding: 10px;
     font-size: 16px;
-    cursor: pointer;
     border-radius: 5px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
@@ -152,7 +157,7 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .signup-page {
+    .signup-row {
         flex-direction: column;
     }
 
@@ -164,5 +169,10 @@
     .right-section {
         width: 100%;
         height: 70vh;
+    }
+
+    .signup-container {
+        width: 500%; /* Make container responsive for smaller screens */
+        padding: 20px;
     }
 }
