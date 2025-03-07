@@ -1,0 +1,168 @@
+/* General Styles */
+.signup-page {
+    display: flex;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+}
+
+  /* Left Section */
+  .left-section {
+    width: 35%;
+    color: #ffffff; /* Change text color on hover (gold) */
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0;
+  }
+  
+  .header {
+    font-size: 15px;
+    padding: 20px;
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
+    background: #1d3557;
+  }
+
+  /* Left Section Footer */
+  .left-footer {
+    position: absolute; /* Fixes the footer at the bottom */
+    bottom: 0;
+    width: 33.4%;
+    height: 50px;
+    background: #163a56;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  .left-footer .footer-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+/* Right Section */
+.right-section {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f4f4;
+}
+
+.signup-container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+/* BLTS Logo */
+.blts-signup-logo {
+    width: 80px;
+    margin-bottom: 15px;
+}
+
+/* Title & Subtitle */
+.signup-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.signup-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.signup-form select,
+.signup-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.signup-form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Upload Logo */
+.upload-logo {
+    background: #f9f9f9;
+    padding: 10px;
+    text-align: center;
+    border: 2px dashed #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.upload-logo:hover {
+    background: #eee;
+}
+
+/* Register Button */
+.signup-btn {
+    background-color: #ff3b3b;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.signup-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Footer Links */
+.signup-footer {
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.signup-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .signup-page {
+        flex-direction: column;
+    }
+
+    .left-section {
+        width: 100%;
+        height: 30vh;
+    }
+
+    .right-section {
+        width: 100%;
+        height: 70vh;
+    }
+}

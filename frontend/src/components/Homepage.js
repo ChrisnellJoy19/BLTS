@@ -16,8 +16,8 @@ const Homepage = () => {
       </div>  
         <div className="nav-items">
           <Link to="/login" className="nav-item">Login</Link>
-          <a href="#" className="nav-item">Sign Up</a>
-          <a href="#" className="nav-item">About Us</a>
+          <Link to="/signup" className="nav-item">Sign Up</Link>
+          <Link to="/aboutus" className="nav-item">About Us</Link>
         </div>
       </nav>
 
@@ -28,7 +28,7 @@ const Homepage = () => {
       </div>
 
       {/* Get Started Button */}
-      <a href="#" className="get-started-btn">Get Started</a>
+      <Link to="/get-started-btn" className="get-started-btn">Get Started</Link>
 
       {/* BLTS Logo */}
       <img src="/images/blts_logo.png" alt="BLTS Logo" className="blts-logo" />
