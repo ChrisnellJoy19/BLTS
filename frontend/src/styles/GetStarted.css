@@ -1,0 +1,114 @@
+/* General Styling */
+.get-started-page {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+    
+  /* Navbar */
+  .get-started-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 98%;
+    padding: 15px;
+    background-color: #183248;
+  }
+  
+  .get-started-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust spacing between logo and text */
+}
+  
+  .get-started-dilg-logo {
+    height: 40px;
+    margin-left:5px;
+  }
+  
+  .get-started-site-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .get-started-nav-items a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    padding: 8px 12px; /* Adds padding to make the hover effect more visible */
+    border-radius: 5px; /* Slightly rounded corners */
+  }
+  
+  .get-started-nav-items a:hover {
+    color: #ffffff; /* Change text color on hover (gold) */
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    cursor: pointer;
+  }
+  
+  /* Description */
+  .get-started-description {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .get-started-blts-logo {
+    width: 150px;
+  }
+  
+  .get-started-description p {
+    max-width: 600px;
+    font-size: 1rem;
+    margin: 10px auto;
+  }
+  
+  /* Map Section */
+  .get-started-map-section {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-top: 10px;
+  }
+  
+  .get-started-map-image {
+    width: 300px;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .get-started-municipality-list {
+    margin-left: 20px;
+    background: white;
+    color: black;
+    padding: 10px;
+    list-style: none;
+    border-radius: 10px;
+    width: 300px;
+    height:240px;
+  }
+  
+  .get-started-municipality-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .get-started-municipality-list li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Footer */
+  .get-started-footer {
+    background: #183248;
+    width: 98.7%;
+    text-align: center;
+    padding: 10px;
+    margin-top: auto;
+  }
+  
