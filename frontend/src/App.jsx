@@ -4,9 +4,13 @@ import Homepage from "./components/Homepage";
 import User from "./components/User";
 import Admin from "./components/Admin";
 import About_Us from "./components/About_Us";
+<<<<<<< Updated upstream
 import GetStarted from "./components/GetStarted";
 import DilgAdmin from "./components/DilgAdmin";
 import LGUAdmin from "./components/LGUAdmin";
+=======
+import GetStarted from './components/GetStarted';
+>>>>>>> Stashed changes
 
 function App() {
   return (
@@ -17,11 +21,15 @@ function App() {
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/adminlogin" element={<Admin />} /> 
         <Route path="/about" element={<About_Us />} /> 
+<<<<<<< Updated upstream
 
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/adminDILG" element={<DilgAdmin />} />
         <Route path="/adminLGU" element={<LGUAdmin />} />
 
+=======
+        <Route path="/get-started" element={<GetStarted />} />
+>>>>>>> Stashed changes
       </Routes>
     </Router>
   );
