@@ -1,0 +1,162 @@
+/* Homepage Design */
+.homepage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    overflow: hidden;
+}
+
+/* Top Bar */
+.rectangle-2 {
+    position: absolute;
+    width: 100%;
+    height: 90px;
+    top: 0;
+    background: #183248;
+}
+
+/* Navigation */
+.navigation {
+    position: absolute;
+    height: 80px;
+    width: 95%;
+    top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 28px;
+}
+
+/* Navigation Items */
+.nav-items {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    padding: 8px 12px; /* Adds padding to make the hover effect more visible */
+    border-radius: 5px; /* Slightly rounded corners */
+}
+
+.nav-item:hover {
+    color: #ffffff; /* Change text color on hover (gold) */
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    cursor: pointer;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adjust spacing between logo and text */
+}
+
+/* DILG Logo */
+.dilglogo {
+    width: 70px;
+    height: 70px;
+}
+
+.site-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+/* Title and Description */
+.dilg-description {
+    position: absolute;
+    width: 40%;
+    max-width: 962px;
+    height: auto;
+    left: 65%;
+    top: 27%;
+    transform: translate(-50%, -50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+.login-identity {
+    position: absolute;
+    width: 40%;
+    max-width: 962px;
+    height: auto;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    font-family: 'Inter', sans-serif;
+    font-weight:bold;
+    font-style: italic;
+    font-size: 25px;
+    text-align: center;
+    color: #000000;
+}
+
+/* Get Started Button */
+/* Button container to align buttons properly */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 80px; /* Adds space between buttons */
+    margin-top: 370px;
+}
+
+/* Apply button styles correctly */
+.oblong-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 50px;
+    background: #183248;
+    border: 1px solid #FFFFFF;
+    border-radius: 30px; /* Makes it oblong */
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    text-decoration: none; /* Remove underline */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.oblong-btn:hover {
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+}
+
+/* BLTS Logo */
+.bltslogo {
+    position: absolute;
+    width: 400px;
+    height: auto;
+    left: 30%;
+    top: 15%;
+    transform: translateX(-50%);
+}
+
+/* Footer */
+.footer {
+    position: absolute;
+    width: 100%;
+    height: 45px;
+    bottom: 0;
+    background: #183248;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.75);
+}

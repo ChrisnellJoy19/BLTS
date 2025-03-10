@@ -1,0 +1,149 @@
+/* Login Page Styles */
+.login-page {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Left Section */
+  .left-section {
+    width: 35%;
+    color: #ffffff; /* Change text color on hover (gold) */
+    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header {
+    font-size: 15px;
+    padding: 15px;
+    width: 100%;
+    font-weight: bold;
+    background: #1d3557;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 250px; /* Add space between text and icon */
+  }
+
+  .homeicon {
+    width: 24px; /* Adjust size */
+    height: 24px;
+  }
+
+  .homeicon img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+
+
+  /* Left Section Footer */
+  .left-footer {
+    position: absolute; /* Fixes the footer at the bottom */
+    bottom: 0;
+    width: 33.4%;
+    height: 50px;
+    background: #163a56;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+  .left-footer .footer-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Right Section */
+  .right-section {
+    width: 65%;
+    background: #ffffff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 60px;
+  }
+
+    /* Right Section Header (Login Title & Subtitle) */
+  .right-header {
+    position: absolute;
+    margin-left: 31%;
+    top: 5px;
+    left: 50px;
+    text-align: left;
+  }
+
+  .login-title {
+    color:rgba(209, 36, 6, 0.897);
+    font-style: Arial;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .login-subtitle {
+    font-size: 16px;
+    font-family: Arial;
+    margin-top: 0;
+    font-weight: 600;
+    color: #000000;
+  }
+
+  
+  .login-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+    margin-top: 25%;
+    margin-left: 30%;
+  }
+
+  /* Logo inside login container */
+  .blts-login-logo {
+    width: 400px; /* Adjust size as needed */
+    height: auto;
+    display: block;
+    margin-left: 60%; /* Centers the logo and adds space below */
+  }
+  
+  
+  .login-form input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .login-btn {
+    width: 50%;
+    background: linear-gradient(45deg, #ca1a07, #e67e22);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .login-btn:hover {
+    background: linear-gradient(45deg, #c0392b, #d35400);
+  }
+  
+  .login-footer {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .login-footer a {
+    color: #2980b9;
+    text-decoration: none;
+  }

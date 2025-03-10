@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Login.css";
+import "../styles/DilgAdmin.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -30,7 +30,7 @@ const Login = () => {
       <div className="right-section">
         {/* Title and subtitle moved to the top-left of the right section */}
         <div className="right-header">
-          <h2 className="login-title">Login Account</h2>
+          <h2 className="login-title">DILG-Login Account</h2>
           <p className="login-subtitle">Create Your BLTS Profile</p>
           <img
             src="/images/blts_logo.png"
@@ -49,12 +49,7 @@ const Login = () => {
             </button>
           </form>
           <div className="login-footer">
-            <p>
-              Don't have an account? <Link to="/register">Register here</Link>
-            </p>
-            <Link to="/forgot-password" className="forgot-password">
-              Forgot Password?
-            </Link>
+            Don't have an account?<br/> Contact DILG Marinduque
           </div>
         </div>
       </div>
