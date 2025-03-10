@@ -1,40 +1,37 @@
-require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-const PORT = process.env.PORT || 5001;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/bltsDB";
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("✅ Connected to MongoDB"))
-.catch((err) => console.error("❌ MongoDB Connection Error:", err));
-
-// API Route
-app.get("/api", (req, res) => {
-  res.json({ message: "API is running..." });
+mongoose.connect("mongodb://localhost:27017/bltsDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-app.get('/', (req, res) => {
-    res.send('Backend is working!');
-  });
-  
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Log MongoDB connection status
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected successfully");
+});
 
-const Item = require("./models/Item");
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
 
-// Fetch all items
-app.get("/api/items", async (req, res) => {
+const Municipality = mongoose.model("Municipality", new mongoose.Schema({
+  name: String,
+  barangays: [{ name: String, ordinances: Number, resolutions: Number }],
+}));
+
+app.get("/api/municipalities", async (req, res) => {
   try {
-    const items = await Item.find();
-    res.json(items);
+    const municipalities = await Municipality.find();
+    res.json(municipalities);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching items" });
+    res.status(500).json({ message: "Server Error", error });
   }
 });
 
+app.listen(5000, () => console.log("Server running on port 5000"));
