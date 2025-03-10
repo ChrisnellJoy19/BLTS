@@ -39,7 +39,7 @@
   text-decoration: none;
   color: white;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
   padding: 8px 12px; /* Adds padding to make the hover effect more visible */
   border-radius: 5px; /* Slightly rounded corners */

@@ -26,9 +26,9 @@ const GetStarted = () => {
           <span className="get-started-site-title">DILG Marinduque</span>
         </div>
         <div className="get-started-nav-items">
-          <Link to="/login" className="get-started-nav-item">Login</Link>
-          <Link to="/signup" className="get-started-nav-item">Sign Up</Link>
-          <Link to="/about" className="get-started-nav-item">About Us</Link>
+          <Link to="/userlogin" className="nav-item">User</Link>
+          <Link to="/adminlogin" className="nav-item">Admin</Link>
+          <Link to="/about" className="nav-item">About Us</Link>
         </div>
       </nav>
 
