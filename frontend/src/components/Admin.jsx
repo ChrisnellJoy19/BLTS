@@ -2,49 +2,49 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Admin.css"; // Import the CSS file
 
-const Homepage = () => {
+const AdminLogin = () => {
   return (
-    <div className="homepage">
+    <div className="adminLogin">
       {/* Top Bar */}
-      <div className="rectangle-2"></div>
+      <div className="admin-topbar"></div>
 
       {/* Navigation */}
-      <nav className="navigation">
-      <div className="logo-container">
-        <img src="/images/dilg_logo.png" alt="dilg-logo" className="dilglogo" />
-        <span className="site-title">DILG Marinduque</span>
+      <nav className="admin-navigation">
+      <div className="admin-logo-container">
+        <img src="/images/dilg_logo.png" alt="dilg-logo" className="admin-dilg-logo" />
+        <span className="admin-site-title">DILG Marinduque</span>
       </div>  
-        <div className="nav-items">
+        <div className="admin-nav-items">
           <Link to="/homepage" className="homeicon">
             <img src="/images/home-icon.png" alt="Go to Homepage" />
           </Link>
-          <Link to="/about" className="nav-item">About Us</Link>
+          <Link to="/about" className="admin-nav-item">About Us</Link>
         </div>
       </nav>
 
       {/* Title and Description */}
-      <div className="dilg-description">
+      <div className="admin-dilg-description">
         <p>Barangay Legislative Tracking System (BLTS) is an online repository platform for archiving Barangay Legislative Records. Barangay Secretary uploads ordinances, resolutions and others.</p>
       </div>
 
-      <div className="login-identity">
+      <div className="admin-login-identity">
         <p>Login As:</p>
       </div>
 
-      <div className="button-container">
-        <Link to="/adminDILG" className="oblong-btn">DILG</Link>
-        <Link to="/adminLGU" className="oblong-btn">LGU</Link>
+      <div className="admin-button-container">
+        <Link to="/adminDILG" className="admin-oblong-btn">DILG</Link>
+        <Link to="/adminLGU" className="admin-oblong-btn">LGU</Link>
       </div>
 
       {/* BLTS Logo */}
-      <img src="/images/blts_logo.png" alt="BLTS Logo" className="bltslogo" />
+      <img src="/images/blts_logo.png" alt="BLTS Logo" className="admin-blts-logo" />
 
       {/* Footer */}
-      <footer className="footer">
+      <footer className="admin-footer">
         <p className="footer-text">A project by ONE MARINDUQUE DILG - LRC</p>
       </footer>
     </div>
   );
 };
 
-export default Homepage;
+export default AdminLogin;
