@@ -1,0 +1,119 @@
+[{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb462"
+  },
+  "name": "Boac",
+  "description": "Boac is the capital of Marinduque and home to historical landmarks.",
+  "barangays": [
+    {
+      "name": "Barangay 1",
+      "resolutions": 15,
+      "ordinances": 10
+    },
+    {
+      "name": "Barangay 2",
+      "resolutions": 12,
+      "ordinances": 8
+    },
+    {
+      "name": "Barangay 3",
+      "ordinances": "30",
+      "resolutions": "25"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb463"
+  },
+  "name": "Mogpog",
+  "description": "Mogpog is known for its rich cultural heritage and the famous Moriones Festival.",
+  "barangays": [
+    {
+      "name": "Barangay A",
+      "resolutions": 10,
+      "ordinances": 5
+    },
+    {
+      "name": "Barangay B",
+      "resolutions": 8,
+      "ordinances": 6
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb464"
+  },
+  "name": "Gasan",
+  "description": "Gasan is a scenic municipality known for its beaches and cultural traditions.",
+  "barangays": [
+    {
+      "name": "Barangay Alpha",
+      "resolutions": 20,
+      "ordinances": 15
+    },
+    {
+      "name": "Barangay Beta",
+      "resolutions": 18,
+      "ordinances": 12
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb465"
+  },
+  "name": "Buenavista",
+  "description": "Buenavista is home to stunning landscapes and eco-tourism spots.",
+  "barangays": [
+    {
+      "name": "Barangay Uno",
+      "resolutions": 9,
+      "ordinances": 7
+    },
+    {
+      "name": "Barangay Dos",
+      "resolutions": 6,
+      "ordinances": 4
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb466"
+  },
+  "name": "Sta. Cruz",
+  "description": "Sta. Cruz is the largest municipality in Marinduque, rich in natural resources.",
+  "barangays": [
+    {
+      "name": "Barangay X",
+      "resolutions": 25,
+      "ordinances": 20
+    },
+    {
+      "name": "Barangay Y",
+      "resolutions": 22,
+      "ordinances": 18
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "67c94a19375c5802c80cb467"
+  },
+  "name": "Torrijos",
+  "description": "Torrijos is famous for its beautiful beaches and Mt. Malindig.",
+  "barangays": [
+    {
+      "name": "Barangay Red",
+      "resolutions": 11,
+      "ordinances": 9
+    },
+    {
+      "name": "Barangay Blue",
+      "resolutions": 14,
+      "ordinances": 11
+    }
+  ]
+}]

@@ -1,14 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const Admin = require("./models/Admin"); // Make sure this path is correct
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/bltsDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost:27017/bltsDB", { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
 });
 
 // Log MongoDB connection status
@@ -52,6 +55,23 @@ app.post("/api/municipalities", async (req, res) => {
     res.status(201).json({ message: "Municipality created successfully!" });
   } catch (error) {
     res.status(500).json({ message: "Failed to create municipality", error });
+  }
+});
+
+// Admin Login Route
+app.post("/adminlogin", async (req, res) => {
+  const { email, username, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ email});
+    if (!admin) return res.status(400).json({ message: "Invalid email or password" });
+
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) return res.status(400).json({ message: "Invalid email or password" });
+
+    res.json({ message: "Login successful", admin: { name: admin.name, role: admin.role } });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 

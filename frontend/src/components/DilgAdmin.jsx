@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../styles/DilgAdmin.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post("http://localhost:5000/adminlogin", { email, password });
+  
+      if (response.data.message === "Login successful") {
+        alert("Login Successful! Redirecting to dashboard...");
+        navigate("/admin-dashboard"); 
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        // Show the exact error message returned from the server
+        setErrorMessage(error.response.data.message);
+      } else {
+        // Show a general error message if something else goes wrong
+        setErrorMessage("An error occurred. Please try again.");
+      }
+    }
+  };
+  
   return (
     <div className="login-page">
-      {/* Left Section */}
       <div className="left-section">
         <div className="left-header">
           <div className="header">
@@ -25,29 +52,36 @@ const Login = () => {
         </div>
       </div>
 
-
-      {/* Right Section */}
       <div className="right-section">
-        {/* Title and subtitle moved to the top-left of the right section */}
         <div className="right-header">
           <h2 className="login-title">DILG-Login Account</h2>
           <p className="login-subtitle">Create Your BLTS Profile</p>
-          <img
-            src="/images/blts_logo.png"
-            alt="BLTS Logo"
-            className="blts-login-logo"
-          />
+          <img src="/images/blts_logo.png" alt="BLTS Logo" className="blts-login-logo" />
         </div>
 
         <div className="login-container">
-          {/* BLTS Logo inside login container */}
-          <form className="login-form">
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Password" required />
-            <button type="submit" className="login-btn">
-              Login
-            </button>
+          <form className="login-form" onSubmit={handleLogin}>
+            <input 
+              type="email" 
+              placeholder="Email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <button type="submit" className="login-btn">Login</button>
           </form>
+          {errorMessage && (
+            <div style={{ color: "red", marginTop: "10px", fontWeight: "bold" }}>
+              {errorMessage}
+            </div>
+          )}
           <div className="login-footer">
             Don't have an account?<br/> Contact DILG Marinduque
           </div>
