@@ -1,7 +1,7 @@
-export default {
-  server: {
-    hmr: {
-      overlay: false,
-    },
-  },
-};
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+  ],
+})
