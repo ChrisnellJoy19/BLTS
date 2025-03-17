@@ -1,149 +1,259 @@
-/* Login Page Styles */
-.login-page {
-    display: flex;
-    height: 100vh;
-  }
-  
-  /* Left Section */
-  .left-section {
-    width: 35%;
-    color: #ffffff; /* Change text color on hover (gold) */
-    background: linear-gradient(119.13deg, #889FB1 0%, #587D9D 100%);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .header {
-    font-size: 15px;
-    padding: 15px;
-    width: 100%;
-    font-weight: bold;
-    background: #1d3557;
-    display: flex;
-    align-items: center; /* Align items vertically */
-    gap: 250px; /* Add space between text and icon */
-  }
-
-  .homeicon {
-    width: 24px; /* Adjust size */
-    height: 24px;
-  }
-
-  .homeicon img {
-    width: 100%;
-    height: auto;
-    cursor: pointer;
-  }
-
-
-  /* Left Section Footer */
-  .left-footer {
-    position: absolute; /* Fixes the footer at the bottom */
-    bottom: 0;
-    width: 33.4%;
-    height: 50px;
-    background: #163a56;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Prevent horizontal scrolling on the entire page */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100vw;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
-  .left-footer .footer-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.75);
-  }
+/* Make the entire page flex and take full viewport height */
+.user-login-page {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevent horizontal scrolling */
+}
 
-  /* Right Section */
-  .right-section {
-    width: 65%;
-    background: #ffffff;
+/* Left Section (Sidebar) */
+.user-left-section {
+  flex: 1.2;
+  background: linear-gradient(to bottom, #5a7d9a, #5f7f9e);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-width: 300px;
+  overflow: hidden;
+}
+
+/* Header (Top Section) */
+.user-header {
+  font-size: 15px;
+  padding: 20px;
+  font-weight: bold;
+  background: #1d3557;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+/* Adjust text position inside the left section */
+.user-description {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  text-align: center; /* Ensure justified text */
+  height: 100%;
+  padding: 40px; /* Adds spacing */
+}
+
+/* Home icon styling */
+.user-home-icon img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* Lower-left image */
+.user-left-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 500px; /* Adjust size as needed */
+  height: auto;
+  z-index: 1;
+}
+
+.user-left-image img {
+  width: 100%;
+  height: auto;
+  opacity: 5; /* Adjust transparency */
+  filter: brightness(0) invert(1); /* Convert to white */
+}
+
+/* Footer (Bottom Section) */
+.user-left-footer {
+  padding: 5px;
+  background: #163a56;
+  text-align: center;
+  font-size: 15px;
+  height: 25px;
+  flex-shrink: 5;
+  position: relative;
+}
+
+/* Fix right section to align everything properly */
+.user-right-section {
+  flex: 1.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  background: white;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative; /* Ensure elements stay inside */
+}
+/* Pattern in the upper right corner */
+.user-pattern {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px; /* Adjust size as needed */
+  height: auto;
+  z-index: 1;
+}
+
+.user-pattern img {
+  width: 100%;
+  height: auto;
+  opacity: 0.5; /* Adjust transparency */
+}
+
+/* Adjust header position */
+.user-right-header {
+  position: relative; /* Remove absolute positioning */
+  text-align: center; /* Center it */
+  width: 100%; /* Take full width */
+  margin-bottom: 20px; /* Add space below */
+}
+
+/* Adjust title positioning */
+.user-login-title {
+  color: rgba(209, 36, 6, 0.897);
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.user-login-subtitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 20px;
+}
+
+/* Ensure the login container does not overflow */
+.user-login-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* BLTS Logo */
+.blts-user-login-logo {
+  width: 100%;
+  max-width: 200px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Login Form */
+.user-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Form Input Fields */
+.user-login-form input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Login Button */
+.user-login-btn {
+  width: 90%;
+  background: linear-gradient(45deg, #ca1a07, #e67e22);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.user-login-btn:hover {
+  background: linear-gradient(45deg, #c0392b, #d35400);
+}
+
+/* Login Footer */
+.user-login-footer {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+  color: #333;
+}
+
+/* Fix alignment on larger screens */
+@media (min-width: 1200px) {
+  .user-right-section {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 60px;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full height to ensure centering */
   }
+}
 
-    /* Right Section Header (Login Title & Subtitle) */
-  .right-header {
-    position: absolute;
-    margin-left: 31%;
-    top: 5px;
-    left: 50px;
-    text-align: left;
-  }
-
-  .login-title {
-    color:rgba(209, 36, 6, 0.897);
-    font-style: Arial;
-    font-size: 25px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-
-  .login-subtitle {
-    font-size: 16px;
-    font-family: Arial;
-    margin-top: 0;
-    font-weight: 600;
-    color: #000000;
-  }
-
-  
-  .login-container {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 250px;
-    margin-top: 25%;
-    margin-left: 30%;
-  }
-
-  /* Logo inside login container */
-  .blts-login-logo {
-    width: 400px; /* Adjust size as needed */
+/* Responsive Fix */
+@media (max-width: 900px) {
+  .user-login-page {
+    flex-direction: column;
     height: auto;
-    display: block;
-    margin-left: 60%; /* Centers the logo and adds space below */
+    width: 100%;
+    max-width: 100vw;
   }
-  
-  
-  .login-form input {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+
+  .user-left-section {
+    flex: none;
+    width: 100%;
+    height: auto;
   }
-  
-  .login-btn {
-    width: 50%;
-    background: linear-gradient(45deg, #ca1a07, #e67e22);
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.3s;
+
+  .user-right-section {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center everything */
+    padding: 20px 40px; /* Adjust padding */
+    height: 100vh;
+    position: relative;
   }
-  
-  .login-btn:hover {
-    background: linear-gradient(45deg, #c0392b, #d35400);
+
+  .user-right-header {
+    text-align: center; /* Keep it centered */
+    width: 100%;
+    margin-bottom: 15px;
   }
-  
-  .login-footer {
-    margin-top: 15px;
-    font-size: 14px;
+
+  .user-login-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
   }
-  
-  .login-footer a {
-    color: #2980b9;
-    text-decoration: none;
-  }
+}
