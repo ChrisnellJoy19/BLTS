@@ -18,14 +18,12 @@ const Login = () => {
   
       if (response.data.message === "Login successful") {
         alert("Login Successful! Redirecting to dashboard...");
-        navigate("/admin-dashboard"); 
+        // navigate("/admin-dashboard"); 
       }
     } catch (error) {
       if (error.response && error.response.data.message) {
-        // Show the exact error message returned from the server
         setErrorMessage(error.response.data.message);
       } else {
-        // Show a general error message if something else goes wrong
         setErrorMessage("An error occurred. Please try again.");
       }
     }

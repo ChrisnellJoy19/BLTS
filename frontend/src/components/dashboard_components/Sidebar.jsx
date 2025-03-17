@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 
 const Sidebar = ({ menuOpen, toggleMenu }) => {
   const menuItems = [
-    { name: 'Dashboard', icon: <Grid />, href: '#' },
-    { name: 'Calendar', icon: <Calendar />, href: '#' },
-    { name: 'User Profile', icon: <User />, href: '#' },
-    { name: 'Tasks', icon: <FileText />, href: '#' },
-    { name: 'Clipboard', icon: <Clipboard />, href: '#' },
-    { name: 'Messages', icon: <MessageSquare />, href: '#' },
+    { name: 'Dashboard', icon: <Grid className="text-white" />, href: '#' },
+    { name: 'Calendar', icon: <Calendar className="text-white" />, href: '#' },
+    { name: 'User Profile', icon: <User className="text-white" />, href: '#' },
+    { name: 'Tasks', icon: <FileText className="text-white" />, href: '#' },
+    { name: 'Clipboard', icon: <Clipboard className="text-white" />, href: '#' },
+    { name: 'Messages', icon: <MessageSquare className="text-white" />, href: '#' },
   ];
 
   return (
@@ -17,9 +17,23 @@ const Sidebar = ({ menuOpen, toggleMenu }) => {
       initial={{ width: '4rem' }}
       animate={{ width: menuOpen ? '16rem' : '4rem' }}
       transition={{ duration: 0.5 }}
-      className="bg-white shadow-lg flex flex-col h-full py-4 fixed"
+      className="bg-[#2d456e] shadow-lg flex flex-col h-full py-4 fixed"
     >
-      <div className="flex flex-col items-center space-y-6 mt-6">
+      <div className="flex items-center justify-between px-4">
+        <img
+          src="/images/logo.png"
+          alt="Municipal Logo"
+          className={`w-12 h-12 ${menuOpen ? 'mb-2' : ''} transition-all`}
+        />
+        {menuOpen && (
+          <div className="text-center transition-all text-white">
+            <h1 className="text-lg font-bold">Barangay</h1>
+            <p className="text-sm">District, Marinduque</p>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col items-center mt-10 space-y-4">
         {menuItems.map((item, index) => (
           <a
             key={index}
@@ -27,7 +41,7 @@ const Sidebar = ({ menuOpen, toggleMenu }) => {
             onClick={toggleMenu}
             className={`flex items-center w-full px-4 py-2 transition-all 
                         ${menuOpen ? 'justify-start' : 'justify-center'} 
-                        hover:bg-blue-100 rounded-lg text-gray-700`}
+                        hover:bg-blue-700 rounded-lg text-white`}
           >
             <span className="mr-3">{item.icon}</span>
             {menuOpen && <span>{item.name}</span>}
