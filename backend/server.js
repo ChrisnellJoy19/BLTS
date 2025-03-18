@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/bltsDB", { 
+mongoose.connect("mongodb+srv://blts:blts2025@blts-project.tvawa.mongodb.net/?retryWrites=true&w=majority&appName=BLTS-Project", { 
   useNewUrlParser: true, 
   useUnifiedTopology: true 
 });
