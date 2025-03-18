@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import Sidebar from './dashboard_components/Sidebar';
-// import Navbar from './dashboard_components/Navbar';
-// import { motion } from 'framer-motion';
-// import { Search, SlidersHorizontal, LogOut, Edit, Settings, HelpCircle } from 'lucide-react';
-import "../styles/LGUAdminDashboard.css";
+import Sidebar from './dashboard_components/Sidebar';
+import Navbar from './dashboard_components/Navbar';
+import { motion } from 'framer-motion';
+import { Search, SlidersHorizontal, LogOut, Edit, Settings, HelpCircle } from 'lucide-react';
 
-const LGUAdminDashboard = () => {
+const AdminDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
@@ -102,4 +101,4 @@ const LGUAdminDashboard = () => {
   );
 };
 
-export default LGUAdminDashboard;
+export default AdminDashboard;

@@ -35,12 +35,12 @@ const DilgAdminLogin = () => {
           <img src="/images/accent-1.svg" alt="Pattern" />
         </div>
         <div className="DilgAdminLogin-right-header">
-          <h2 className="DilgAdminLogin-login-title">DILG-Login Account</h2>
-          <p className="DilgAdminLogin-login-subtitle">Login your BLTS Profile</p>
+          <h2 className="DilgAdminLogin-title">DILG-Login Account</h2>
+          <p className="DilgAdminLogin-subtitle">Login your BLTS Profile</p>
         </div>
 
         {/* Logo and Login Form */}
-        <div className="DilgAdminLogin-login-container">
+        <div className="DilgAdminLogin-container">
           <img
             src="/images/blts_logo.png"
             alt="BLTS Logo"
