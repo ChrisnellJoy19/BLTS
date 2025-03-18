@@ -15,7 +15,7 @@ const AdminLogin = () => {
         <span className="admin-site-title">DILG Marinduque</span>
       </div>  
         <div className="admin-nav-items">
-          <Link to="/homepage" className="homeicon">
+          <Link to="/homepage" className="home-icon">
             <img src="/images/home-icon.png" alt="Go to Homepage" />
           </Link>
           <Link to="/about" className="admin-nav-item">About Us</Link>
@@ -32,8 +32,8 @@ const AdminLogin = () => {
       </div>
 
       <div className="admin-button-container">
-        <Link to="/adminDILG" className="admin-oblong-btn">DILG</Link>
-        <Link to="/adminLGU" className="admin-oblong-btn">LGU</Link>
+        <Link to="/DilgAdminLogin" className="admin-oblong-btn">DILG</Link>
+        <Link to="/LguAdminLogin" className="admin-oblong-btn">LGU</Link>
       </div>
 
       {/* BLTS Logo */}

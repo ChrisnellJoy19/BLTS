@@ -19,9 +19,9 @@ function App() {
         <Route path="/adminlogin" element={<AdminLogin />} /> 
         <Route path="/about" element={<About_Us />} /> 
         <Route path="/get-started" element={<GetStarted />} />
-        <Route path="/adminDILG" element={<DilgAdminLogin />} />
-        <Route path="/adminLGU" element={<LGUAdminLogin />} />
-        <Route path="/admin-dashboard" element={<LGUAdminDashboard />} />
+        <Route path="/DilgAdminLogin" element={<DilgAdminLogin />} />
+        <Route path="/LguAdminLogin" element={<LGUAdminLogin />} />
+        <Route path="/lguAdminDashboard" element={<LGUAdminDashboard />} />
       </Routes>
     </Router>
   );
