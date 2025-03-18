@@ -49,7 +49,9 @@ const UserLogin = () => {
           <form className="user-login-form">
             <input type="email" placeholder="Email" required />
             <input type="password" placeholder="Password" required />
-            <button type="submit" className="user-login-btn">Login</button>
+            <Link to="\user-dashboard">
+              <button type="submit" className="user-login-btn">Login</button>
+            </Link>
           </form>
           <div className="user-login-footer">
             Don't have an account?<br /> Contact DILG Marinduque

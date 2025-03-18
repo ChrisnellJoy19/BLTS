@@ -9,6 +9,7 @@ import DilgAdminLogin from "./components/DilgAdminLogin";
 import LGUAdminLogin from "./components/LGUAdminLogin";
 import LGUAdminDashboard from "./components/LGUAdminDashboard";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
+import UserDashboard from "./components/UserDashboard";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/LguAdminLogin" element={<LGUAdminLogin />} />
         <Route path="/lguAdminDashboard" element={<LGUAdminDashboard />} />
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>
   );
