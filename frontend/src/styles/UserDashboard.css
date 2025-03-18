@@ -1,0 +1,155 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #183248;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.sidelogo {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center; /* Ensure text is centered */
+  margin-top: 10px; /* Adjust spacing */
+}
+
+.dilglogo {
+  margin-top: 15%;
+  height: 100px;
+  width: 100px;
+}
+
+.barangay {
+  font-size: 18px; /* Adjust font size */
+  font-weight: 100px;
+  margin-top: 5px; /* Space between logo and text */
+}
+
+.logo-container {
+  display: flex; /* Align images in a row */
+  justify-content: left; /* Center horizontally */
+  align-items: center; /* Align vertically */
+  gap: 5px; /* Space between logos */
+  margin-left: 1%;
+}
+
+.logo {
+  height: 40px; /* Adjust size as needed */
+  width: auto;
+}
+
+.bltslogo{
+  height: auto;
+  width: 350px;
+  margin-left: 0px;
+  margin-top: 0px;
+}
+
+.welcome {
+  display: flex;
+  justify-content: left;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  margin-left: 2%;
+}
+
+.menu {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-item:hover {
+  background-color: #374bad;
+  border-radius: 5px;
+  border-color: #183248;
+}
+
+.logout {
+  margin-top: auto;
+}
+
+.logout:hover {
+  background-color: #aa1905;
+  border-radius: 5px;
+  border-color: #183248;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  text-align: center;
+  background: linear-gradient(119.13deg, #889FB1 0%, #344757 100%);
+}
+
+
+.charts {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.charts div {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Lower-left image */
+.dashboard-left-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 300px; /* Adjust size as needed */
+  height: 200px;
+  z-index: 1;
+}
+
+.dashboard-left-image img {
+  width: 100%;
+  height: auto;
+  opacity: 5; /* Adjust transparency */
+  filter: brightness(0) invert(1); /* Convert to white */
+}
+
+/* Pattern in the upper right corner */
+.dashboard-right-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px; /* Adjust size as needed */
+  height: auto;
+  z-index: 1;
+}
+
+.dashboard-right-image img {
+  width: 100%;
+  height: auto;
+  opacity: 0.5; /* Adjust transparency */
+}
