@@ -13,7 +13,7 @@ const LguAdminLogin = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/lguadminlogin", {
+      const response = await axios.post("http://localhost:5000/api/lguadmin/login", {
         identifier,
         password,
       });
