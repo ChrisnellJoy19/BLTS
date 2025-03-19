@@ -1,34 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
-const municipalityRoutes = require("./routes/municipalities"); // Ensure path is correct
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const municipalityRoutes = require("./routes/municipalities");
+const lguAdminRoutes = require("./routes/lguadmin");
+
+// console.log("Loaded environment variables:");
+// console.log("MONGO_URI:", process.env.MONGO_URI);
+// console.log("PORT:", process.env.PORT);
+// console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://blts:blts2025@blts-project.tvawa.mongodb.net/bltsDB?retryWrites=true&w=majority&appName=BLTS-Project", {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-});
+})
+.then(() => console.log("✅ MongoDB connected successfully"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
-mongoose.connection.on("connected", () => {
-    console.log("✅ MongoDB connected successfully");
-});
-
-mongoose.connection.on("error", (err) => {
-    console.error("❌ MongoDB connection error:", err);
-});
-
-// ✅ Ensure the route is used
+// Routes
 app.use("/api/municipalities", municipalityRoutes);
+app.use("/api/lguadmin", lguAdminRoutes);
 
-// Default route for testing
 app.get("/", (req, res) => {
     res.send("Welcome to the BLTS API");
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
