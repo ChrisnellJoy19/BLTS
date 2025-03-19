@@ -37,6 +37,7 @@ function App() {
 
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/municipality/:id" element={<DilgMunicipalityView />} />
       </Routes>
     </Router>
   );

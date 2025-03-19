@@ -6,7 +6,7 @@ const DilgAdminDashboard = () => {
   const [municipalities, setMunicipalities] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/municipalities")
+    fetch("http://localhost:5000/api/municipalities") 
       .then((response) => response.json())
       .then((data) => setMunicipalities(data))
       .catch((error) => console.error("Error fetching municipalities:", error));
@@ -46,12 +46,14 @@ const DilgAdminDashboard = () => {
           <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Municipalities</h2>
             <ul className="space-y-2">
-              {municipalities.map((municipality) => (
-                <li key={municipality._id} className="bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition">
-                  <Link to={`/municipality/${municipality._id}`} className="block text-blue-700 font-medium">
-                    {municipality.name}
-                  </Link>
-                </li>
+            {municipalities.map((municipality) => (
+            <Link
+            key={municipality._id}
+            to={`/municipality/${municipality._id}`}
+            className="block bg-white p-4 rounded-lg shadow-md hover:bg-gray-200 transition"
+            >
+            {municipality.name}
+            </Link>
               ))}
             </ul>
           </div>
