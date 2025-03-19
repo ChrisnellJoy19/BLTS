@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './dashboard_components/Sidebar';
 import Navbar from './dashboard_components/Navbar';
 import { motion } from 'framer-motion';
@@ -7,6 +8,16 @@ import { Search, SlidersHorizontal, LogOut, Edit, Settings, HelpCircle } from 'l
 const AdminDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is authenticated
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // If no token, redirect to login page
+      navigate('/LguAdminLogin');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

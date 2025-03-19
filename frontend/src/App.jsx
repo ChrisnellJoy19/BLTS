@@ -10,6 +10,7 @@ import LGUAdminLogin from "./components/LGUAdminLogin";
 import LGUAdminDashboard from "./components/LGUAdminDashboard";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -21,9 +22,19 @@ function App() {
         <Route path="/adminlogin" element={<AdminLogin />} /> 
         <Route path="/about" element={<About_Us />} /> 
         <Route path="/get-started" element={<GetStarted />} />
-        <Route path="/DilgAdminLogin" element={<DilgAdminLogin />} />
-        <Route path="/LguAdminLogin" element={<LGUAdminLogin />} />
-        <Route path="/lguAdminDashboard" element={<LGUAdminDashboard />} />
+        <Route path="/dilgAdminLogin" element={<DilgAdminLogin />} />
+        <Route path="/lguAdminLogin" element={<LGUAdminLogin />} />
+        
+        {/* Protecting the LGU Admin Dashboard Route */}
+        <Route 
+          path="/lguAdminDashboard" 
+          element={
+            <PrivateRoute>
+              <LGUAdminDashboard />
+            </PrivateRoute>
+          } 
+        />
+
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
