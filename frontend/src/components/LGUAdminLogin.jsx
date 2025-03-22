@@ -45,16 +45,27 @@ const LguAdminLogin = () => {
         </p>
         <div className="LguAdminLogin-left-footer">
           A project by ONE MARINDUQUE DILG - LRC
+        <div className="LguAdminLogin-left-image">
+            <img src="/images/accent-3.svg" alt="Lower Left Decoration" />
+          </div>
         </div>
       </div>
 
       <div className="LguAdminLogin-right-section">
+        <div className="LguAdminLogin-pattern">
+          <img src="/images/accent-1.svg" alt="Pattern" />
+        </div>
         <div className="LguAdminLogin-right-header">
           <h2 className="LguAdminLogin-title">LGU-Admin Login</h2>
           <p className="LguAdminLogin-subtitle">Login to your BLTS Profile</p>
         </div>
 
         <div className="LguAdminLogin-container">
+        <img
+            src="/images/blts_logo.png"
+            alt="BLTS Logo"
+            className="blts-DilgAdminLogin-logo"
+          />
           <form className="user-login-form" onSubmit={handleSubmit}>
             <input
               type="text"
