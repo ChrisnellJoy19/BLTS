@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/UserDashboard.css";
+import Sidebar from "./dashboard_components/UserSidebar"; // Import Sidebar component
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { Home, FileText, Settings, LogOut } from "lucide-react";
 
 const data = [
   { name: "Category A", value: 40 },
@@ -18,20 +18,7 @@ const renderLabel = ({ value, percent }) => `${(percent * 100).toFixed(1)}%`;
 const Dashboard = () => {
   return (
     <div className="dashboard-container">
-      <aside className="sidebar">
-        <div className="sidelogo">
-          <img src="/images/dilg_logo.png" alt="dilg-logo" className="dilglogo" />
-          <div className="barangay">Barangay, Municipality, Province</div>
-        </div>
-
-        <nav className="menu">
-          <button className="menu-item"><Home size={20} /> Dashboard</button>
-          <button className="menu-item"><FileText size={20} /> Ordinances</button>
-          <button className="menu-item"><FileText size={20} /> Resolutions</button>
-          <button className="menu-item"><Settings size={20} /> User Profile</button>
-          <button className="menu-item logout"><LogOut size={20} /> Logout</button>
-        </nav>
-      </aside>
+      <Sidebar /> {/* Sidebar Component */}
 
       <main className="content">
         <div className="logo-container">

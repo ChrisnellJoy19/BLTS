@@ -92,6 +92,17 @@ body {
   border-color: #183248;
 }
 
+.dashboard{
+  margin-top: auto;
+  border-color: #000000;
+}
+
+.dashboard:hover {
+  background-color: #374bad;
+  border-radius: 5px;
+  border-color: #000000;
+}
+
 .logout {
   margin-top: auto;
 }
@@ -143,7 +154,7 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 400px; /* Adjust size as needed */
+  width: 250px; /* Adjust size as needed */
   height: auto;
   z-index: 1;
 }
