@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/GetStarted.css";
 
 const GetStarted = () => {
   const [municipalities, setMunicipalities] = useState([]);
@@ -18,31 +17,41 @@ const GetStarted = () => {
   };
 
   return (
-    <div className="get-started-page">
-      <div className="top-bar"></div>
-      <nav className="get-started-navigation">
-        <div className="get-started-logo-container">
-          <img src="/images/dilg_logo.png" alt="DILG Logo" className="get-started-dilg-logo" />
-          <span className="get-started-site-title">DILG Marinduque</span>
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white">
+      
+      {/* Navbar */}
+      <nav className="w-full flex justify-between items-center px-4 py-3 bg-[#183248]">
+        <div className="flex items-center gap-1">
+          <img src="/images/dilg_logo.png" alt="DILG Logo" className="h-10 ml-1" />
+          <span className="text-white font-bold text-lg">DILG Marinduque</span>
         </div>
-        <div className="get-started-nav-items">
-          <Link to="/userlogin" className="nav-item">User</Link>
-          <Link to="/adminlogin" className="nav-item">Admin</Link>
-          <Link to="/about" className="nav-item">About Us</Link>
+        <div className="flex gap-4">
+          <Link to="/userlogin" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">User</Link>
+          <Link to="/adminlogin" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">Admin</Link>
+          <Link to="/about" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">About Us</Link>
         </div>
       </nav>
 
-      <div className="get-started-description">
-        <img src="/images/blts_logo.png" alt="BLTS Logo" className="get-started-blts-logo" />
-        <p>
+      {/* Home Button below navbar */}
+      <div className="w-full flex justify-start px-2 mt-2">
+        <Link to="/" className="flex items-center gap-1 text-white font-semibold bg-[#183248] hover:bg-[#2a4c68] px-2 py-1 rounded-md transition">
+          <img src="/images/home-icon.png" alt="Home" className="h-4 w-4" />
+          <span>Home</span>
+        </Link>
+      </div>
+
+      {/* Description */}
+      <div className="text-center mt-6 px-4">
+        <img src="/images/blts_logo.png" alt="BLTS Logo" className="w-40 mx-auto" />
+        <p className="max-w-xl mx-auto mt-4 text-sm sm:text-base">
           Barangay Legislative Tracking System (BLTS) is an online repository platform for archiving Barangay Legislative Records. Barangay Secretary uploads ordinances, resolutions, and others.
         </p>
       </div>
 
-      {/* Map and Lists Container */}
-      <div className="get-started-map-container">
+      {/* Map and Lists */}
+      <div className="flex flex-wrap justify-center items-start gap-8 mt-6 px-4">
         <iframe
-          className="get-started-map-iframe"
+          className="rounded-lg shadow-lg"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d221569.83690051668!2d121.83084090324186!3d13.380381676842799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a318a5c1f65dbf%3A0xe9feb3ea5b6e3b7b!2sMarinduque!5e1!3m2!1sen!2sph!4v1741305863299!5m2!1sen!2sph"
           width="500"
           height="400"
@@ -52,13 +61,13 @@ const GetStarted = () => {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
 
-        {/* Municipality & Barangay Lists */}
-        <div className="get-started-lists-container">
-          <ul className="get-started-municipality-list">
+        <div className="flex flex-col sm:flex-row gap-6">
+          {/* Municipality List */}
+          <ul className="bg-white text-black rounded-lg shadow-md w-72 p-4">
             {municipalities.map((municipality) => (
-              <li 
-                key={municipality._id} 
-                className="municipality-item"
+              <li
+                key={municipality._id}
+                className="text-center font-bold bg-[#587D9D] text-white py-2 px-4 my-1 rounded cursor-pointer transition transform hover:bg-[#445F7A] hover:scale-105"
                 onClick={() => handleMunicipalityClick(municipality)}
               >
                 {municipality.name}
@@ -66,11 +75,17 @@ const GetStarted = () => {
             ))}
           </ul>
 
+          {/* Barangay List */}
           {selectedMunicipality && (
-            <ul className="get-started-barangay-list">
-              <h3>Barangays in {selectedMunicipality.name}</h3>
+            <ul className="bg-white text-black rounded-lg shadow-md w-72 p-4">
+              <h3 className="text-center font-semibold text-lg mb-2">
+                Barangays in {selectedMunicipality.name}
+              </h3>
               {selectedMunicipality.barangays.map((barangay) => (
-                <li key={barangay._id} className="barangay-item">
+                <li
+                  key={barangay._id}
+                  className="py-1 border-b border-gray-300 last:border-none"
+                >
                   {barangay.name} - Ordinances: {barangay.ordinances || 0}, Resolutions: {barangay.resolutions || 0}
                 </li>
               ))}
@@ -79,8 +94,9 @@ const GetStarted = () => {
         </div>
       </div>
 
-      <footer className="get-started-footer">
-        <p className="get-started-footer-text">A project by ONE MARINDUQUE DILG - LRC</p>
+      {/* Footer */}
+      <footer className="w-full mt-auto bg-[#183248] text-center text-sm py-2">
+        A project by ONE MARINDUQUE DILG - LRC
       </footer>
     </div>
   );

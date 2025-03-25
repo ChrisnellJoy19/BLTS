@@ -22,7 +22,6 @@ import AdminAddProfile from "./components/AdminAddProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
 
-
 function App() {
   return (
     <Router>

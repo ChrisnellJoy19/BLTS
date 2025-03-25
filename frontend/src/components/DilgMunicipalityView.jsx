@@ -34,18 +34,18 @@ const DilgMunicipalityView = () => {
   if (!municipality) return <p className="text-center text-lg font-semibold">Loading...</p>;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex w-screen h-screen bg-gradient-to-r from-[#889FB1] to-[#587D9D]">
       <Sidebar />
-      <div className="flex-1 p-6">
+      <div className="flex-grow flex flex-col p-6 overflow-auto">
         {/* Municipality Name and Description */}
-        <h1 className="text-4xl font-bold text-blue-600">{municipality.name}</h1>
-        <p className="text-lg text-gray-700 mt-2">{municipality.description}</p>
+        <h1 className="text-4xl font-bold text-white">{municipality.name}</h1>
+        <p className="text-lg text-white mt-2">{municipality.description}</p>
 
         {/* Charts Section */}
         <div className="flex space-x-10 mt-6">
           {/* Resolutions Chart */}
           <div>
-            <h2 className="text-xl font-semibold text-center">Resolutions</h2>
+            <h2 className="text-xl font-semibold text-center text-white">Resolutions</h2>
             <PieChart width={400} height={300}>
               <Pie
                 data={municipality.barangays.map(b => ({ name: b.name, value: b.resolutions }))}
@@ -67,7 +67,7 @@ const DilgMunicipalityView = () => {
 
           {/* Ordinances Chart */}
           <div>
-            <h2 className="text-xl font-semibold text-center">Ordinances</h2>
+            <h2 className="text-xl font-semibold text-center text-white">Ordinances</h2>
             <PieChart width={400} height={300}>
               <Pie
                 data={municipality.barangays.map(b => ({ name: b.name, value: b.ordinances }))}
@@ -90,7 +90,7 @@ const DilgMunicipalityView = () => {
 
         {/* Barangay List with Buttons */}
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold">Barangays</h2>
+          <h2 className="text-2xl font-semibold text-white">Barangays</h2>
           <div className="mt-4 space-y-2">
             {municipality.barangays.map((barangay) => (
               <button

@@ -50,7 +50,13 @@ const DilgAdminDashboard = () => {
             <Link
             key={municipality._id}
             to={`/municipality/${municipality._id}`}
-            className="block bg-white p-4 rounded-lg shadow-md hover:bg-gray-200 transition"
+            className="block text-white p-4 rounded-lg shadow-md transition"
+            style={{
+              backgroundColor: '#587D9D',
+              transition: 'background-color 0.3s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#445F7A')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#587D9D')}
             >
             {municipality.name}
             </Link>
