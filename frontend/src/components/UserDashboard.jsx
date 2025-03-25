@@ -1,6 +1,5 @@
 import React from "react";
-import "../styles/UserDashboard.css";
-import Sidebar from "./dashboard_components/UserSidebar"; // Import Sidebar component
+import Sidebar from "./dashboard_components/UserSidebar";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 const data = [
@@ -12,72 +11,54 @@ const data = [
 
 const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
 
-// Function to calculate and display percentage labels
-const renderLabel = ({ value, percent }) => `${(percent * 100).toFixed(1)}%`;
+const renderLabel = ({ percent }) => `${(percent * 100).toFixed(1)}%`;
 
 const Dashboard = () => {
   return (
-    <div className="dashboard-container">
-      <Sidebar /> {/* Sidebar Component */}
+    <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-auto">
+      <Sidebar />
+      <main className="flex-1 p-6 md:p-10 bg-gradient-to-br from-gray-400 to-gray-700 text-white relative">
+        {/* Logo Section */}
+        <div className="flex flex-wrap items-center gap-2 mb-6 ml-2 justify-center md:justify-start">
+          <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-10" />
+          <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-10" />
+          <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-10" />
+          <img src="/images/one_duque.png" alt="oneduque-logo" className="h-10" />
+        </div>
+        <img src="/images/blts_logo.png" alt="blts-logo" className="w-60 md:w-72 mb-4 mx-auto md:mx-0" />
+        <h1 className="text-xl md:text-2xl font-bold text-center md:text-left">WELCOME, USER!</h1>
 
-      <main className="content">
-        <div className="logo-container">
-          <img src="/images/dilg_logo.png" alt="dilg-logo" className="logo" />
-          <img src="/images/dilg_marinduque.png" alt="morion-logo" className="logo" />
-          <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="logo" />
-          <img src="/images/one_duque.png" alt="oneduque-logo" className="logo" />
+        {/* Charts Section */}
+        <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12 mt-6">
+          {["RESOLUTIONS", "ORDINANCES"].map((title, index) => (
+            <div key={index} className="text-center w-full md:w-auto">
+              <h2 className="text-lg font-semibold mb-2">{title}</h2>
+              <div className="flex justify-center">
+                <PieChart width={300} height={250}>
+                  <Pie
+                    data={data}
+                    dataKey="value"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    label={renderLabel}
+                    labelLine={false}
+                  >
+                    {data.map((entry, i) => (
+                      <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
+                </PieChart>
+              </div>
+            </div>
+          ))}
         </div>
-        <img src="/images/blts_logo.png" alt="blts-logo" className="bltslogo" />
-        <h1 className="welcome">WELCOME, USER!</h1>
 
-        <div className="charts">
-          <div>
-            <h2>RESOLUTIONS</h2>
-            <PieChart width={400} height={300}>
-              <Pie
-                data={data}
-                dataKey="value"
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={100}
-                label={renderLabel} // Display percentage labels
-                labelLine={false} // Remove label lines for cleaner look
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
-            </PieChart>
-          </div>
-          <div>
-            <h2>ORDINANCES</h2>
-            <PieChart width={400} height={300}>
-              <Pie
-                data={data}
-                dataKey="value"
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={100}
-                label={renderLabel} // Display percentage labels
-                labelLine={false} // Remove label lines for cleaner look
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
-            </PieChart>
-          </div>
-        </div>
-        <div className="dashboard-right-image">
-          <img src="/images/accent-1.svg" alt="Upper Right Decoration" />
-        </div>
-        <div className="dashboard-left-image">
-          <img src="/images/accent-3.svg" alt="Lower Left Decoration" />
-        </div>
+        {/* Decorative Images */}
+        <img src="/images/accent-1.svg" alt="Upper Right Decoration" className="absolute top-0 right-0 w-32 md:w-64 opacity-50" />
+        <img src="/images/accent-3.svg" alt="Lower Left Decoration" className="absolute bottom-0 left-0 w-40 md:w-72 opacity-50" />
       </main>
     </div>
   );

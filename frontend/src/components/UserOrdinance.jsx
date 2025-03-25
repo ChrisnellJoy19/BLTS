@@ -1,48 +1,61 @@
 import React from "react";
-import "../styles/UserOrdinance.css";
 import Sidebar from "./dashboard_components/UserSidebar";
 import ordinanceData from "../components/ordinanceData";
-import { Edit, Download, Eye, Trash2, Plus } from "lucide-react"; // Import icons
+import { Edit, Download, Eye, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
-
 
 const Dashboard = () => {
   return (
-    <div className="ordinance-container">
+    <div className="flex h-screen">
+      {/* Sidebar (Unchanged) */}
       <Sidebar />
 
-      <main className="ordinance-content">
-        <div className="ordinance-logo-container">
-          <img src="/images/dilg_logo.png" alt="dilg-logo" className="ordinance-logo" />
-          <img src="/images/dilg_marinduque.png" alt="morion-logo" className="ordinance-logo" />
-          <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="ordinance-logo" />
-          <img src="/images/one_duque.png" alt="oneduque-logo" className="ordinance-logo" />
+      {/* Main Content */}
+      <main className="flex-1 p-5 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#344757] text-white">
+        {/* Logos (Keep original position) */}
+        <div className="flex flex-wrap justify-start items-center gap-1 ml-4">
+          <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-[30px]" />
+          <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-[30px]" />
+          <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-[30px]" />
+          <img src="/images/one_duque.png" alt="oneduque-logo" className="h-[30px]" />
         </div>
 
-        <div className="blts-container">
-          <img src="/images/blts_logo.png" alt="blts-logo" className="blts_logo" />
-          <input type="text" className="search-bar" placeholder="Search Ordinances..." />
+        {/* BLTS Logo & Search Bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between mt-2">
+          <img src="/images/blts_logo.png" alt="blts-logo" className="h-auto w-60 sm:w-72" />
+          <input
+            type="text"
+            className="px-5 py-2 text-[15px] text-black bg-[#f4f4f4] border border-black rounded-full outline-none mt-2 md:mt-0 w-full md:w-auto"
+            placeholder="Search Ordinance..."
+          />
         </div>
 
-        {/* Add New Ordinance Button */}
-        <div className="add-ordinance-container">
-          <Link to="/add-ordinances" className="add-ordinance-btn">+ Add New Ordinance</Link>
+        {/* Add Ordinance Button (Position Unchanged) */}
+        <div className="flex justify-start mt-2">
+          <Link
+            to="/add-ordinances"
+            className="bg-[#0c3968] text-white text-[14px] px-4 py-2 rounded-md hover:bg-[#4d7fb4] transition md:ml-[830px]"
+          >
+            + Add New Ordinance
+          </Link>
         </div>
 
-        {/* Scrollable Ordinance Container */}
-        <div className="ordinance-scroll-container">
-          <div className="ordinance-list">
+        {/* Ordinance List (Scrollable & Stays in Place) */}
+        <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-gradient-to-br from-[#889FB1] to-[#587D9D] p-4 rounded-lg mt-4 border border-transparent mx-auto">
+          <div className="flex flex-col gap-3">
             {ordinanceData.map((ordinance) => (
-              <div key={ordinance.id} className="ordinance-card">
-                <h3>{ordinance.letterNo}</h3>
-                <p><strong>{ordinance.title}</strong></p>
-                <p>{ordinance.date}</p>
-                <p>{ordinance.author}</p>
-                <div className="ordinance-actions">
-                  <Edit size={20} className="action-icon edit-icon" />
-                  <Download size={20} className="action-icon download-icon" />
-                  <Eye size={20} className="action-icon view-icon" />
-                  <Trash2 size={20} className="action-icon delete-icon" />
+              <div key={ordinance.id} className="bg-white text-black p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-bold">{ordinance.letterNo}</h3>
+                <p className="font-semibold">{ordinance.title}</p>
+                <p className="text-sm">{ordinance.date}</p>
+                <p className="text-sm">{ordinance.author}</p>
+
+                {/* Action Icons */}
+                <div className="flex justify-end space-x-3 mt-2">
+                  <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" />
+                  <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
+                  <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
+                  <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
                 </div>
               </div>
             ))}
