@@ -75,8 +75,17 @@ const UserLogin = () => {
           </form>
 
           <div className="text-sm text-gray-700 mt-4">
-            Don't have an account?<br /> Contact DILG Marinduque
+            Don't have an account?
           </div>
+
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=marinduque.dilg.po@gmail.com&su=BLTS%20Account%20Request&body=Hello%20DILG%20Marinduque%2C%0D%0A%0D%0AI%20would%20like%20to%20request%20an%20account%20for%20the%20Barangay%20Legislative%20Tracking%20System.%0D%0A%0D%0AMunicipality%3A%20%0D%0ABarangay%3A%20%0D%0AName%20of%20Secretary%3A%20%0D%0ABarangay%20Email%3A%20%0D%0A%0D%0AThank%20you!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-700 hover:underline cursor-pointer"
+          >
+            Click here to contact DILG Marinduque
+          </a>
         </div>
       </div>
     </div>
