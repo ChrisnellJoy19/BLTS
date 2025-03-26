@@ -17,7 +17,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-auto">
       <Sidebar />
-      <main className="flex-1 p-6 md:p-10 bg-gradient-to-br from-gray-400 to-gray-700 text-white relative">
+      <main className="flex-1 p-6 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white relative">
         {/* Logo Section */}
         <div className="flex flex-wrap items-center gap-2 mb-6 ml-2 justify-center md:justify-start">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-10" />
