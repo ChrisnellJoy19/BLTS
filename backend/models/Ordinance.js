@@ -5,9 +5,9 @@ const OrdinanceSchema = new mongoose.Schema({
     title: String,
     description: String,
     fileUrl: String,
-    datePassed: Date,
+    enactmentDate: Date,
     status: String,
-    uploadedBy: String
+    author: String
 });
 
 module.exports = mongoose.model("Ordinance", OrdinanceSchema);
