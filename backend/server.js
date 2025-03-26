@@ -8,7 +8,6 @@ app.use(cors());
 app.use(express.json());
 
 const municipalityRoutes = require("./routes/municipalities");
-const lguAdminRoutes = require("./routes/lguadmin");
 const barangayRoutes = require("./routes/barangays");
 const dilgadminRoute = require("./routes/dilgadmin");
 const userRoutes = require('./routes/users');  
@@ -29,7 +28,6 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 app.use("/api/municipalities", municipalityRoutes);
-app.use("/api/lguadmin", lguAdminRoutes);
 app.use("/api/barangays", barangayRoutes); 
 app.use("/api/dilgadmin", dilgadminRoute);
 app.use("/api/user", userRoutes);

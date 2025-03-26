@@ -1,19 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./components/Homepage";
-import User from "./components/User";
-import User from "./components/UserLogin";
-import AdminLogin from "./components/AdminLogin";
-import About_Us from "./components/AboutUs";
+import UserLogin from "./components/UserLogin";
+import AboutUs from "./components/AboutUs";
 import GetStarted from "./components/GetStarted";
 import DilgAdminLogin from "./components/DilgAdminLogin";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
-import PrivateRoute from "./components/PrivateRoute";
 import MunicipalityView from "./components/MunicipalityView";
 
 import "./index.css"; 
-import "./index.css";
 import UserOrdinance from "./components/UserOrdinance";
 import UserResolution from "./components/UserResolution";
 import UserProfile from "./components/UserProfile";
@@ -22,18 +18,14 @@ import AdminAddProfile from "./components/AdminAddProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
 
-
-
-
-
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/userlogin" element={<User />} />
+        <Route path="/userlogin" element={<UserLogin/>} />
         <Route path="/homepage" element={<Homepage />} />
-        <Route path="/about" element={<About_Us />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/dilgAdminLogin" element={<DilgAdminLogin />} />
         {/* Protecting the LGU Admin Dashboard Route
@@ -51,13 +43,12 @@ function App() {
         <Route path="/municipality/:id" element={<MunicipalityView />} />
         <Route path="/user-ordinances" element={<UserOrdinance/>} />
         <Route path="/user-resolutions" element={<UserResolution/>} />
-        <Route path="/user-ordinances" element={<UserOrdinance/>} />
+        <Route path="/user-profile" element={<UserProfile/>} />
         <Route path="/add-new-profile" element={<UserAddProfile/>} />
         <Route path="/add-new-admin" element={<AdminAddProfile/>} />        
         <Route path="/add-ordinances" element={<UserAddOrdinance/>} />
         <Route path="/add-resolutions" element={<UserAddResolution/>} />
 
-        <Route path="/user-profile" element={<UserProfile/>} />
       </Routes>
     </Router>
   );

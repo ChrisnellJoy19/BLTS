@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { developersData } from "../data/developers";
 import DeveloperCard from "./DeveloperCard";
 
-const About_Us = () => {
+const AboutUs = () => {
   const [activeVersion, setActiveVersion] = useState("v1");
 
   return (
@@ -80,4 +80,4 @@ const About_Us = () => {
   );
 };
 
-export default About_Us;
+export default AboutUs;
