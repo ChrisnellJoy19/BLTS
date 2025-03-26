@@ -4,13 +4,44 @@ import DilgSidebar from "./dashboard_components/DilgSidebar";
 
 const DilgAdminDashboard = () => {
   const [municipalities, setMunicipalities] = useState([]);
+  const [barangays, setBarangays] = useState([]); // Store barangays
+  const [selectedBarangay, setSelectedBarangay] = useState(""); // To hold the selected barangay
+  const [announcement, setAnnouncement] = useState(""); // To hold the announcement text
 
   useEffect(() => {
     fetch("http://localhost:5000/api/municipalities") 
       .then((response) => response.json())
       .then((data) => setMunicipalities(data))
       .catch((error) => console.error("Error fetching municipalities:", error));
+
+    fetch("http://localhost:5000/api/barangays") // Fetch barangays
+      .then((response) => response.json())
+      .then((data) => setBarangays(data))
+      .catch((error) => console.error("Error fetching barangays:", error));
   }, []);
+
+  const handlePostAnnouncement = () => {
+    const payload = {
+      announcement: announcement,
+      barangayId: selectedBarangay === "all" ? "all" : selectedBarangay
+    };
+
+    // Post the announcement (example API request)
+    fetch("http://localhost:5000/api/announcements", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Announcement posted successfully:", data);
+        setAnnouncement(""); // Clear the announcement field after posting
+        setSelectedBarangay(""); // Reset barangay selection
+      })
+      .catch((error) => console.error("Error posting announcement:", error));
+  };
 
   return (
     <div className="flex w-screen h-screen bg-gradient-to-r from-[#889FB1] to-[#587D9D]">
@@ -29,40 +60,46 @@ const DilgAdminDashboard = () => {
           <h1 className="text-xl font-bold">WELCOME, DILG ADMIN!</h1>
         </header>
 
-        {/* Main Content */}
-        <div className="flex flex-col md:flex-row mt-6 gap-6">
-          {/* Embedded Google Map */}
-          <div className="w-full md:w-1/2">
-            <iframe
-              className="w-full h-[400px] rounded-lg shadow-lg"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d221569.83690051668!2d121.83084090324186!3d13.380381676842799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a318a5c1f65dbf%3A0xe9feb3ea5b6e3b7b!2sMarinduque!5e1!3m2!1sen!2sph!4v1741305863299!5m2!1sen!2sph"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
+        {/* Announcement Section */}
+        <div className="mt-6 p-4 bg-white rounded-lg shadow-lg">
+          <h2 className="text-lg font-semibold mb-2">Post an Announcement</h2>
+
+          {/* Announcement Input */}
+          <textarea
+            value={announcement}
+            onChange={(e) => setAnnouncement(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Enter your announcement here"
+            rows="4"
+          ></textarea>
+
+          {/* Select Barangay */}
+          <div className="mt-4">
+            <label className="block font-medium mb-1">Select Barangay:</label>
+            <select
+              value={selectedBarangay}
+              onChange={(e) => setSelectedBarangay(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="" disabled>
+                -- Select a Barangay --
+              </option>
+              <option value="all">All Barangays</option>
+              {barangays.map((barangay) => (
+                <option key={barangay._id} value={barangay._id}>
+                  {barangay.name}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Municipality List */}
-          <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4">Municipalities</h2>
-            <ul className="space-y-2">
-            {municipalities.map((municipality) => (
-            <Link
-            key={municipality._id}
-            to={`/municipality/${municipality._id}`}
-            className="block text-white p-4 rounded-lg shadow-md transition"
-            style={{
-              backgroundColor: '#587D9D',
-              transition: 'background-color 0.3s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#445F7A')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#587D9D')}
-            >
-            {municipality.name}
-            </Link>
-              ))}
-            </ul>
-          </div>
+          {/* Post Announcement Button */}
+          <button
+            onClick={handlePostAnnouncement}
+            className="mt-4 bg-[#587D9D] text-white py-2 px-4 rounded-md hover:bg-[#445F7A]"
+          >
+            Post Announcement
+          </button>
         </div>
       </div>
     </div>

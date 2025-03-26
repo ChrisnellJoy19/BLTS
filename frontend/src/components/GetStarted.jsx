@@ -26,9 +26,9 @@ const GetStarted = () => {
           <span className="text-white font-bold text-lg">DILG Marinduque</span>
         </div>
         <div className="flex gap-4">
-          <Link to="/userlogin" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">User</Link>
-          <Link to="/adminlogin" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">Admin</Link>
-          <Link to="/about" className="text-white font-semibold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">About Us</Link>
+          <Link to="/userlogin" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">User</Link>
+          <Link to="/dilgAdminLogin" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">Admin</Link>
+          <Link to="/about" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-gradient-to-r from-[#889FB1] to-[#587D9D] transition">About Us</Link>
         </div>
       </nav>
 
@@ -65,32 +65,16 @@ const GetStarted = () => {
           {/* Municipality List */}
           <ul className="bg-white text-black rounded-lg shadow-md w-72 p-4">
             {municipalities.map((municipality) => (
-              <li
+              <Link
                 key={municipality._id}
-                className="text-center font-bold bg-[#587D9D] text-white py-2 px-4 my-1 rounded cursor-pointer transition transform hover:bg-[#445F7A] hover:scale-105"
+                to={`/municipality/${municipality._id}`}
+                className="flex items-center justify-center text-center font-bold bg-[#587D9D] text-white py-2 px-4 my-1 rounded cursor-pointer transition transform hover:bg-[#445F7A] hover:scale-105"
                 onClick={() => handleMunicipalityClick(municipality)}
               >
                 {municipality.name}
-              </li>
+              </Link>
             ))}
           </ul>
-
-          {/* Barangay List */}
-          {selectedMunicipality && (
-            <ul className="bg-white text-black rounded-lg shadow-md w-72 p-4">
-              <h3 className="text-center font-semibold text-lg mb-2">
-                Barangays in {selectedMunicipality.name}
-              </h3>
-              {selectedMunicipality.barangays.map((barangay) => (
-                <li
-                  key={barangay._id}
-                  className="py-1 border-b border-gray-300 last:border-none"
-                >
-                  {barangay.name} - Ordinances: {barangay.ordinances || 0}, Resolutions: {barangay.resolutions || 0}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </div>
 

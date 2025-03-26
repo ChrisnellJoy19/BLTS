@@ -11,7 +11,7 @@ const About_Us = () => {
       <header className="flex flex-col items-center text-center px-4 py-6 relative">
         {/* Home Button */}
         <a href="/" className="absolute top-4 left-4">
-          <img src="/images/home-icon.png" alt="Home" className="h-10 w-10" />
+          <img src="/images/home-icon.png" alt="Home" className="h-8 w-8" />
           <span>Home</span>
         </a>
 

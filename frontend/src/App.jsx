@@ -2,18 +2,15 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./components/Homepage";
 import User from "./components/User";
-import AdminLogin from "./components/AdminLogin";
 import About_Us from "./components/AboutUs";
 import GetStarted from "./components/GetStarted";
 import DilgAdminLogin from "./components/DilgAdminLogin";
-import LGUAdminLogin from "./components/LGUAdminLogin";
-import LGUAdminDashboard from "./components/LGUAdminDashboard";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
 import PrivateRoute from "./components/PrivateRoute";
-import DilgMunicipalityView from "./components/DilgMunicipalityView"; // ✅ Added missing import
+import MunicipalityView from "./components/MunicipalityView";
 
-import "./index.css"; // ✅ Ensure Tailwind styles are applied
+import "./index.css"; 
 import UserOrdinance from "./components/UserOrdinance";
 import UserResolution from "./components/UserResolution";
 import UserProfile from "./components/UserProfile";
@@ -29,13 +26,10 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/userlogin" element={<User />} />
         <Route path="/homepage" element={<Homepage />} />
-        <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/about" element={<About_Us />} />
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/dilgAdminLogin" element={<DilgAdminLogin />} />
-        <Route path="/lguAdminLogin" element={<LGUAdminLogin />} />
-
-        {/* Protecting the LGU Admin Dashboard Route */}
+        {/* Protecting the LGU Admin Dashboard Route
         <Route
           path="/lguAdminDashboard"
           element={
@@ -43,11 +37,11 @@ function App() {
               <LGUAdminDashboard />
             </PrivateRoute>
           }
-        />
+        /> */}
 
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/municipality/:id" element={<DilgMunicipalityView />} />
+        <Route path="/municipality/:id" element={<MunicipalityView />} />
         <Route path="/user-ordinances" element={<UserOrdinance/>} />
         <Route path="/user-resolutions" element={<UserResolution/>} />
         <Route path="/user-profile" element={<UserProfile/>} />

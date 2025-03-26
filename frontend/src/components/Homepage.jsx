@@ -26,7 +26,7 @@ const Homepage = () => {
             User
           </Link>
           <Link
-            to="/adminlogin"
+            to="/dilgAdminLogin"
             className="hover:bg-gradient-to-br from-[#889FB1] to-[#587D9D] px-3 py-1 rounded transition font-bold"
           >
             Admin
