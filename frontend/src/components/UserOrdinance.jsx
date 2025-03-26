@@ -11,7 +11,7 @@ const Dashboard = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-5 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#344757] text-white">
+      <main className="flex-1 p-5 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white">
         {/* Logos (Keep original position) */}
         <div className="flex flex-wrap justify-start items-center gap-1 ml-4">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-[30px]" />
@@ -41,7 +41,7 @@ const Dashboard = () => {
         </div>
 
         {/* Ordinance List (Scrollable & Stays in Place) */}
-        <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-gradient-to-br from-[#889FB1] to-[#587D9D] p-4 rounded-lg mt-4 border border-transparent mx-auto">
+        <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-[#183248] p-4 rounded-lg mt-4 border border-transparent mx-auto">
           <div className="flex flex-col gap-3">
             {ordinanceData.map((ordinance) => (
               <div key={ordinance.id} className="bg-white text-black p-4 rounded-lg shadow-md">

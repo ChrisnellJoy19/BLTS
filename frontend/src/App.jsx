@@ -7,7 +7,7 @@ import GetStarted from "./components/GetStarted";
 import DilgAdminLogin from "./components/DilgAdminLogin";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
-import PrivateRoute from "./components/PrivateRoute";
+// import PrivateRoute from "./components/PrivateRoute";
 import MunicipalityView from "./components/MunicipalityView";
 
 import "./index.css"; 
