@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { ChevronRight, Scissors } from "lucide-react";
+import { ChevronRight, Scissors, ArrowLeft} from "lucide-react";
 
 const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
 
@@ -45,12 +45,19 @@ const MunicipalityView = () => {
       </nav>
 
       {/* Home Button */}
-      <div className="w-full flex justify-start px-4 mt-2">
-        <Link to="/" className="flex items-center gap-1 text-white font-semibold bg-[#183248] hover:bg-[#2a4c68] px-2 py-1 rounded-md transition">
-          <img src="/images/home-icon.png" alt="Home" className="h-4 w-4" />
-          <span>Home</span>
-        </Link>
-      </div>
+        <div className="w-full flex justify-start px-4 mt-2">
+          <Link to="/" className="flex items-center gap-1 text-white font-semibold bg-[#183248] hover:bg-[#2a4c68] px-2 py-1 rounded-md transition">
+            <img src="/images/home-icon.png" alt="Home" className="h-4 w-4" />
+            <span>Home</span>
+          </Link>
+          <button
+            onClick={() => window.history.back()}
+            className="ml-1 flex items-center gap-1 text-white font-semibold bg-[#183248] hover:bg-[#2a4c68] px-2 py-1 rounded-md transition"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back</span>
+          </button>
+        </div>
 
       {/* Main Content */}
       <div className="flex-grow flex flex-col p-6 overflow-auto">

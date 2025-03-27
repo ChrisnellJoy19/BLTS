@@ -26,7 +26,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      <main className="flex-1 p-8 bg-gradient-to-r from-gray-400 to-gray-700">
+      <main className="flex-1 p-8 bg-gradient-to-br from-[#889FB1] to-[#587D9D]">
         <div className="flex gap-2 mb-4">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8" />

@@ -3,7 +3,7 @@ import Sidebar from "./dashboard_components/UserSidebar";
 
 const Dashboard = () => {
   const [documentTitle, setDocumentTitle] = useState("");
-  const [documentType, setDocumentType] = useState("Resolution");
+  const [documentType] = useState("Resolution");
   const [documentNumber, setDocumentNumber] = useState("");
   const [governanceArea, setGovernanceArea] = useState("");
   const [dateEnacted, setDateEnacted] = useState("");
@@ -54,7 +54,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <main className="flex-1 p-6 bg-gradient-to-r from-gray-500 to-gray-800 overflow-auto">
+      <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-black">
         <div className="flex flex-wrap gap-2 justify-start">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8" />

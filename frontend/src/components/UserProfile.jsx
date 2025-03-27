@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
       <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-1">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8 sm:h-10" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8 sm:h-10" />
           <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-8 sm:h-10" />
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
         <div className="bg-white text-black rounded-lg shadow-md p-4 mt-6 w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center">
           <div className="flex-shrink-0">
-            <img src="/images/barangay_logo.png" alt="barangay-logo" className="ml-20 w-24 h-24 rounded-full" />
+            <img src="/images/dilg_logo.png" alt="barangay-logo" className="ml-5 w-24 h-24 rounded-full" />
           </div>
           <div className="flex-1 text-left px-6 ml-10">
             <h2 className="text-lg font-bold">🏠 BALANACAN</h2>
