@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Sidebar from "./dashboard_components/DilgSidebar";
+import { useParams, Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ChevronRight, Scissors } from "lucide-react";
 
 const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
 
-const DilgMunicipalityView = () => {
+const MunicipalityView = () => {
   const { id } = useParams();
   const [municipality, setMunicipality] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Municipality ID:", id);
-
     const fetchMunicipalityData = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/municipalities/${id}`);
         if (!response.ok) throw new Error("Failed to fetch data");
         const data = await response.json();
-        console.log("Fetched Data:", data);
         setMunicipality(data);
       } catch (err) {
         console.error("Error fetching municipality data:", err);
@@ -31,18 +27,39 @@ const DilgMunicipalityView = () => {
   }, [id]);
 
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!municipality) return <p className="text-center text-lg font-semibold">Loading...</p>;
+  if (!municipality) return <p className="text-center text-lg font-semibold text-white">Loading...</p>;
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 p-6">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white">
+      {/* Navbar */}
+      <nav className="w-full flex justify-between items-center px-4 py-3 bg-[#183248]">
+        <div className="flex items-center gap-1">
+          <img src="/images/dilg_logo.png" alt="DILG Logo" className="h-10 ml-1" />
+          <span className="text-white font-bold text-lg">DILG Marinduque</span>
+        </div>
+        <div className="flex gap-4">
+          <Link to="/userlogin" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-[#2a4c68] transition">User</Link>
+          <Link to="/dilgAdminLogin" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-[#2a4c68] transition">Admin</Link>
+          <Link to="/about" className="text-white font-bold text-base px-3 py-2 rounded hover:bg-[#2a4c68] transition">About Us</Link>
+        </div>
+      </nav>
+
+      {/* Home Button */}
+      <div className="w-full flex justify-start px-4 mt-2">
+        <Link to="/" className="flex items-center gap-1 text-white font-semibold bg-[#183248] hover:bg-[#2a4c68] px-2 py-1 rounded-md transition">
+          <img src="/images/home-icon.png" alt="Home" className="h-4 w-4" />
+          <span>Home</span>
+        </Link>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-grow flex flex-col p-6 overflow-auto">
         {/* Municipality Name and Description */}
-        <h1 className="text-4xl font-bold text-blue-600">{municipality.name}</h1>
-        <p className="text-lg text-gray-700 mt-2">{municipality.description}</p>
+        <h1 className="text-4xl font-bold">{municipality.name}</h1>
+        <p className="text-lg mt-2">{municipality.description}</p>
 
         {/* Charts Section */}
-        <div className="flex space-x-10 mt-6">
+        <div className="flex flex-wrap justify-center gap-10 mt-6">
           {/* Resolutions Chart */}
           <div>
             <h2 className="text-xl font-semibold text-center">Resolutions</h2>
@@ -88,14 +105,14 @@ const DilgMunicipalityView = () => {
           </div>
         </div>
 
-        {/* Barangay List with Buttons */}
+        {/* Barangay List */}
         <div className="mt-6">
           <h2 className="text-2xl font-semibold">Barangays</h2>
           <div className="mt-4 space-y-2">
             {municipality.barangays.map((barangay) => (
               <button
                 key={barangay._id}
-                className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white hover:bg-gray-100 transition"
+                className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white text-black hover:bg-gray-100 transition"
               >
                 <div className="flex items-center space-x-3">
                   <Scissors className="text-gray-600" size={20} />
@@ -107,8 +124,13 @@ const DilgMunicipalityView = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="w-full mt-auto bg-[#183248] text-center text-sm py-2">
+        A project by ONE MARINDUQUE DILG - LRC
+      </footer>
     </div>
   );
 };
 
-export default DilgMunicipalityView;
+export default MunicipalityView;

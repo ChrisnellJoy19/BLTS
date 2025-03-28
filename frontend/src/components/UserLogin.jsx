@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; // ✅ Import useState
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"; // ✅ Import axios
 
-const DilgAdminLogin = () => {
-  const [email, setEmail] = useState("");
+const UserLogin = () => {
+  const [identifier, setIdentifier] = useState(""); // ✅ Fix field name
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/dilgadmin/login", {
-        email,
+      const response = await axios.post("http://localhost:5000/api/user/login", {
+        identifier, // ✅ Match backend field
         password,
       });
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user)); // ✅ Store user info
         alert("Login successful!");
-        window.location.href = "/dilgAdminDashboard";
+        window.location.href = "/user-dashboard";
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Try again.");
@@ -40,13 +41,16 @@ const DilgAdminLogin = () => {
         </Link>
       </div>
 
-        <p className="text-center text-lg px-10 py-8">
-          Barangay Legislative Tracking System (BLTS) is an online repository
-          platform for archiving Barangay Legislative Records. Barangay
-          Secretary uploads ordinances, resolutions, and others.
-        </p>
+        {/* Description */}
+        <div className="text-lg text-center px-10 py-6 z-10">
+          <p>
+            Barangay Legislative Tracking System (BLTS) is an online repository platform for archiving Barangay Legislative Records.
+            Barangay Secretary uploads ordinances, resolutions, and others.
+          </p>
+        </div>
 
-        <div className="relative bg-[#163a56] text-center text-sm py-2 z-10">
+        {/* Footer */}
+        <div className="bg-[#163a56] text-center text-sm py-2 w-full relative z-10">
           A project by ONE MARINDUQUE DILG - LRC
         </div>
       </div>
@@ -58,22 +62,23 @@ const DilgAdminLogin = () => {
         </div>
 
         <div className="relative z-10 text-center mb-6">
-          <h2 className="text-[25px] font-bold text-red-700 mb-1">DILG-Login Account</h2>
+          <h2 className="text-[25px] font-bold text-red-700 mb-1">User-Login Account</h2>
           <p className="text-sm font-semibold text-black">Login your BLTS Profile</p>
         </div>
 
+        {/* Login Form */}
         <div className="relative z-10 bg-white p-6 rounded-lg shadow-lg w-full max-w-[350px] text-center">
           <img
             src="/images/blts_logo.png"
             alt="BLTS Logo"
             className="w-full max-w-[200px] mx-auto mb-4"
           />
-          <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
+          <form className="user-login-form" onSubmit={handleSubmit}>
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Username or Email"
+              value={identifier} // ✅ Fix field name
+              onChange={(e) => setIdentifier(e.target.value)}
               required
               className="w-[90%] p-2 my-2 border border-gray-300 rounded-md text-sm"
             />
@@ -92,12 +97,24 @@ const DilgAdminLogin = () => {
               Login
             </button>
           </form>
-          {error && <div className="text-red-600 text-sm mt-4">{error}</div>}
-          <div className="text-sm text-gray-600 mt-4">Authorized DILG Admins only.</div>
+
+          {/* ✅ Show messages */}
+          {error && <p className="error-message">{error}</p>}
+
+          <div className="text-sm text-gray-700 mt-4">Don't have an account?</div>
+
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=marinduque.dilg.po@gmail.com&su=BLTS%20Account%20Request&body=Hello%20DILG%20Marinduque%2C%0D%0A%0D%0AI%20would%20like%20to%20request%20an%20account%20for%20the%20Barangay%20Legislative%20Tracking%20System.%0D%0A%0D%0AMunicipality%3A%20%0D%0ABarangay%3A%20%0D%0AName%20of%20Secretary%3A%20%0D%0ABarangay%20Email%3A%20%0D%0A%0D%0AThank%20you!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-700 hover:underline cursor-pointer"
+          >
+            Click here to contact DILG Marinduque
+          </a>
         </div>
       </div>
     </div>
   );
 };
 
-export default DilgAdminLogin;
+export default UserLogin;
