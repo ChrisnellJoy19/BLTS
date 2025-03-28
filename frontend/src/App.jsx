@@ -7,16 +7,11 @@ import GetStarted from "./components/GetStarted";
 import DilgAdminLogin from "./components/DilgAdminLogin";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
-import MunicipalityView from "./components/MunicipalityView";
+import PrivateRoute from "./components/PrivateRoute";
+import DilgMunicipalityView from "./components/DilgMunicipalityView"; // ✅ Added missing import
+import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount";
 
-import "./index.css"; 
-import UserOrdinance from "./components/UserOrdinance";
-import UserResolution from "./components/UserResolution";
-import UserProfile from "./components/UserProfile";
-import UserAddProfile from "./components/UserAddProfile";
-import AdminAddProfile from "./components/AdminAddProfile";
-import UserAddOrdinance from "./components/UserAddOrdinance";
-import UserAddResolution from "./components/UserAddResolution";
+import "./index.css"; // ✅ Ensure Tailwind styles are applied
 
 function App() {
   return (
@@ -40,15 +35,8 @@ function App() {
 
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/municipality/:id" element={<MunicipalityView />} />
-        <Route path="/user-ordinances" element={<UserOrdinance/>} />
-        <Route path="/user-resolutions" element={<UserResolution/>} />
-        <Route path="/user-profile" element={<UserProfile/>} />
-        <Route path="/add-new-profile" element={<UserAddProfile/>} />
-        <Route path="/add-new-admin" element={<AdminAddProfile/>} />        
-        <Route path="/add-ordinances" element={<UserAddOrdinance/>} />
-        <Route path="/add-resolutions" element={<UserAddResolution/>} />
-
+        <Route path="/municipality/:id" element={<DilgMunicipalityView />} />
+        <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
       </Routes>
     </Router>
   );

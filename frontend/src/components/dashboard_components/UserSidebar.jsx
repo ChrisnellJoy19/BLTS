@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Settings, LogOut, Menu } from "lucide-react";
+import { Home, FileText, Settings, LogOut } from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // For small screens only
 
   const handleClick = (event, path) => {
     if (location.pathname === path) {
@@ -23,60 +23,66 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="md:w-1/5 w-full bg-[#183248] text-white p-5 flex md:flex-col flex-row md:relative fixed top-0 left-0 right-0 z-50">
-      {/* Mobile Menu Button */}
+    <>
+      {/* Toggle Button (only on small screens) */}
       <button
-        className="md:hidden text-white text-2xl focus:outline-none"
+        className="md:hidden fixed top-4 right-5 z-50 bg-[#183248] text-white px-4 py-2 rounded-md shadow-md hover:bg-[#587D9D]"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Menu size={28} />
+        {isOpen ? "Hide Sidebar" : "Show Sidebar"}
       </button>
 
-      {/* Sidebar Content */}
-      <div className={`md:flex flex-col md:w-full w-full ${isOpen ? "flex" : "hidden"} md:flex`}>
+      {/* Sidebar (Responsive) */}
+      <div
+        className={`
+          fixed top-0 left-0 h-screen w-64 bg-[#183248] text-white p-5 z-40 transform transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:relative md:block
+        `}
+      >
         <div className="flex flex-col items-center text-center mt-4">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="w-24 h-24" />
           <div className="text-lg mt-2">Barangay, Municipality, Province</div>
         </div>
 
-        <nav className="mt-6 flex md:flex-col flex-row justify-around w-full">
+        <nav className="mt-6 flex flex-col space-y-2">
           <Link
             to="/user-dashboard"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/user-dashboard")}
           >
-            <Home size={20} /> Dashboard
+            <Home className="w-5 h-5" /> <span>Dashboard</span>
           </Link>
           <Link
             to="/user-ordinances"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/user-ordinances")}
           >
-            <FileText size={20} /> Ordinances
+            <FileText className="w-5 h-5" /> <span>Ordinances</span>
           </Link>
           <Link
             to="/user-resolutions"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/user-resolutions")}
           >
-            <FileText size={20} /> Resolutions
+            <FileText className="w-5 h-5" /> <span>Resolutions</span>
           </Link>
           <Link
             to="/user-profile"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/user-profile")}
           >
-            <Settings size={20} /> User Profile
+            <Settings className="w-5 h-5" /> <span>User Profile</span>
           </Link>
           <button
             className="flex items-center gap-2 p-3 hover:bg-red-600 rounded mt-auto w-full text-left"
             onClick={handleLogout}
           >
-            <LogOut size={20} /> Logout
+            <LogOut className="w-5 h-5" /> <span>Logout</span>
           </button>
         </nav>
       </div>
-    </div>
+    </>
   );
 };
 

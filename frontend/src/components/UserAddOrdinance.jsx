@@ -21,14 +21,18 @@ const Dashboard = () => {
   };
 
   const handleCancel = () => {
-    if (window.confirm("Are you sure you want to cancel? Any unsaved changes will be lost.")) {
+    const confirmCancel = window.confirm("Are you sure you want to cancel? Any unsaved changes will be lost.");
+    if (confirmCancel) {
       console.log("Canceled");
+      // Add any navigation or reset logic if needed, e.g., clearing form fields.
     }
   };
 
   const handleUpload = (event) => {
     event.preventDefault();
-    if (window.confirm("Are you sure you want to upload this document?")) {
+  
+    const confirmUpload = window.confirm("Are you sure you want to upload this document?");
+    if (confirmUpload) {
       console.log({
         documentTitle,
         documentType,
@@ -37,15 +41,20 @@ const Dashboard = () => {
         dateEnacted,
         administrativeYear,
         authors,
-        selectedFile,
+        selectedFile
       });
+      // Add actual upload logic here if needed
+    } else {
+      console.log("Upload canceled");
     }
   };
+  
+
 
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <main className="flex-1 p-6 bg-gradient-to-r from-gray-500 to-gray-800 overflow-auto">
+      <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-black">
         <div className="flex flex-wrap gap-2 justify-start">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8" />

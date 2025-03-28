@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
-import ordinanceData from "../components/ordinanceData";
+import resolutionData from "../data/resolutionData";
 import { Edit, Download, Eye, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -30,25 +30,25 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Add Ordinance Button (Position Unchanged) */}
+        {/* Add Resolution Button (Position Unchanged) */}
         <div className="flex justify-start mt-2">
           <Link
-            to="/add-ordinances"
-            className="bg-[#0c3968] text-white text-[13px] px-4 py-2 rounded-md hover:bg-[#4d7fb4] transition md:ml-[830px]"
+            to="/add-resolutions"
+            className="bg-[#0c3968] text-white text-[14px] px-4 py-2 rounded-md hover:bg-[#4d7fb4] transition md:ml-[830px]"
           >
             + Add New Resolution
           </Link>
         </div>
 
-        {/* Ordinance List (Scrollable & Stays in Place) */}
+        {/* Resolution List (Scrollable & Stays in Place) */}
         <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-[#183248] p-4 rounded-lg mt-4 border border-transparent mx-auto">
           <div className="flex flex-col gap-3">
-            {ordinanceData.map((ordinance) => (
-              <div key={ordinance.id} className="bg-white text-black p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-bold">{ordinance.letterNo}</h3>
-                <p className="font-semibold">{ordinance.title}</p>
-                <p className="text-sm">{ordinance.date}</p>
-                <p className="text-sm">{ordinance.author}</p>
+            {resolutionData.map((resolution) => (
+              <div key={resolution.id} className="bg-white text-black p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-bold">{resolution.letterNo}</h3>
+                <p className="font-semibold">{resolution.title}</p>
+                <p className="text-sm">{resolution.date}</p>
+                <p className="text-sm">{resolution.author}</p>
 
                 {/* Action Icons */}
                 <div className="flex justify-end space-x-3 mt-2">

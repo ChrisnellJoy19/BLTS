@@ -70,7 +70,7 @@ const AboutUs = () => {
 
       {/* Developer Section */}
       <div className="bg-white text-[#183248] mt-6 px-4 py-8 text-center">
-        <h3 className="text-xl font-bold mb-6">Developers of {activeVersion.toUpperCase()}</h3>
+        <h3 className="text-xl font-bold mb-6">Developers of BLTS {activeVersion.toUpperCase()}</h3>
         <div className="flex flex-wrap justify-center gap-8">          {developersData[activeVersion].map((dev, index) => (
             <DeveloperCard key={index} {...dev} />
           ))}

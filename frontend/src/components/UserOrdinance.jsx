@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
-import ordinanceData from "../components/ordinanceData";
+import ordinanceData from "../data/ordinanceData";
 import { Edit, Download, Eye, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
