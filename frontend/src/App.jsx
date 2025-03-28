@@ -10,24 +10,11 @@ import LGUAdminLogin from "./components/LGUAdminLogin";
 import LGUAdminDashboard from "./components/LGUAdminDashboard";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
-<<<<<<< Updated upstream
 import PrivateRoute from "./components/PrivateRoute";
 import DilgMunicipalityView from "./components/DilgMunicipalityView"; // ✅ Added missing import
+import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount";
 
 import "./index.css"; // ✅ Ensure Tailwind styles are applied
-=======
-import UserOrdinance from "./components/UserOrdinance";
-import UserResolution from "./components/UserResolution";
-import UserProfile from "./components/UserProfile";
-import UserAddProfile from "./components/UserAddProfile";
-import AdminAddProfile from "./components/AdminAddProfile";
-import UserAddOrdinance from "./components/UserAddOrdinance";
-import UserAddResolution from "./components/UserAddResolution";
-
-
-
-
->>>>>>> Stashed changes
 
 function App() {
   return (
@@ -54,18 +41,8 @@ function App() {
 
         <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
-<<<<<<< Updated upstream
         <Route path="/municipality/:id" element={<DilgMunicipalityView />} />
-=======
-        <Route path="/user-ordinances" element={<UserOrdinance/>} />
-        <Route path="/user-resolutions" element={<UserResolution/>} />
-        <Route path="/user-profile" element={<UserProfile/>} />
-        <Route path="/add-new-profile" element={<UserAddProfile/>} />
-        <Route path="/add-new-admin" element={<AdminAddProfile/>} />        
-        <Route path="/add-ordinances" element={<UserAddOrdinance/>} />
-        <Route path="/add-resolutions" element={<UserAddResolution/>} />
-
->>>>>>> Stashed changes
+        <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
       </Routes>
     </Router>
   );
