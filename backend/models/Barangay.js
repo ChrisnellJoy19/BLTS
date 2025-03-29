@@ -1,20 +1,30 @@
 const mongoose = require("mongoose");
 
-const BarangaySchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    municipalityId: { type: mongoose.Schema.Types.ObjectId, ref: "Municipality" },
-    adminProfiles: [
-        {
-            startYear: Number,
-            endYear: Number,
-            punongBarangay: { type: String, required: true },
-            barangaySecretary: { type: String, required: true },
-            email: { type: String },  
-            sangguniangBarangayMembers: [{ type: String }], 
-            file: { type: String },
-            sangguniangKabataan: [{ type: String}]
-        }
-    ]
+const BarangayProfileSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  municipalityId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Municipality",
+    required: true,
+  },
+  adminProfiles: [
+    {
+      startYear: Number,
+      endYear: Number,
+      punongBarangay: String,
+      barangaySecretary: String,
+      email: String,
+      sangguniangBarangayMembers: [String],
+      sangguniangKabataan: [String],
+    },
+  ],
+  file: {
+    type: String, // This will store the file path if an image or document is uploaded
+    default: null,
+  },
 });
 
-module.exports = mongoose.model("Barangay", BarangaySchema);
+module.exports = mongoose.model("Barangay", BarangayProfileSchema);

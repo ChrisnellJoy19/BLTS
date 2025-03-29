@@ -16,15 +16,12 @@ router.post("/register", async (req, res) => {
   const { username, password, email, municipalityId, barangayId, role } = req.body;
 
   try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username or Email already exists" });
-    }
+    console.log("🔹 Raw Password:", password);
 
-    // 🔹 Hash the password before saving
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    console.log("🔹 Hashed Password:", hashedPassword);
 
     const newUser = new User({
       username,
@@ -44,9 +41,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 // 🔹 User Login Route
 router.post("/login", async (req, res) => {
-  const { identifier, password } = req.body; // Accepts username or email
+  const { identifier, password } = req.body;
 
   try {
     const user = await User.findOne({
@@ -58,15 +56,17 @@ router.post("/login", async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+
+    // console.log("Entered Password:", password);
+    // console.log("Stored Hashed Password:", user.password);
+
     if (!isPasswordValid) {
+      console.log("🔴 Password comparison result:", isPasswordValid);
       return res.status(401).json({ message: "Incorrect password" });
     }
-    
 
-    // Generate Token
+    // console.log("✅ Password matched successfully!");
+
     const token = jwt.sign(
       {
         id: user._id,
@@ -86,6 +86,8 @@ router.post("/login", async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        municipalityId: user.municipalityId,
+        barangayId: user.barangayId,
       },
     });
   } catch (error) {
@@ -93,6 +95,7 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
 
 // 🔹 Fetch User Data Route (Protected)
 router.get("/", authenticate, async (req, res) => {

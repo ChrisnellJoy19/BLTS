@@ -68,11 +68,11 @@ const Sidebar = () => {
             <FileText className="w-5 h-5" /> <span>Resolutions</span>
           </Link>
           <Link
-            to="/user-profile"
+            to="/barangay-profile"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
-            onClick={(e) => handleClick(e, "/user-profile")}
+            onClick={(e) => handleClick(e, "/barangay-profile")}
           >
-            <Settings className="w-5 h-5" /> <span>User Profile</span>
+            <Settings className="w-5 h-5" /> <span>Barangay Profile</span>
           </Link>
           <button
             className="flex items-center gap-2 p-3 hover:bg-red-600 rounded mt-auto w-full text-left"

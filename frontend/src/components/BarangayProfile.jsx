@@ -8,10 +8,27 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBarangayData = async () => {
+    const fetchUserBarangay = async () => {
       try {
-        const barangayId = "67e512242f9e47978a4e8564"; 
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
+
+        // Decode the token to extract user details
+        const user = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        const barangayId = user.barangayId;
+
+        if (!barangayId) {
+          console.error("No barangay ID found in token");
+          return;
+        }
+
+        // Fetch Barangay Data
+        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (response.ok) {
           const barangayData = await response.json();
@@ -38,7 +55,7 @@ const Dashboard = () => {
       }
     };
 
-    fetchBarangayData();
+    fetchUserBarangay();
   }, []);
 
   if (loading) return <p className="text-center mt-6 text-white">Loading barangay data...</p>;
@@ -68,7 +85,7 @@ const Dashboard = () => {
         {barangay && (
           <div className="bg-white text-black rounded-lg shadow-md p-4 mt-6 w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center">
             <div className="flex-shrink-0">
-              <img src="/images/barangay_logo.png" alt="barangay-logo" className="ml-20 w-24 h-24 rounded-full" />
+              <img src="/images/dilg_logo.png" alt="barangay-logo" className="ml-20 w-24 h-24 rounded-full" />
             </div>
             <div className="flex-1 text-left px-6 ml-10">
               <h2 className="text-lg font-bold">🏠 {barangay.name.toUpperCase()}</h2>
@@ -77,8 +94,6 @@ const Dashboard = () => {
               <p>Punong Barangay</p>
               <h3 className="font-bold">{barangay.adminProfiles[0]?.barangaySecretary}</h3>
               <p>Barangay Secretary</p>
-              <h3 className="font-bold">{barangay.adminProfiles[0]?.sangguniangKabataan}</h3>
-              <p>Sangguniang Kabataan</p>
             </div>
             <div className="flex-1 text-left">
               <h4 className="text-lg font-bold">📅 {barangay.adminProfiles[0]?.startYear} - {barangay.adminProfiles[0]?.endYear}</h4>

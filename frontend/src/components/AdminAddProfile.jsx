@@ -113,8 +113,7 @@ const Dashboard = () => {
               <label className="block font-semibold mt-2">Email</label>
               <input type="email" name="email" onChange={handleInputChange} className="border p-2 w-full" />
 
-              <label className="block font-semibold mt-2">Sangguniang Kabataan Chairperson</label>
-              <input type="text" name="sangguniangKabataan" onChange={handleInputChange} className="border p-2 w-full" />
+              
             </div>
 
             <div>
@@ -124,6 +123,8 @@ const Dashboard = () => {
                   <input key={index} type="text" onChange={(e) => handleInputChange(e, index)} className="border p-2 w-full mb-1" />
                 ))}
               </div>
+              <label className="block font-semibold mt-2">Sangguniang Kabataan Chairperson</label>
+              <input type="text" name="sangguniangKabataan" onChange={handleInputChange} className="border p-2 w-full" />
               
               <label className="block font-semibold mt-2">Upload File</label>
               <input type="file" onChange={handleFileChange} className="border p-2 w-full" />

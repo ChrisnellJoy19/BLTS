@@ -7,38 +7,44 @@ const Barangay = require("../models/Barangay");
 // Multer setup for file uploads
 const upload = multer({ dest: "uploads/" });
 
-// ✅ Create a new barangay with admin profile
+// ✅ Create a new barangay with admin profiles
 router.post("/", upload.single("file"), async (req, res) => {
   try {
     console.log("📥 Received request to create barangay:", req.body);
 
-    const { name, municipalityId, adminProfile } = req.body;
+    const { name, municipalityId, adminProfiles } = req.body;
 
-    if (!name || !municipalityId || !adminProfile) {
+    // 🔍 Validate required fields
+    if (!name || !municipalityId || !adminProfiles) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     let adminData;
     try {
-      adminData = JSON.parse(adminProfile);
+      adminData = typeof adminProfiles === "string" ? JSON.parse(adminProfiles) : adminProfiles;
     } catch (parseError) {
-      console.error("❌ Error parsing adminProfile JSON:", parseError);
-      return res.status(400).json({ message: "Invalid adminProfile JSON format" });
+      console.error("❌ Error parsing adminProfiles JSON:", parseError);
+      return res.status(400).json({ message: "Invalid adminProfiles JSON format" });
     }
 
-    // ✅ Create new barangay with admin profile
+    // ✅ Validate that adminProfiles is an array
+    if (!Array.isArray(adminData)) {
+      return res.status(400).json({ message: "adminProfiles should be an array" });
+    }
+
+    // ✅ Create new barangay with admin profiles
     const newBarangay = new Barangay({
       name,
       municipalityId,
-      adminProfile: {
-        fromDate: adminData.fromDate,
-        toDate: adminData.toDate,
-        punongBarangay: adminData.punongBarangay,
-        barangaySecretary: adminData.barangaySecretary,
-        email: adminData.email,
-        sbMembers: adminData.sbMembers,
-        sangguniangKabataan: adminData.sangguniangKabataan,
-      },
+      adminProfiles: adminData.map(profile => ({
+        startYear: profile.startYear,
+        endYear: profile.endYear,
+        punongBarangay: profile.punongBarangay,
+        barangaySecretary: profile.barangaySecretary,
+        email: profile.email,
+        sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
+        sangguniangKabataan: profile.sangguniangKabataan || [],
+      })),
       file: req.file ? req.file.path : null, // Save file path if uploaded
     });
 
