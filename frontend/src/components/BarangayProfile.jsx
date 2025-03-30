@@ -74,10 +74,10 @@ const Dashboard = () => {
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 sm:w-72 mt-4" />
 
         <div className="flex flex-col items-end space-y-2 mt-4 mr-2 md:mr-20">
-          <Link to="/add-new-admin" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
+          <Link to="/add-new-profile" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
             + Add New Administrative Profile
           </Link>
-          <Link to="/add-new-profile" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
+          <Link to="/edit-profile" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
             Edit Profile
           </Link>
         </div>

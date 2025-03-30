@@ -51,21 +51,26 @@ router.post("/login", async (req, res) => {
       $or: [{ username: identifier }, { email: identifier }],
     });
 
+    console.log("🟢 Login Attempt:", identifier);
+    console.log("🔍 Retrieved User:", user);
+
     if (!user) {
+      console.log("🔴 User not found for identifier:", identifier);
       return res.status(400).json({ message: "Invalid username or password" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("🔐 Checking password...");
+    console.log("Entered Password:", password);
+    console.log("Stored Hashed Password:", user.password);
 
-    // console.log("Entered Password:", password);
-    // console.log("Stored Hashed Password:", user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       console.log("🔴 Password comparison result:", isPasswordValid);
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // console.log("✅ Password matched successfully!");
+    console.log("✅ Password matched successfully!");
 
     const token = jwt.sign(
       {
@@ -91,7 +96,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Server error:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });

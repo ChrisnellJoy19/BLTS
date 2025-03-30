@@ -70,14 +70,42 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.punongBarangay || !formData.barangaySecretary || !formData.fromDate || !formData.toDate || !formData.name || !formData.municipalityName) {
-      alert("Please fill out all required fields.");
-      return;
+  
+    const formData = new FormData();
+    formData.append("name", formData.name);
+    formData.append("municipalityId", formData.municipalityId);
+    formData.append("adminProfiles", JSON.stringify([
+      {
+        startYear: formData.fromDate,
+        endYear: formData.toDate,
+        punongBarangay: formData.punongBarangay,
+        barangaySecretary: formData.barangaySecretary,
+        email: formData.email,
+        sangguniangBarangayMembers: formData.sbMembers,
+        sangguniangKabataan: formData.sangguniangKabataan
+      }
+    ]));
+    if (formData.file) {
+      formData.append("file", formData.file);
     }
-
-    alert("Form submitted successfully!");
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/barangays", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (response.ok) {
+        alert("Form submitted successfully!");
+      } else {
+        alert("Failed to submit data.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred.");
+    }
   };
+    
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">

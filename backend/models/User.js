@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   municipalityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Municipality', required: true },
   barangayId: { type: mongoose.Schema.Types.ObjectId, ref: 'Barangay', required: true },
-  role: { type: String, required: true, enum: ['secretary', 'dilg_admin', 'lgu_admin'] },
+  role: { type: String, required: true, enum: ['secretary', 'dilg_admin'] },
   profile: { type: Object, default: {} },
   createdAt: { type: Date, default: Date.now }
 });
