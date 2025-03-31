@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 
 const ResolutionSchema = new mongoose.Schema({
-    barangayId: { type: mongoose.Schema.Types.ObjectId, ref: "Barangay" },
-    title: String,
-    description: String,
-    fileUrl: String,
-    datePassed: Date,
-    status: String,
-    uploadedBy: String
-});
+  documentTitle: { type: String, required: true },
+  documentType: { type: String, default: "Resolution" },
+  documentNumber: { type: String, required: true },
+  governanceArea: { type: String, required: true },
+  dateEnacted: { type: Date, required: true },
+  administrativeYear: { type: String, required: true },
+  authors: [{ type: String }],
+  status: { type: String, enum: ["Draft", "Active", "Repealed"], required: true },
+  description: { type: String, required: true },
+  barangayId: { type: mongoose.Schema.Types.ObjectId, ref: "Barangay", required: true },
+  fileUrl: { type: String, required: true }, // Store the file path or URL
+}, { timestamps: true });
 
 module.exports = mongoose.model("Resolution", ResolutionSchema);

@@ -1,61 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
-const Dashboard = () => {
+const UserAddOrdinance = () => {
   const [documentTitle, setDocumentTitle] = useState("");
   const [documentType] = useState("Ordinance");
   const [documentNumber, setDocumentNumber] = useState("");
   const [governanceArea, setGovernanceArea] = useState("");
   const [dateEnacted, setDateEnacted] = useState("");
-  const [administrativeYear, setAdministrativeYear] = useState("");
+  const [administrativeYear, setAdministrativeYear] = useState(""); 
   const [authors, setAuthors] = useState([]);
+  const [status, setStatus] = useState("");
+  const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [barangayId, setBarangayId] = useState("");
+  const navigate = useNavigate();
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:5000/api/user/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+  
+        console.log("🟢 User Data from /me:", response.data);
+        if (response.data.barangayId) {
+          setBarangayId(response.data.barangayId);
+        } else {
+          console.warn("⚠️ Barangay ID is missing from response.");
+        }
+      } catch (error) {
+        console.error("❌ Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
+  
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log({ documentTitle, documentType, documentNumber, governanceArea, dateEnacted, administrativeYear, authors, selectedFile });
-  };
-
+  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
   const handleCancel = () => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel? Any unsaved changes will be lost.");
-    if (confirmCancel) {
-      console.log("Canceled");
-      // Add any navigation or reset logic if needed, e.g., clearing form fields.
-    }
+    navigate("/user-ordinances");
   };
-
-  const handleUpload = (event) => {
-    event.preventDefault();
   
-    const confirmUpload = window.confirm("Are you sure you want to upload this document?");
-    if (confirmUpload) {
-      console.log({
-        documentTitle,
-        documentType,
-        documentNumber,
-        governanceArea,
-        dateEnacted,
-        administrativeYear,
-        authors,
-        selectedFile
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!barangayId) {
+      alert("Barangay ID is required.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("documentTitle", documentTitle);
+    formData.append("documentType", documentType);
+    formData.append("documentNumber", documentNumber);
+    formData.append("governanceArea", governanceArea);
+    formData.append("dateEnacted", dateEnacted);
+    formData.append("administrativeYear", administrativeYear);
+    formData.append("authors", authors.length ? JSON.stringify(authors) : "[]");
+    formData.append("status", status);
+    formData.append("description", description);
+    formData.append("barangayId", barangayId.toString());
+    if (selectedFile) formData.append("file", selectedFile);
+
+    try {
+      const token = localStorage.getItem("token");
+    
+      // Ensure you have the user's barangayId from your authentication system
+      const user = JSON.parse(localStorage.getItem("user")); // Example, modify as needed
+      console.log("User Data:", user); // Debugging
+      console.log("Barangay ID:", user?.barangayId); // Debugging
+    
+      if (!user?.barangayId) {
+        alert("Barangay ID is missing!");
+        return;
+      }
+    
+      console.log("FormData being sent:", Object.fromEntries(formData.entries())); // Debugging
+    
+      await axios.post("http://localhost:5000/api/ordinances", formData, { 
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } 
       });
-      // Add actual upload logic here if needed
-    } else {
-      console.log("Upload canceled");
+      
+    
+      alert("Document uploaded successfully!");
+      navigate("/user-ordinances"); 
+    } catch (error) {
+      console.error("Error uploading document:", error.response?.data || error.message);
+      alert("Failed to upload document.");
     }
+    
   };
-  
-
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-black">
-        <div className="flex flex-wrap gap-2 justify-start">
+      <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-black relative">
+      <div className="flex flex-wrap gap-2 justify-start">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8" />
           <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-8" />
@@ -63,63 +108,91 @@ const Dashboard = () => {
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 mt-2" />
         
-        <form className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto mt-6" onSubmit={handleSubmit}>
-          <div className="md:col-span-2 space-y-4">
-            <h2 className="text-lg font-bold">Upload a Document</h2>
-            <div>
+        <div className="max-w-4xl mx-auto mt-6 h-[70vh] overflow-y-auto bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold">Upload a Document</h2>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
+            <div className="md:col-span-2">
               <label className="text-sm font-semibold">Document Title</label>
-              <input type="text" value={documentTitle} onChange={(e) => setDocumentTitle(e.target.value)} className="w-full border p-2 rounded mt-1" placeholder="Enter document title..." required />
+              <input type="text" value={documentTitle} onChange={(e) => setDocumentTitle(e.target.value)} className="w-full border p-2 rounded mt-1" required />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-semibold">Type of Document</label>
-                <input type="text" value={documentType} readOnly className="w-full border p-2 rounded bg-gray-200" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold">Number</label>
-                <input type="text" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} className="w-full border p-2 rounded mt-1" placeholder="Enter document number..." />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-semibold">Governance Area</label>
-                <select value={governanceArea} onChange={(e) => setGovernanceArea(e.target.value)} className="w-full border p-2 rounded mt-1">
-                  <option value="">Select area</option>
-                  <option value="Local">Local</option>
-                  <option value="Regional">Regional</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-semibold">Date Enacted / Adopted</label>
-                <input type="date" value={dateEnacted} onChange={(e) => setDateEnacted(e.target.value)} className="w-full border p-2 rounded mt-1" />
-              </div>
-            </div>
+
             <div>
-              <label className="text-sm font-semibold">Administrative Year / Term Year</label>
-              <input type="text" value={administrativeYear} onChange={(e) => setAdministrativeYear(e.target.value)} className="w-full border p-2 rounded mt-1" placeholder="Enter year..." />
+              <label className="text-sm font-semibold">Type of Document</label>
+              <input type="text" value={documentType} readOnly className="w-full border p-2 rounded bg-gray-200" />
             </div>
+
             <div>
-              <label className="text-sm font-semibold">Author/s</label>
-              <select value={authors} onChange={(e) => setAuthors([e.target.value])} className="w-full border p-2 rounded mt-1">
-                <option value="">Select author</option>
-                <option value="Author1">Author 1</option>
-                <option value="Author2">Author 2</option>
-                <option value="Author3">Author 3</option>
+              <label className="text-sm font-semibold">Document Number</label>
+              <input type="text" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} className="w-full border p-2 rounded mt-1" />
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold">Governance Area</label>
+              <select value={governanceArea} onChange={(e) => setGovernanceArea(e.target.value)} className="w-full border p-2 rounded mt-1">
+                <option value="">Select area</option>
+                <option value="Barangay">Barangay</option>
+                <option value="Municipal">Municipal</option>
               </select>
             </div>
-          </div>
-          <div className="flex flex-col justify-center border-dashed border-2 border-gray-300 p-6 text-center rounded-md">
-            <label htmlFor="file-upload" className="cursor-pointer text-sm font-semibold">Click here to upload file (max 1)</label>
-            <input id="file-upload" type="file" onChange={handleFileChange} className="hidden" />
-          </div>
-          <div className="md:col-span-3 flex justify-end gap-4">
-            <button type="button" onClick={handleCancel} className="px-4 py-2 bg-gray-300 hover:bg-red-500 hover:text-white rounded">CANCEL</button>
-            <button type="submit" onClick={handleUpload} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-400">UPLOAD</button>
-          </div>
-        </form>
+
+            <div>
+              <label className="text-sm font-semibold">Date Enacted</label>
+              <input type="date" value={dateEnacted} onChange={(e) => setDateEnacted(e.target.value)} className="w-full border p-2 rounded mt-1" />
+            </div>
+
+      
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold">Administrative Year</label>
+              <input
+                type="text"
+                value={administrativeYear}
+                onChange={(e) => setAdministrativeYear(e.target.value)}
+                className="w-full border p-2 rounded mt-1"
+                placeholder="Enter administrative year (e.g., 2023-2024)"
+                required
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold">Authors</label>
+              <input 
+                type="text" 
+                value={authors.join(", ")} 
+                onChange={(e) => setAuthors(
+                  e.target.value.split(",").map(author => author.trim()).filter(author=>author))} 
+                className="w-full border p-2 rounded mt-1" 
+                placeholder="Enter authors, separated by commas" />
+            </div>
+ 
+            <div>
+              <label className="text-sm font-semibold">Status</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full border p-2 rounded mt-1" required>
+                <option value="">Select status</option>
+                <option value="Draft">Draft</option>
+                <option value="Active">Active</option>
+                <option value="Repealed">Repealed</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="text-sm font-semibold">Description</label>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full border p-2 rounded mt-1" required></textarea>
+            </div>
+
+            <div className="md:col-span-2">
+              <label htmlFor="file-upload" className="cursor-pointer text-sm font-semibold">Upload File</label>
+              <input id="file-upload" type="file" onChange={handleFileChange} className="w-full border p-2 rounded mt-1" />
+            </div>
+
+            <div className="md:col-span-2 flex justify-end gap-4">
+              <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={handleCancel}>CANCEL</button>
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">UPLOAD</button>
+            </div>
+          </form>
+        </div>
       </main>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserAddOrdinance;

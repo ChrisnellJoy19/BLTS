@@ -20,7 +20,8 @@ const municipalityRoutes = require("./routes/municipalities");
 const barangayRoutes = require("./routes/barangays");
 const dilgadminRoute = require("./routes/dilgadmin");
 const userRoutes = require('./routes/users');  
-const ordinanceRoutes = require('./routes/ordinance'); 
+const ordinanceRoutes = require('./routes/ordinances'); 
+const resolutionsRoutes = require('./routes/resolutions');
 
 console.log("Loaded environment variables:");
 console.log("MONGO_URI:", process.env.MONGO_URI);
@@ -44,6 +45,9 @@ app.use("/api/barangays", barangayRoutes);
 app.use("/api/dilgadmin", dilgadminRoute);
 app.use("/api/user", userRoutes);
 app.use("/api/ordinances", ordinanceRoutes);
+app.use("/api/resolutions", resolutionsRoutes);
+app.use("/uploads", express.static("uploads"));
+
 
 app.get("/", (req, res) => {
     res.send("Welcome to the BLTS API");

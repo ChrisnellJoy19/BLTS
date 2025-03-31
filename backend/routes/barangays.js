@@ -82,4 +82,36 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// ✅ Get Administrative Years for a Barangay
+router.get("/:id/admin-years", async (req, res) => {
+  try {
+    console.log(`📥 Fetching administrative years for barangay ID: ${req.params.id}`);
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid barangay ID" });
+    }
+
+    const barangay = await Barangay.findById(req.params.id);
+
+    if (!barangay) {
+      console.log("❌ Barangay not found");
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    // Extract startYear and endYear from adminProfiles
+    const adminYears = barangay.adminProfiles.map(profile => ({
+      startYear: profile.startYear,
+      endYear: profile.endYear,
+      label: `${profile.startYear} - ${profile.endYear}`
+    }));
+
+    console.log("✅ Administrative Years Fetched:", adminYears);
+    res.json(adminYears);
+
+  } catch (error) {
+    console.error("❌ Error fetching administrative years:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 module.exports = router;

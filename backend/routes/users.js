@@ -116,4 +116,31 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
+// 🔹 Fetch Current Logged-in User Data (Protected)
+router.get("/me", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log("🔹 Sending User Data:", user); // 🔥 Log what’s being sent
+    res.json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      municipalityId: user.municipalityId,
+      barangayId: user.barangayId,  // 🔥 Ensure this is included
+      role: user.role,
+    });
+  } catch (error) {
+    console.error("❌ Server error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
+
+
+
+
 module.exports = router;
