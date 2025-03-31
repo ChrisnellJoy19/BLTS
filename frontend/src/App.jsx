@@ -1,5 +1,7 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Homepage from "./components/Homepage";
 import UserLogin from "./components/UserLogin";
 import AboutUs from "./components/AboutUs";
@@ -17,39 +19,52 @@ import UserEditProfile from "./components/UserEditProfile";
 import UserAddNewProfile from "./components/UserAddNewProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
-import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount";
+import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
+import AdminRoute from "./components/AdminRoute";
+import UserRoute from "./components/UserRoute";
+import EditCredentials from "./components/EditCredentials";
+import ForgotPassword from "./components/ForgotPassword"; // adjust path if needed
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Homepage />} />
-        <Route path="/userlogin" element={<UserLogin/>} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/get-started" element={<GetStarted />} />
-        <Route path="/dilgAdminLogin" element={<DilgAdminLogin />} />
-        {/* Protecting the LGU Admin Dashboard Route
+        <Route path="/DilgAdminLogin" element={<DilgAdminLogin />} />
+        <Route path="/UserLogin" element={<UserLogin />} />
+        {/* Protected Routes */}
         <Route
-          path="/lguAdminDashboard"
+          path="/dilgAdminDashboard"
           element={
-            <PrivateRoute>
-              <LGUAdminDashboard />
-            </PrivateRoute>
+            <AdminRoute>
+              <DilgAdminDashboard />
+            </AdminRoute>
           }
-        /> */}
+        />
+        <Route
+          path="/user-dashboard"
+          element={
+            <UserRoute>
+              <UserDashboard />
+            </UserRoute>
+          }
+        />
 
-        <Route path="/dilgAdminDashboard" element={<DilgAdminDashboard />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/municipality/:id" element={<MunicipalityView />} />
-        <Route path="/user-ordinances" element={<UserOrdinance/>} />
-        <Route path="/user-resolutions" element={<UserResolution/>} />
+        <Route path="/user-ordinances" element={<UserOrdinance />} />
+        <Route path="/user-resolutions" element={<UserResolution />} />
         <Route path="/barangay-profile" element={<BarangayProfile/>} />
         <Route path="/edit-profile" element={<UserEditProfile/>} />
         <Route path="/add-new-profile" element={<UserAddNewProfile/>} />        
-        <Route path="/add-ordinances" element={<UserAddOrdinance/>} />
-        <Route path="/add-resolutions" element={<UserAddResolution/>} />
+        <Route path="/add-ordinances" element={<UserAddOrdinance />} />
+        <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
+        <Route path="/edit-credentials" element={<EditCredentials />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </Router>
   );

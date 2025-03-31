@@ -16,7 +16,7 @@ const UserLogin = () => {
       });
 
       if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userToken", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user)); // ✅ Store user info
         alert("Login successful!");
         window.location.href = "/user-dashboard";
@@ -36,7 +36,7 @@ const UserLogin = () => {
         <Link
           to="/homepage"
           className="flex items-center gap-2 text-white bg-[#163a56] px-3 py-1 rounded-md shadow hover:bg-[#5f7f9e] transition">
-          <img src="/images/home-icon.png" alt="Home" className="h-4 w-4" />
+          <img src="/images/home-icon.png" alt="Home" className="w-6 h-6 cursor-pointer" />
           <span>Home</span>
         </Link>
       </div>
@@ -111,6 +111,11 @@ const UserLogin = () => {
           >
             Click here to contact DILG Marinduque
           </a>
+          <p className="text-sm text-center mt-2">
+            <a href="/forgot-password" className="text-black-200 hover:underline cursor-pointer">
+              Forgot Password?
+            </a>
+          </p>
         </div>
       </div>
     </div>

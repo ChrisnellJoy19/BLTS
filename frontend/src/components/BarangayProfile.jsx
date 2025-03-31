@@ -10,7 +10,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserBarangay = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("userToken");
         if (!token) {
           console.error("No authentication token found");
           return;
@@ -88,7 +88,7 @@ const Dashboard = () => {
               <img src="/images/dilg_logo.png" alt="barangay-logo" className="ml-20 w-24 h-24 rounded-full" />
             </div>
             <div className="flex-1 text-left px-6 ml-10">
-              <h2 className="text-lg font-bold">🏠 {barangay.name.toUpperCase()}</h2>
+              <h2 className="text-lg font-bold">🏠 BARANGAY {barangay.name.toUpperCase()}</h2>
               <p>{municipalityName}, Marinduque</p>
               <h3 className="font-bold">{barangay.adminProfiles[0]?.punongBarangay}</h3>
               <p>Punong Barangay</p>

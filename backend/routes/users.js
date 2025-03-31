@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Municipality = require("../models/Municipality");
+const Barangay = require("../models/Barangay");
 const authenticate = require("../middleware/auth");
 
 // Ensure JWT Secret is set
@@ -10,6 +12,20 @@ if (!process.env.JWT_SECRET) {
   console.error("⚠️ JWT_SECRET is missing from environment variables!");
   process.exit(1);
 }
+
+// 🔹 Fetch User Data Route (Protected)
+router.get("/", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password"); // Exclude password field
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
 
 // 🔹 User Registration Route
 router.post("/register", async (req, res) => {
@@ -41,7 +57,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 // 🔹 User Login Route
 router.post("/login", async (req, res) => {
   const { identifier, password } = req.body;
@@ -56,13 +71,16 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       console.log("🔴 User not found for identifier:", identifier);
-      return res.status(400).json({ message: "Invalid username or password" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     console.log("🔐 Checking password...");
     console.log("Entered Password:", password);
     console.log("Stored Hashed Password:", user.password);
 
+    // Fetch barangay and municipality names & logo
+    const barangay = await Barangay.findById(user.barangayId);
+    const municipality = await Municipality.findById(user.municipalityId);
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -84,6 +102,14 @@ router.post("/login", async (req, res) => {
     );
 
     res.json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      barangay: barangay ? barangay.name : "Unknown Barangay",
+      municipality: municipality ? municipality.name : "Unknown Municipality",
+      province: "Marinduque", // Fixed province
+      logo: barangay ? barangay.logo : "/images/default_logo.png", // Default logo if none exists
       message: "Login successful",
       token,
       user: {

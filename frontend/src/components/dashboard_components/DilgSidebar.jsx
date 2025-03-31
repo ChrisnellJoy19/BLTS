@@ -1,13 +1,21 @@
-import React, {useState} from "react";
-import { Link, useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTachometerAlt, faUserPlus, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTachometerAlt,
+  faUserPlus,
+  faSignOutAlt,
+  faUserCog, // Added icon for Edit Credentials
+} from "@fortawesome/free-solid-svg-icons";
 
 const DilgSidebar = () => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Clear admin token
+    localStorage.removeItem("adminToken");
+
     // Close the dialog
     setShowLogoutDialog(false);
 
@@ -47,6 +55,15 @@ const DilgSidebar = () => {
             </Link>
           </li>
           <li>
+            <Link
+              to="/edit-credentials"
+              className="flex items-center w-full px-4 py-3 text-white font-semibold bg-[#1c3b57] border border-white/20 rounded-lg hover:bg-[#365980] transition"
+            >
+              <FontAwesomeIcon icon={faUserCog} className="mr-3" />
+              Account Settings
+            </Link>
+          </li>
+          <li>
             <button
               onClick={() => setShowLogoutDialog(true)}
               className="flex items-center w-full px-4 py-3 text-white font-semibold bg-[#1c3b57] border border-white/20 rounded-lg hover:bg-[#365980] transition"
@@ -57,8 +74,10 @@ const DilgSidebar = () => {
           </li>
         </ul>
       </nav>
+
+      {/* Logout Confirmation Dialog */}
       {showLogoutDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
             <h2 className="text-xl font-bold mb-4">Confirm Logout</h2>
             <p className="mb-6">Are you sure you want to log out?</p>
