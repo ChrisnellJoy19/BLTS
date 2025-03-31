@@ -75,15 +75,7 @@ export const developersData = {
         image: "/images/vea.png",
       },
     ],
-    v3: [
-      {
-        name: "CHRISNELL JOY C. LIMPIADA",
-        position: "BSCpE Intern, MarSU",
-        address: "Balanacan, Mogpog, Marinduque",
-        contact: "0916-777-3484",
-        email: "cjlimpiada03@gmail.com",
-        image: "/images/chrisnell.jpg",
-      },
+    v3: [      
       {
         name: "JELAICA MAE J. MAYORES",
         position: "BSCpE Intern, MarSU",
@@ -93,13 +85,21 @@ export const developersData = {
         image: "/images/jelaica.jpg",
       },
       {
+        name: "CHRISNELL JOY C. LIMPIADA",
+        position: "BSCpE Intern, MarSU",
+        address: "Balanacan, Mogpog, Marinduque",
+        contact: "0916-777-3484",
+        email: "cjlimpiada03@gmail.com",
+        image: "/images/chrisnell.jpg",
+      },
+      {
         name: "MARY AGUSTHINE R. RAMIREZ",
         position: "BSCpE Intern, MarSU",
         address: "Yook, Buenavista, Marinduque",
         contact: "0977-263-9207",
         email: "ramirezmaryagusthine1303@gmail.com",
         image: "/images/mary.jpg",
-      },
+      },      
       {
         name: "JOHN RAFAEL P. RIOVEROS",
         position: "BSCpE Intern, MarSU",

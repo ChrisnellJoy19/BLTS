@@ -14,30 +14,30 @@ const DilgBarangayView = () => {
   console.log("Municipality ID:", municipalityId);
   console.log("Barangay ID:", barangayId);
 
-  // useEffect(() => {
-  //   // Fetch barangay data from backend
-  //   fetch(`http://localhost:5000/api/municipalities/${municipalityId}/barangays/${barangayId}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setBarangay(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching barangay:", error);
-  //       setLoading(false);
-  //     });
-  // }, [municipalityId, barangayId]);
-
   useEffect(() => {
-    const foundBarangay = barangays.find(
-      (b) => b._id === barangayId && b.municipalityId === municipalityId
-    );
-  
-    if (foundBarangay) {
-      setBarangay(foundBarangay);
-    }
-    setLoading(false);
+    // Fetch barangay data from backend
+    fetch(`http://localhost:5000/api/municipalities/${municipalityId}/barangays/${barangayId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBarangay(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching barangay:", error);
+        setLoading(false);
+      });
   }, [municipalityId, barangayId]);
+
+  // useEffect(() => {
+  //   const foundBarangay = barangays.find(
+  //     (b) => b._id === barangayId && b.municipalityId === municipalityId
+  //   );
+  
+  //   if (foundBarangay) {
+  //     setBarangay(foundBarangay);
+  //   }
+  //   setLoading(false);
+  // }, [municipalityId, barangayId]);
   
 
   if (loading) return <p>Loading...</p>;

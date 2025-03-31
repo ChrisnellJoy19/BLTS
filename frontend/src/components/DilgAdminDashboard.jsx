@@ -54,7 +54,7 @@ const DilgAdminDashboard = () => {
       <div className="flex-grow flex flex-col p-6 overflow-auto">
         {/* Header */}
         <header className="flex items-left justify-left text-white py-1">
-          <img src="/images/blts_logo.png" alt="BLTS Logo" className="h-40 mr-32" />
+          <img src="/images/blts_logo.png" alt="BLTS Logo" className="max-h-32 w-auto mr-8" />
         </header>
         <header className="flex items-left justify-left text-black">
           <h1 className="text-xl font-bold">WELCOME, DILG ADMIN!</h1>
