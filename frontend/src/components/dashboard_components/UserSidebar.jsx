@@ -9,16 +9,56 @@ const Sidebar = () => {
 
   const [barangayName, setBarangayName] = useState("");
   const [municipalityName, setMunicipalityName] = useState("");
-  const [barangayLogo, setBarangayLogo] = useState("");
+  const [barangayLogo, setBarangayLogo] = useState("/images/barangay_logo_placeholder.png");
 
   useEffect(() => {
-    // Simulate fetching user location from localStorage or backend
-    const userData = JSON.parse(localStorage.getItem("user")) || {};
-    const { barangay, municipality, barangayLogo } = userData;
+    const fetchUserBarangay = async () => {
+      try {
+        const token = localStorage.getItem("userToken");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
 
-    setBarangayName(barangay || "");
-    setMunicipalityName(municipality || "");
-    setBarangayLogo(barangayLogo || "/images/barangay_logo_placeholder.png");
+        // Decode the token to extract user details
+        const user = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        const barangayId = user.barangayId;
+
+        if (!barangayId) {
+          console.error("No barangay ID found in token");
+          return;
+        }
+
+        // Fetch Barangay Data
+        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const barangayData = await response.json();
+          setBarangayName(barangayData.name);
+          setBarangayLogo(barangayData.logo || "/images/barangay_logo_placeholder.png");
+
+          // Fetch Municipality Name
+          const municipalityResponse = await fetch(
+            `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
+          );
+
+          if (municipalityResponse.ok) {
+            const municipalityData = await municipalityResponse.json();
+            setMunicipalityName(municipalityData.name);
+          } else {
+            console.error("Failed to fetch municipality data");
+          }
+        } else {
+          console.error("Failed to fetch barangay data");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUserBarangay();
   }, []);
 
   const handleClick = (event, path) => {
@@ -38,7 +78,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Toggle Button (only on small screens) */}
       <button
         className="md:hidden fixed top-4 right-5 z-50 bg-[#183248] text-white px-4 py-2 rounded-md shadow-md hover:bg-[#587D9D]"
         onClick={() => setIsOpen(!isOpen)}
@@ -46,7 +85,6 @@ const Sidebar = () => {
         {isOpen ? "Hide Sidebar" : "Show Sidebar"}
       </button>
 
-      {/* Sidebar (Responsive) */}
       <div
         className={`
           fixed top-0 left-0 h-screen w-64 bg-[#183248] text-white p-5 z-40 transform transition-transform duration-300 ease-in-out
@@ -58,11 +96,11 @@ const Sidebar = () => {
           <img
             src={barangayLogo}
             alt="barangay-logo"
-            className="w-24 h-24 rounded-full border-4 border-white"
-            />
-          <div className="text-lg mt-2">
+            className="w-25 h-25 rounded-full border-1 border-white"
+          />
+          <div className="text-lg mt-2 font-bold">
             {barangayName && municipalityName
-              ? `Barangay ${barangayName}, Municipality ${municipalityName}, Marinduque`
+              ? ` ${barangayName},  ${municipalityName}, Marinduque`
               : "Loading..."}
           </div>
         </div>
@@ -94,17 +132,13 @@ const Sidebar = () => {
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/barangay-profile")}
           >
-{/* HEAD */}
-            <User className="w-5 h-5" /> <span>User Profile</span>
+            <Settings className="w-5 h-5" /> <span>Barangay Profile</span>
           </Link>
           <Link
             to="/edit-credentials"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
           >
             <Settings className="w-5 h-5" /> <span>Account Settings</span>
-
-            <Settings className="w-5 h-5" /> <span>Barangay Profile</span>
-{/* 3fa79c3dac1acd56ae9811a70226435a319570d5 */}
           </Link>
           <button
             className="flex items-center gap-2 p-3 hover:bg-red-600 rounded mt-auto w-full text-left"

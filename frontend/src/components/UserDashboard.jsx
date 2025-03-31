@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
@@ -14,6 +14,43 @@ const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
 const renderLabel = ({ percent }) => `${(percent * 100).toFixed(1)}%`;
 
 const Dashboard = () => {
+  const [barangayName, setBarangayName] = useState("User");
+
+  useEffect(() => {
+    const fetchBarangayName = async () => {
+      try {
+        const token = localStorage.getItem("userToken");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
+
+        const user = JSON.parse(atob(token.split(".")[1]));
+        const barangayId = user.barangayId;
+
+        if (!barangayId) {
+          console.error("No barangay ID found in token");
+          return;
+        }
+
+        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const barangayData = await response.json();
+          setBarangayName(barangayData.name);
+        } else {
+          console.error("Failed to fetch barangay data");
+        }
+      } catch (error) {
+        console.error("Error fetching barangay name:", error);
+      }
+    };
+
+    fetchBarangayName();
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-auto">
       <Sidebar />
@@ -26,12 +63,12 @@ const Dashboard = () => {
           <img src="/images/one_duque.png" alt="oneduque-logo" className="h-10" />
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-60 md:w-72 mb-4 mx-auto md:mx-0" />
-        <h1 className="text-xl md:text-2xl font-bold text-center md:text-left">WELCOME, USER!</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-center md:text-left text-black ">WELCOME, BARANGAY {barangayName.toUpperCase()}!</h1>
 
         {/* Charts Section */}
         <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12 mt-6">
           {["RESOLUTIONS", "ORDINANCES"].map((title, index) => (
-            <div key={index} className="text-center w-full md:w-auto">
+            <div key={index} className="text-center w-full md:w-auto text-black">
               <h2 className="text-lg font-semibold mb-2">{title}</h2>
               <div className="flex justify-center">
                 <PieChart width={300} height={250}>
