@@ -26,7 +26,30 @@ router.get("/:id", async (req, res) => {
 // Create a new ordinance
 router.post("/", async (req, res) => {
   try {
-    const newOrdinance = new Ordinance(req.body);
+    const { barangayId, title, description, fileUrl, enactmentDate, status, author, governanceArea, adminYears } = req.body;
+
+    // Validate governance area
+    if (!["Local", "Regional"].includes(governanceArea)) {
+      return res.status(400).json({ message: "Invalid governance area. Choose 'Local' or 'Regional'." });
+    }
+
+    // Validate admin years (must be an array of numbers)
+    if (adminYears && !Array.isArray(adminYears) || adminYears.some(year => typeof year !== "number")) {
+      return res.status(400).json({ message: "adminYears must be an array of numbers." });
+    }
+
+    const newOrdinance = new Ordinance({
+      barangayId,
+      title,
+      description,
+      fileUrl,
+      enactmentDate,
+      status,
+      author,
+      governanceArea,
+      adminYears
+    });
+
     await newOrdinance.save();
     res.status(201).json(newOrdinance);
   } catch (error) {
@@ -37,6 +60,18 @@ router.post("/", async (req, res) => {
 // Update an ordinance
 router.put("/:id", async (req, res) => {
   try {
+    const { governanceArea, adminYears } = req.body;
+
+    // Validate governance area
+    if (governanceArea && !["Local", "Regional"].includes(governanceArea)) {
+      return res.status(400).json({ message: "Invalid governance area. Choose 'Local' or 'Regional'." });
+    }
+
+    // Validate admin years (must be an array of numbers)
+    if (adminYears && !Array.isArray(adminYears) || adminYears.some(year => typeof year !== "number")) {
+      return res.status(400).json({ message: "adminYears must be an array of numbers." });
+    }
+
     const updatedOrdinance = await Ordinance.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedOrdinance) return res.status(404).json({ message: "Ordinance not found" });
     res.json(updatedOrdinance);

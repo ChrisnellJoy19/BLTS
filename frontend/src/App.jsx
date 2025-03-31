@@ -10,20 +10,20 @@ import DilgAdminLogin from "./components/DilgAdminLogin";
 import DilgAdminDashboard from "./components/DilgAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
 import MunicipalityView from "./components/MunicipalityView";
+
+import "./index.css"; 
 import UserOrdinance from "./components/UserOrdinance";
 import UserResolution from "./components/UserResolution";
-import UserProfile from "./components/UserProfile";
-import UserAddProfile from "./components/UserAddProfile";
-import AdminAddProfile from "./components/AdminAddProfile";
+import BarangayProfile from "./components/BarangayProfile";
+import UserEditProfile from "./components/UserEditProfile";
+import UserAddNewProfile from "./components/UserAddNewProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
-import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount";
+import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
 import AdminRoute from "./components/AdminRoute";
 import UserRoute from "./components/UserRoute";
 import EditCredentials from "./components/EditCredentials";
 import ForgotPassword from "./components/ForgotPassword"; // adjust path if needed
-
-import "./index.css"; 
 
 function App() {
   return (
@@ -35,7 +35,6 @@ function App() {
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/DilgAdminLogin" element={<DilgAdminLogin />} />
         <Route path="/UserLogin" element={<UserLogin />} />
-
         {/* Protected Routes */}
         <Route
           path="/dilgAdminDashboard"
@@ -57,9 +56,9 @@ function App() {
         <Route path="/municipality/:id" element={<MunicipalityView />} />
         <Route path="/user-ordinances" element={<UserOrdinance />} />
         <Route path="/user-resolutions" element={<UserResolution />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/add-new-profile" element={<UserAddProfile />} />
-        <Route path="/add-new-admin" element={<AdminAddProfile />} />
+        <Route path="/barangay-profile" element={<BarangayProfile/>} />
+        <Route path="/edit-profile" element={<UserEditProfile/>} />
+        <Route path="/add-new-profile" element={<UserAddNewProfile/>} />        
         <Route path="/add-ordinances" element={<UserAddOrdinance />} />
         <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />

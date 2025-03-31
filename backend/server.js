@@ -7,6 +7,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ✅ Middleware to Log Incoming Requests
+app.use((req, res, next) => {
+    console.log(`📥 Received ${req.method} request on ${req.url}`);
+    if (Object.keys(req.body).length) {
+        console.log("📦 Request Body:", req.body);
+    }
+    next();
+});
+
 const municipalityRoutes = require("./routes/municipalities");
 const barangayRoutes = require("./routes/barangays");
 const dilgadminRoute = require("./routes/dilgadmin");
@@ -25,6 +34,9 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log("✅ MongoDB connected successfully"))
 .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// ✅ Check if Barangay Routes are Loaded
+console.log("✅ Barangay routes loaded");
 
 // Routes
 app.use("/api/municipalities", municipalityRoutes);

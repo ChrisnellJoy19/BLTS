@@ -7,7 +7,9 @@ const OrdinanceSchema = new mongoose.Schema({
     fileUrl: String,
     enactmentDate: Date,
     status: String,
-    author: String
+    author: String,
+    governanceArea: { type: String, enum: ["Local", "Regional"], required: true }, // New Field
+    adminYears: [{ type: Number }]
 });
 
 module.exports = mongoose.model("Ordinance", OrdinanceSchema);

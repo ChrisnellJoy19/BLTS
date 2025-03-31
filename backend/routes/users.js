@@ -16,15 +16,12 @@ router.post("/register", async (req, res) => {
   const { username, password, email, municipalityId, barangayId, role } = req.body;
 
   try {
-    // Check if user already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username or Email already exists" });
-    }
+    console.log("🔹 Raw Password:", password);
 
-    // 🔹 Hash the password before saving
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    console.log("🔹 Hashed Password:", hashedPassword);
 
     const newUser = new User({
       username,
@@ -44,25 +41,37 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 // 🔹 User Login Route
 router.post("/login", async (req, res) => {
-  const { identifier, password } = req.body; // Accepts username or email
+  const { identifier, password } = req.body;
 
   try {
     const user = await User.findOne({
       $or: [{ username: identifier }, { email: identifier }],
     });
 
+    console.log("🟢 Login Attempt:", identifier);
+    console.log("🔍 Retrieved User:", user);
+
     if (!user) {
+      console.log("🔴 User not found for identifier:", identifier);
       return res.status(400).json({ message: "Invalid username or password" });
     }
+
+    console.log("🔐 Checking password...");
+    console.log("Entered Password:", password);
+    console.log("Stored Hashed Password:", user.password);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid username or password" });
+      console.log("🔴 Password comparison result:", isPasswordValid);
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // Generate Token
+    console.log("✅ Password matched successfully!");
+
     const token = jwt.sign(
       {
         id: user._id,
@@ -82,13 +91,16 @@ router.post("/login", async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        municipalityId: user.municipalityId,
+        barangayId: user.barangayId,
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("❌ Server error:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
 
 // 🔹 Fetch User Data Route (Protected)
 router.get("/", authenticate, async (req, res) => {
