@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
-import resolutionData from "../data/resolutionData";
 import { Edit, Download, Eye, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const UserResolution = () => {
+  const [resolutions, setResolutions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const barangayId = user?.barangayId;
+
+  useEffect(() => {
+      if (!barangayId) return; 
+  
+      const fetchResolutions = async () => {
+        if (!barangayId) return; 
+        try {
+          const response = await fetch(`http://localhost:5000/api/resolutions?barangayId=${encodeURIComponent(barangayId)}`);
+          
+          if (!response.ok) throw new Error("Failed to fetch resolutions");
+      
+          const data = await response.json();
+          setResolutions(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+  
+      fetchResolutions();
+    }, [barangayId]);
   return (
     <div className="flex h-screen">
       {/* Sidebar (Unchanged) */}
@@ -40,30 +67,42 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        {/* Resolution List (Scrollable & Stays in Place) */}
+        {/* Resolution List */}
         <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-[#183248] p-4 rounded-lg mt-4 border border-transparent mx-auto">
-          <div className="flex flex-col gap-3">
-            {resolutionData.map((resolution) => (
-              <div key={resolution.id} className="bg-white text-black p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-bold">{resolution.letterNo}</h3>
-                <p className="font-semibold">{resolution.title}</p>
-                <p className="text-sm">{resolution.date}</p>
-                <p className="text-sm">{resolution.author}</p>
+          
+          {loading ? (
+            <p className="text-center text-white">Loading resolutions...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : resolutions.length === 0 ? (
+            <p className="text-center text-white">No resolutions found for your  barangay.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {resolutions.map((resolution) => (
+                <div key={resolution._id} className="bg-white text-black p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-bold">Letter No. {resolution.documentNumber}, s. {resolution.administrativeYear}</h3>
+                  <p className="font-semibold">{resolution.documentTitle}</p>
+                  <p className="text-sm">Date of Enactment | {new Date(resolution.dateEnacted).toLocaleDateString()}</p>
+                  <p className="text-sm">Author(s) | {resolution.authors.join(", ")}</p>
 
-                {/* Action Icons */}
-                <div className="flex justify-end space-x-3 mt-2">
-                  <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" />
-                  <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
-                  <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
-                  <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
+                  {/* Action Icons */}
+                  <div className="flex justify-end space-x-3 mt-2">
+                    <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" />
+                    <a href={resolution.fileUrl} download>
+                      <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
+                    </a>
+                    <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
+                    <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
+      
         </div>
       </main>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserResolution;

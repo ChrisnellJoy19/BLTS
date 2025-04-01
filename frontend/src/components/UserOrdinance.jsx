@@ -1,18 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
-import ordinanceData from "../data/ordinanceData";
 import { Edit, Download, Eye, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const UserOrdinance = () => {
+  const [ordinances, setOrdinances] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const user = JSON.parse(localStorage.getItem("user"));
+  const barangayId = user?.barangayId;  
+
+
+  useEffect(() => {
+    if (!barangayId) return; // Prevent fetching if no barangayId
+
+    const fetchOrdinances = async () => {
+      if (!barangayId) return; 
+    
+      try {
+        const response = await fetch(`http://localhost:5000/api/ordinances?barangayId=${encodeURIComponent(barangayId)}`);
+        
+        if (!response.ok) throw new Error("Failed to fetch ordinances");
+    
+        const data = await response.json();
+        setOrdinances(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+
+    fetchOrdinances();
+  }, [barangayId]);
+
   return (
     <div className="flex h-screen">
-      {/* Sidebar (Unchanged) */}
+      {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
       <main className="flex-1 p-5 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white">
-        {/* Logos (Keep original position) */}
+        
+        {/* Logos */}
         <div className="flex flex-wrap justify-start items-center gap-1 ml-4">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-[30px]" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-[30px]" />
@@ -30,7 +62,7 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Add Ordinance Button (Position Unchanged) */}
+        {/* Add Ordinance Button */}
         <div className="flex justify-start mt-2">
           <Link
             to="/add-ordinances"
@@ -40,30 +72,42 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        {/* Ordinance List (Scrollable & Stays in Place) */}
+        {/* Ordinance List */}
         <div className="w-full max-w-[1000px] h-[400px] overflow-y-auto bg-[#183248] p-4 rounded-lg mt-4 border border-transparent mx-auto">
-          <div className="flex flex-col gap-3">
-            {ordinanceData.map((ordinance) => (
-              <div key={ordinance.id} className="bg-white text-black p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-bold">{ordinance.letterNo}</h3>
-                <p className="font-semibold">{ordinance.title}</p>
-                <p className="text-sm">{ordinance.date}</p>
-                <p className="text-sm">{ordinance.author}</p>
+          
+          {loading ? (
+            <p className="text-center text-white">Loading ordinances...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : ordinances.length === 0 ? (
+            <p className="text-center text-white">No ordinances found for your barangay.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {ordinances.map((ordinance) => (
+                <div key={ordinance._id} className="bg-white text-black p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-bold">Letter No. {ordinance.documentNumber}, s. {ordinance.administrativeYear}</h3>
+                  <p className="font-semibold">{ordinance.documentTitle}</p>
+                  <p className="text-sm">Date of Enactment | {new Date(ordinance.dateEnacted).toLocaleDateString()}</p>
+                  <p className="text-sm">Author(s) | {ordinance.authors.join(", ")}</p>
 
-                {/* Action Icons */}
-                <div className="flex justify-end space-x-3 mt-2">
-                  <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" />
-                  <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
-                  <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
-                  <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
+                  {/* Action Icons */}
+                  <div className="flex justify-end space-x-3 mt-2">
+                    <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" />
+                    <a href={ordinance.fileUrl} download>
+                      <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
+                    </a>
+                    <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
+                    <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
+          
         </div>
       </main>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserOrdinance;

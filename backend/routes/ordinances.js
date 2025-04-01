@@ -47,15 +47,23 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
   }
 });
 
-// 🔹 Get All Ordinances
 router.get("/", async (req, res) => {
   try {
-    const ordinances = await Ordinance.find().populate("barangayId", "name");
+    const { barangayId } = req.query;
+
+    if (!barangayId) {
+      return res.status(400).json({ message: "Barangay ID is required" });
+    }
+
+    const ordinances = await Ordinance.find({ barangayId }).populate("barangayId", "name");
+    
     res.json(ordinances);
   } catch (error) {
     console.error("Error fetching ordinances:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
+
 
 module.exports = router;

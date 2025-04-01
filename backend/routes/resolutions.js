@@ -50,7 +50,12 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
 // 🔹 Get All Resolutions
 router.get("/", async (req, res) => {
   try {
-    const resolutions = await Resolution.find().populate("barangayId", "name");
+    const { barangayId } = req.query;
+
+    if (!barangayId) {
+      return res.status(400).json({ message: "Barangay ID is required" });
+    }
+    const resolutions = await Resolution.find({ barangayId }).populate("barangayId", "name");
     res.json(resolutions);
   } catch (error) {
     console.error("Error fetching resolutions:", error);
