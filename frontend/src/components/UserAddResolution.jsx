@@ -20,7 +20,7 @@ const UserAddResolution = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("userToken");
         const response = await axios.get("http://localhost:5000/api/user/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -68,7 +68,7 @@ const UserAddResolution = () => {
     if (selectedFile) formData.append("file", selectedFile);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("userToken");
     
       const user = JSON.parse(localStorage.getItem("user"));
       console.log("User Data:", user); 

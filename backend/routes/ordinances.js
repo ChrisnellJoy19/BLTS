@@ -2,17 +2,38 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 const Ordinance = require("../models/Ordinance");
 const authenticate = require("../middleware/auth");
 
+// Ensure the uploads folder exists
+const uploadFolder = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadFolder)) {
+  fs.mkdirSync(uploadFolder);
+}
+
+// Configure multer storage
 const storage = multer.diskStorage({
-  destination: "./uploads/",
+  destination: uploadFolder,
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Rename file
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB file size limit (adjust as needed)
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['application/pdf']; // You can add more types if needed
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed'), false);
+    }
+  }
+});
 
 // 🔹 Upload Ordinance Route
 router.post("/", authenticate, upload.single("file"), async (req, res) => {
@@ -30,8 +51,7 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
       governanceArea,
       dateEnacted,
       administrativeYear,
-      // authors: JSON.parse(authors), // Convert string array to actual array
-      authors: authors ? JSON.parse(authors) : [],
+      authors: authors || [],
       status,
       description,
       barangayId,
