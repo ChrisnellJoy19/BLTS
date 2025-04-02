@@ -11,6 +11,27 @@ const UserAddResolution = () => {
   const [dateEnacted, setDateEnacted] = useState("");
   const [administrativeYear, setAdministrativeYear] = useState(""); 
   const [authors, setAuthors] = useState([]);
+  const [authorInput, setAuthorInput] = useState("");
+  
+  const handleAuthorChange = (e) => {
+    setAuthorInput(e.target.value);
+  };
+  
+  const handleAuthorKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const newAuthor = authorInput.trim();
+      if (newAuthor && !authors.includes(newAuthor)) {
+        setAuthors([...authors, newAuthor]);
+      }
+      setAuthorInput(""); // Clear input after adding
+    }
+  };
+  
+  const removeAuthor = (index) => {
+    setAuthors(authors.filter((_, i) => i !== index));
+  };
+  
   const [status, setStatus] = useState("");
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -41,8 +62,14 @@ const UserAddResolution = () => {
   }, []);
   
   
-
-  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
+  const [selectedFileName, setSelectedFileName] = useState("No file chosen");
+  
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    setSelectedFileName(file ? file.name : "No file chosen");
+  };
+  
   const handleCancel = () => {
     navigate("/user-resolutions");
   };
@@ -128,9 +155,13 @@ const UserAddResolution = () => {
             <div>
               <label className="text-sm font-semibold">Governance Area</label>
               <select value={governanceArea} onChange={(e) => setGovernanceArea(e.target.value)} className="w-full border p-2 rounded mt-1">
-                <option value="">Select area</option>
-                <option value="Barangay">Barangay</option>
-                <option value="Municipal">Municipal</option>
+              <option value="">Select area</option>
+                <option value="Financial Administration and Sustainability">Financial Administration and Sustainability</option>
+                <option value="Disaster Preparedness">Disaster Preparedness</option>
+                <option value="Safety, Peace and Order">Safety, Peace and Order</option>
+                <option value="Social Protection and Sensitivity">Social Protection and Sensitivity</option>
+                <option value="Business-friendliness and Competitiveness">Business-friendliness and Competitiveness</option>
+                <option value="Environmental Management">Environmental Management</option>
               </select>
             </div>
 
@@ -152,15 +183,25 @@ const UserAddResolution = () => {
               />
             </div>
 
+
             <div className="md:col-span-2">
               <label className="text-sm font-semibold">Authors</label>
-              <input 
-                type="text" 
-                value={authors.join(", ")} 
-                onChange={(e) => setAuthors(
-                  e.target.value.split(",").map(author => author.trim()).filter(author=>author))} 
-                className="w-full border p-2 rounded mt-1" 
-                placeholder="Enter authors, separated by commas" />
+              <div className="flex flex-wrap gap-2 border p-2 rounded mt-1">
+                {authors.map((author, index) => (
+                  <span key={index} className="bg-blue-200 px-2 py-1 rounded">
+                    {author}
+                    <button type="button" onClick={() => removeAuthor(index)} className="ml-1 text-red-500">x</button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  value={authorInput}
+                  onChange={handleAuthorChange}
+                  onKeyDown={handleAuthorKeyDown}
+                  className="flex-1 border-none outline-none"
+                  placeholder="Enter an author and press Enter"
+                />
+              </div>
             </div>
  
             <div>
@@ -179,13 +220,47 @@ const UserAddResolution = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="file-upload" className="cursor-pointer text-sm font-semibold">Upload File</label>
-              <input id="file-upload" type="file" onChange={handleFileChange} className="w-full border p-2 rounded mt-1" />
+              <label className="text-sm font-semibold">Upload File</label>
+              
+              {/* Hidden File Input */}
+              <input
+                id="hidden-file-input"
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              
+              {/* Custom Upload Button */}
+              <div className="flex items-center gap-1 w-full border p-2 rounded">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("hidden-file-input").click()}
+                  className="bg-gray-400 text-black px-3 py-1 rounded hover:bg-[#808080]"
+                >
+                  {selectedFile ? "Change File" : "Choose File"}
+                </button>
+                
+                {/* Display File Name */}
+                {selectedFile && (
+                  <span className="text-sm text-gray-700">{selectedFileName}</span>
+                )}
+              </div>
             </div>
 
-            <div className="md:col-span-2 flex justify-end gap-4">
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={handleCancel}>CANCEL</button>
-              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">UPLOAD</button>
+            <div className="md:col-span-2 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              >
+              Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-[#223645] text-white px-4 py-2 rounded hover:bg-[#1a2a35]"
+              >
+              Upload Document
+              </button>
             </div>
           </form>
         </div>
