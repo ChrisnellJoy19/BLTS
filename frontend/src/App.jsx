@@ -18,6 +18,7 @@ import BarangayProfile from "./components/BarangayProfile";
 import UserEditProfile from "./components/UserEditProfile";
 import UserAddNewProfile from "./components/UserAddNewProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
+import UserEditOrdinance from "./components/UserEditOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
 import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
 import AdminRoute from "./components/AdminRoute";
@@ -60,6 +61,7 @@ function App() {
         <Route path="/edit-profile" element={<UserEditProfile/>} />
         <Route path="/add-new-profile" element={<UserAddNewProfile/>} />        
         <Route path="/add-ordinances" element={<UserAddOrdinance />} />
+        <Route path="/edit-ordinance" element={<UserEditOrdinance />} />
         <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
         <Route path="/edit-credentials" element={<EditCredentials />} />

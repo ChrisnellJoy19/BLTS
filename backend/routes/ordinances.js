@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const mongoose = require("mongoose"); //
 const Ordinance = require("../models/Ordinance");
 const authenticate = require("../middleware/auth");
 
@@ -84,6 +85,43 @@ router.get("/", async (req, res) => {
   }
 });
 
+// 🔹 Update Ordinance Route
+router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    let updateData = req.body;
+
+    // Log received data for debugging
+    console.log("Received update data:", updateData);
+
+    // Validate and convert barangayId only if it's provided
+    if (updateData.barangayId) {
+      if (!mongoose.Types.ObjectId.isValid(updateData.barangayId)) {
+        return res.status(400).json({ message: "Invalid barangayId format" });
+      }
+      updateData.barangayId = new mongoose.Types.ObjectId(updateData.barangayId);
+    }
+
+    // If there's a new file, update fileUrl
+    if (req.file) {
+      updateData.fileUrl = `/uploads/${req.file.filename}`;
+    }
+
+    // Log the final data before updating
+    console.log("Final update data:", updateData);
+
+    const updatedOrdinance = await Ordinance.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedOrdinance) {
+      return res.status(404).json({ message: "Ordinance not found" });
+    }
+
+    res.json({ message: "Ordinance updated successfully", ordinance: updatedOrdinance });
+  } catch (error) {
+    console.error("Error updating ordinance:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
 
 
 module.exports = router;
