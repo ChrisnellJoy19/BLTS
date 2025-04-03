@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, User, LogOut, Settings, X } from "lucide-react";
+import { Home, FileText, User, LogOut, Settings, File } from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -113,7 +113,7 @@ const Sidebar = () => {
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
             onClick={(e) => handleClick(e, "/user-ordinances")}
           >
-            <FileText className="w-5 h-5" /> <span>Ordinances</span>
+            <File className="w-5 h-5" /> <span>Ordinances</span>
           </Link>
           <Link
             to="/user-resolutions"
@@ -126,7 +126,7 @@ const Sidebar = () => {
             to="/barangay-profile"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
           >
-            <Settings className="w-5 h-5" /> <span>Barangay Profile</span>
+            <User className="w-5 h-5" /> <span>Barangay Profile</span>
           </Link>
           <Link
             to="/edit-credentials"

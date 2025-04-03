@@ -2,11 +2,18 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
-const data = [
-  { name: "Category A", value: 40 },
-  { name: "Category B", value: 30 },
-  { name: "Category C", value: 20 },
-  { name: "Category D", value: 10 },
+const ordinancesData = [
+  { name: "Financial Administration and Sustainability", value: 6 },
+  { name: "Disaster Preparedness", value: 4 },
+  { name: "Environmental Management", value: 8 },
+  { name: "Safety, Peace and Order", value: 6 },
+];
+
+const resolutionsData = [
+  { name: "Financial Administration and Sustainability", value: 5 },
+  { name: "Disaster Preparedness", value: 3 },
+  { name: "Environmental Management", value: 7 },
+  { name: "Safety, Peace and Order", value: 5 },
 ];
 
 const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
@@ -63,34 +70,59 @@ const Dashboard = () => {
           <img src="/images/one_duque.png" alt="oneduque-logo" className="h-10" />
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-60 md:w-72 mb-4 mx-auto md:mx-0" />
-        <h1 className="text-xl md:text-2xl font-bold text-center md:text-left text-black ">WELCOME, BARANGAY {barangayName.toUpperCase()}!</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-center md:text-left text-black">
+          WELCOME, BARANGAY {barangayName.toUpperCase()}!
+        </h1>
 
         {/* Charts Section */}
         <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12 mt-6">
-          {["RESOLUTIONS", "ORDINANCES"].map((title, index) => (
-            <div key={index} className="text-center w-full md:w-auto text-black">
-              <h2 className="text-lg font-semibold mb-2">{title}</h2>
-              <div className="flex justify-center">
-                <PieChart width={300} height={250}>
-                  <Pie
-                    data={data}
-                    dataKey="value"
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={80}
-                    label={renderLabel}
-                    labelLine={false}
-                  >
-                    {data.map((entry, i) => (
-                      <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
-                </PieChart>
-              </div>
+          {/* Ordinances Chart (Now First) */}
+          <div className="text-center w-full md:w-auto text-black">
+            <h2 className="text-lg font-semibold mb-2">ORDINANCES</h2>
+            <div className="flex justify-center">
+              <PieChart width={300} height={250}>
+                <Pie
+                  data={ordinancesData}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  label={renderLabel}
+                  labelLine={false}
+                >
+                  {ordinancesData.map((entry, i) => (
+                    <Cell key={`ord-cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
+              </PieChart>
             </div>
-          ))}
+          </div>
+
+          {/* Resolutions Chart (Now Second) */}
+          <div className="text-center w-full md:w-auto text-black">
+            <h2 className="text-lg font-semibold mb-2">RESOLUTIONS</h2>
+            <div className="flex justify-center">
+              <PieChart width={300} height={250}>
+                <Pie
+                  data={resolutionsData}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={40}
+                  outerRadius={80}
+                  label={renderLabel}
+                  labelLine={false}
+                >
+                  {resolutionsData.map((entry, i) => (
+                    <Cell key={`res-cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
+              </PieChart>
+            </div>
+          </div>
         </div>
 
         {/* Decorative Images */}
