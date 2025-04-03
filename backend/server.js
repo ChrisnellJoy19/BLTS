@@ -26,6 +26,7 @@ const dilgadminRoute = require("./routes/dilgadmin");
 const userRoutes = require('./routes/users');  
 const ordinanceRoutes = require('./routes/ordinances'); 
 const resolutionsRoutes = require('./routes/resolutions');
+// const archiveordinancesRoutes = require('./routes/archiveordinances');
 
 console.log("Loaded environment variables:");
 console.log("MONGO_URI:", process.env.MONGO_URI);
@@ -50,8 +51,8 @@ app.use("/api/dilgadmin", dilgadminRoute);
 app.use("/api/user", userRoutes);
 app.use("/api/ordinances", ordinanceRoutes);
 app.use("/api/resolutions", resolutionsRoutes);
+// app.use("/api/archiveordinances", archiveordinancesRoutes);
 app.use("/uploads", express.static("uploads"));
-
 
 app.get("/", (req, res) => {
     res.send("Welcome to the BLTS API");

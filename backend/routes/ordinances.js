@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const mongoose = require("mongoose"); //
+const mongoose = require("mongoose"); 
 const Ordinance = require("../models/Ordinance");
 const authenticate = require("../middleware/auth");
 
@@ -102,12 +102,10 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
       updateData.barangayId = new mongoose.Types.ObjectId(updateData.barangayId);
     }
 
-    // If there's a new file, update fileUrl
     if (req.file) {
       updateData.fileUrl = `/uploads/${req.file.filename}`;
     }
 
-    // Log the final data before updating
     console.log("Final update data:", updateData);
 
     const updatedOrdinance = await Ordinance.findByIdAndUpdate(id, updateData, { new: true });
@@ -122,6 +120,5 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
-
 
 module.exports = router;

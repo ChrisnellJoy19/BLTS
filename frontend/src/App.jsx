@@ -20,6 +20,7 @@ import UserAddNewProfile from "./components/UserAddNewProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserEditOrdinance from "./components/UserEditOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
+import UserEditResolution from "./components/UserEditResolution";
 import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
 import AdminRoute from "./components/AdminRoute";
 import UserRoute from "./components/UserRoute";
@@ -62,6 +63,7 @@ function App() {
         <Route path="/add-new-profile" element={<UserAddNewProfile/>} />        
         <Route path="/add-ordinances" element={<UserAddOrdinance />} />
         <Route path="/edit-ordinance" element={<UserEditOrdinance />} />
+        <Route path="/edit-resolution" element={<UserEditResolution />} />
         <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
         <Route path="/edit-credentials" element={<EditCredentials />} />

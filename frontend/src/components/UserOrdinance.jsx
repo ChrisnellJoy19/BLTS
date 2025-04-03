@@ -19,7 +19,7 @@ const UserOrdinance = () => {
     const fetchOrdinances = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/ordinances?barangayId=${encodeURIComponent(barangayId)}`
+          `http://localhost:5000/api/ordinances?barangayId=${encodeURIComponent(barangayId)}&isDeleted=false`
         );
         if (!response.ok) throw new Error("Failed to fetch ordinances");
         const data = await response.json();
@@ -30,6 +30,7 @@ const UserOrdinance = () => {
         setLoading(false);
       }
     };
+    
 
     fetchOrdinances();
   }, [barangayId]);
@@ -37,6 +38,53 @@ const UserOrdinance = () => {
   const handleEdit = (ordinance) => {
     navigate("/edit-ordinance", { state: { ordinance } });
   };
+
+  const handleDownload = async (fileUrl, documentTitle) => {
+    try {
+      const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+      const response = await fetch(fullUrl, { mode: "cors" });
+  
+      // const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+      // const fullUrl = `${BACKEND_URL}${fileUrl}`; //change to this if will deploy
+
+      if (!response.ok) throw new Error("Failed to download file");
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${documentTitle}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+  
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download error:", err);
+    }
+  };
+  
+  const handleView = (fileUrl) => {
+    const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+    window.open(fullUrl, "_blank");
+  };
+  
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredOrdinances = ordinances.filter((ordinance) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      ordinance.documentTitle.toLowerCase().includes(query) ||
+      ordinance.documentNumber.toString().includes(query) ||
+      ordinance.governanceArea.toLowerCase().includes(query) ||
+      ordinance.dateEnacted.includes(query) || // Assuming it's a string (format it if needed)
+      ordinance.administrativeYear.toString().includes(query) ||
+      ordinance.authors.some((author) => author.toLowerCase().includes(query)) // Checks if any author matches
+    );
+  });
+
+
 
   return (
     <div className="flex h-screen">
@@ -51,10 +99,14 @@ const UserOrdinance = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mt-2">
           <img src="/images/blts_logo.png" alt="blts-logo" className="h-auto w-60 sm:w-72" />
           <input
-            type="text"
-            className="px-5 py-2 text-[15px] text-black bg-[#f4f4f4] border border-black rounded-full outline-none mt-2 md:mt-0 w-full md:w-auto"
-            placeholder="Search Ordinance..."
-          />
+          type="text"
+          className="px-5 py-2 text-[15px] text-black bg-[#f4f4f4] border border-black rounded-full outline-none mt-2 md:mt-0 w-full md:w-auto"
+          placeholder="Search Ordinance..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+
+
         </div>
         <div className="flex justify-start mt-2">
           <Link to="/add-ordinances" className="bg-[#0c3968] text-white text-[14px] px-4 py-2 rounded-md hover:bg-[#4d7fb4] transition md:ml-[830px]">
@@ -70,7 +122,7 @@ const UserOrdinance = () => {
             <p className="text-center text-white">No ordinances found for your barangay.</p>
           ) : (
             <div className="flex flex-col gap-3">
-              {ordinances.map((ordinance) => (
+              {filteredOrdinances.map((ordinance) => (
                 <div key={ordinance._id} className="bg-white text-black p-4 rounded-lg shadow-md">
                   <h3 className="text-lg font-bold">Letter No. {ordinance.documentNumber}, s. {ordinance.administrativeYear}</h3>
                   <p className="font-semibold">{ordinance.documentTitle}</p>
@@ -78,11 +130,20 @@ const UserOrdinance = () => {
                   <p className="text-sm">Author(s) | {ordinance.authors.join(", ")}</p>
                   <div className="flex justify-end space-x-3 mt-2">
                     <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" onClick={() => handleEdit(ordinance)} />
-                    <a href={ordinance.fileUrl} download>
-                      <Download className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]" />
-                    </a>
-                    <Eye className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]" />
-                    <Trash2 className="cursor-pointer text-[#dc3545] hover:text-[#c82333]" />
+                    <Download
+                      className="cursor-pointer text-[#28a745] hover:text-[#1e7e34]"
+                      onClick={() => handleDownload(ordinance.fileUrl, ordinance.documentTitle)}
+                    />
+                    <Eye
+                      className="cursor-pointer text-[#17a2b8] hover:text-[#117a8b]"
+                      onClick={() => handleView(ordinance.fileUrl)}
+                    />
+
+                    <Trash2
+                      className="cursor-pointer text-[#dc3545] hover:text-[#c82333]"
+                      onClick={() => handleDelete(ordinance._id)}
+                    />
+
                   </div>
                 </div>
               ))}
