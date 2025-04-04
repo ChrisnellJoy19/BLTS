@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 import Sidebar from "./dashboard_components/UserSidebar";
 
-const Dashboard = () => {
+const UserEditProfile = () => {
   const navigate = useNavigate(); // ✅ Initialize navigation
   const [formData, setFormData] = useState({
     name: "",
@@ -14,7 +14,7 @@ const Dashboard = () => {
     barangaySecretary: "",
     email: "",
     sbMembers: ["", "", "", "", "", "", ""],
-    sangguniangKabataan: [""],
+    sangguniangKabataan: "", // Add this to the state initialization
     file: null,
   });
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ const Dashboard = () => {
 
           setFormData({
             name: barangayData.name,
-            municipalityId: barangayData.municipalityId,
+            municipalityId: barangayData.municipalityId || "",
             municipalityName,
             fromDate: barangayData.adminProfiles[0]?.startYear || "",
             toDate: barangayData.adminProfiles[0]?.endYear || "",
@@ -60,7 +60,7 @@ const Dashboard = () => {
             barangaySecretary: barangayData.adminProfiles[0]?.barangaySecretary || "",
             email: barangayData.adminProfiles[0]?.email || "",
             sbMembers: barangayData.adminProfiles[0]?.sangguniangBarangayMembers || ["", "", "", "", "", "", ""],
-            sangguniangKabataan: barangayData.adminProfiles[0]?.sangguniangKabataan || [""],
+            sangguniangKabataan: barangayData.adminProfiles[0]?.sangguniangKabataan || "", // Ensure this is set
             file: barangayData.adminProfiles[0]?.file,
           });
         } else {
@@ -80,12 +80,12 @@ const Dashboard = () => {
     const { name, value } = e.target;
     if (index !== undefined) {
       const updatedSBMembers = [...formData.sbMembers];
-      updatedSBMembers[index] = value;
+      updatedSBMembers[index] = value || "";
       setFormData({ ...formData, sbMembers: updatedSBMembers });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({ ...formData, [name]: value || "" });
     }
-  };
+  };  
 
   const handleFileChange = (e) => {
     setFormData({ ...formData, file: e.target.files[0] });
@@ -96,23 +96,22 @@ const Dashboard = () => {
   
     // Check if required fields are filled
     if (
-      !formData.name ||
-      !formData.municipalityId ||
-      !formData.fromDate ||
-      !formData.toDate ||
-      !formData.punongBarangay ||
-      !formData.barangaySecretary ||
-      !formData.email
-    ) {
-      alert("Please fill out all required fields before saving.");
-      return;
-    }
+        !formData.fromDate.trim() ||
+        !formData.toDate.trim() ||
+        !formData.punongBarangay.trim() ||
+        !formData.barangaySecretary.trim() ||
+        !formData.email.trim()
+      ) {
+        alert("Please fill out all required fields before saving.");
+        return;
+      }
+      
   
     // Ensure SB Members and SK Members are not empty
     if (formData.sbMembers.some(member => !member.trim())) {
       alert("Please fill out all Sangguniang Barangay Member fields before saving.");
       return;
-    }
+    }    
   
     const confirmSave = window.confirm("Are you sure you want to save the changes?");
     if (!confirmSave) return;
@@ -132,19 +131,29 @@ const Dashboard = () => {
     }
   
     const form = new FormData();
+
     form.append("name", formData.name);
     form.append("municipalityId", formData.municipalityId);
-    form.append("fromDate", formData.fromDate);
-    form.append("toDate", formData.toDate);
-    form.append("punongBarangay", formData.punongBarangay);
-    form.append("barangaySecretary", formData.barangaySecretary);
-    form.append("email", formData.email);
-    form.append("sbMembers", JSON.stringify(formData.sbMembers));
-    form.append("sangguniangKabataan", JSON.stringify(formData.sangguniangKabataan));
-  
+
+    const adminProfiles = [
+      {
+        startYear: parseInt(formData.fromDate),  // Convert to number
+        endYear: parseInt(formData.toDate),      // Convert to number
+        punongBarangay: formData.punongBarangay,
+        barangaySecretary: formData.barangaySecretary,
+        email: formData.email,
+        sangguniangBarangayMembers: formData.sbMembers,
+        sangguniangKabataan: formData.sangguniangKabataan, // if you plan to use SK members in the future
+      }
+    ];
+
+    form.append("adminProfiles", JSON.stringify(adminProfiles));
+
     if (formData.file) {
       form.append("file", formData.file);
     }
+
+    
   
     try {
       const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
@@ -182,7 +191,7 @@ const Dashboard = () => {
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 sm:w-72 mt-4" />
 
-        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl mx-auto mt-4">
+        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-4xl mx-auto ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold">Barangay</label>
@@ -191,7 +200,7 @@ const Dashboard = () => {
               <label className="block font-semibold mt-2">Municipality</label>
               <input type="text" name="municipalityName" value={formData.municipalityName} className="border p-2 w-full font-bold" readOnly />
 
-              <label className="block font-semibold mt-2">Administrative Year</label>
+              <label className="block font-semibold mt-2">Administrative Year (From - To)</label>
               <div className="flex gap-4">
                 <input type="date" name="fromDate" value={formData.fromDate} onChange={handleInputChange} className="border p-2 w-full" />
                 <input type="date" name="toDate" value={formData.toDate} onChange={handleInputChange} className="border p-2 w-full" />
@@ -202,18 +211,29 @@ const Dashboard = () => {
 
               <label className="block font-semibold mt-2">Barangay Secretary</label>
               <input type="text" name="barangaySecretary" value={formData.barangaySecretary} onChange={handleInputChange} className="border p-2 w-full" />
-
-              <label className="block font-semibold mt-2">Email</label>
+              <label className="block font-semibold ">Email</label>
               <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="border p-2 w-full" />
+
             </div>
 
             <div>
+
               <label className="block font-semibold">Sangguniang Barangay Members</label>
               <div className="overflow-y-auto h-40 border p-2">
                 {formData.sbMembers.map((member, index) => (
                   <input key={index} type="text" value={member} onChange={(e) => handleInputChange(e, index)} className="border p-2 w-full mb-1" />
                 ))}
               </div>
+              
+              <label className="block font-semibold mt-2">SK Chairperson</label>
+              <input
+                type="text"
+                name="sangguniangKabataan" // Update name here to match the state variable
+                value={formData.sangguniangKabataan}
+                onChange={handleInputChange}
+                className="border p-2 w-full"
+              />
+
               <label className="block font-semibold mt-2">Upload Barangay Logo</label>
               <input type="file" onChange={handleFileChange} className="border p-2 w-full" />
               <button type="submit" className="bg-black text-white p-2 w-full mt-4 rounded hover:bg-gray-700">Save</button>
@@ -228,4 +248,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default UserEditProfile;

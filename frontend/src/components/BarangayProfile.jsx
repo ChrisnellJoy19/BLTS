@@ -82,7 +82,9 @@ const Dashboard = () => {
         {barangay && (
           <div className="bg-white text-black rounded-lg shadow-md p-4 mt-6 w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center">
             <div className="flex-shrink-0">
-              <img src="/images/dilg_logo.png" alt="barangay-logo" className="ml-20 w-24 h-24 rounded-full" />
+                <img src={barangay.logoUrl ? `http://localhost:5000${barangay.logoUrl}` : '/default-logo.png'} 
+                  alt="barangay-logo"
+                  className="ml-20 w-24 h-24 rounded-full border-1 ">{barangay.adminProfiles[0]?.file}</img>
             </div>
             <div className="flex-1 text-left px-6 ml-10">
               <h2 className="text-lg font-bold">🏠 BARANGAY {barangay.name.toUpperCase()}</h2>
@@ -91,6 +93,8 @@ const Dashboard = () => {
               <p>Punong Barangay</p>
               <h3 className="font-bold">{barangay.adminProfiles[0]?.barangaySecretary}</h3>
               <p>Barangay Secretary</p>
+              <h3 className="font-bold">{barangay.adminProfiles[0]?.sangguniangKabataan}</h3>
+              <p>SK Chairperson</p>
             </div>
             <div className="flex-1 text-left">
               <h4 className="text-lg font-bold">📅 {barangay.adminProfiles[0]?.startYear} - {barangay.adminProfiles[0]?.endYear}</h4>

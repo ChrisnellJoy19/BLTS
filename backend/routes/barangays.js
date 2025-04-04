@@ -4,8 +4,18 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Barangay = require("../models/Barangay");
 
-const upload = multer({ dest: "uploads/" });
-
+// Set up multer with file size limit and type validation
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 10 * 1024 * 1024 }, // Max file size 10MB
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error("Invalid file format. Only images or PDFs are allowed."));
+    }
+    cb(null, true);
+  }
+});
 
 // ✅ Create a new barangay with admin profiles
 router.post("/", upload.single("file"), async (req, res) => {
@@ -44,13 +54,19 @@ router.post("/", upload.single("file"), async (req, res) => {
         email: profile.email,
         sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
         sangguniangKabataan: profile.sangguniangKabataan || [],
+        file: req.file ? `/uploads/${req.file.filename}` : null, // Save the file URL if uploaded
       })),
-      file: req.file ? req.file.path : null, // Save file path if uploaded
     });
 
     await newBarangay.save();
     console.log("✅ Barangay created successfully:", newBarangay);
-    res.status(201).json({ message: "Barangay created successfully", barangay: newBarangay });
+    res.status(201).json({
+      message: "Barangay created successfully",
+      barangay: {
+        ...newBarangay.toObject(),
+        logoUrl: req.file ? `/uploads/${req.file.filename}` : null // Return the full URL of the uploaded file
+      }
+    });
 
   } catch (error) {
     console.error("❌ Server error:", error);
@@ -114,6 +130,7 @@ router.get("/:id/admin-years", async (req, res) => {
   }
 });
 
+// ✅ Update a Barangay by ID
 router.put("/:id", upload.single("file"), async (req, res) => {
   try {
     console.log("Received data:", req.body); // Debugging the incoming data
@@ -146,8 +163,8 @@ router.put("/:id", upload.single("file"), async (req, res) => {
           email: profile.email,
           sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
           sangguniangKabataan: profile.sangguniangKabataan || [],
+          file: req.file ? `/uploads/${req.file.filename}` : null, // Update file URL if uploaded
         })),
-        file: req.file ? req.file.path : null, // Update file path if uploaded
       },
       { new: true, overwrite: true }
     );
@@ -157,7 +174,11 @@ router.put("/:id", upload.single("file"), async (req, res) => {
     }
 
     console.log("Barangay updated:", updatedBarangay);
-    res.json({ message: "Barangay updated successfully", barangay: updatedBarangay });
+    res.json({
+      message: "Barangay updated successfully",
+      barangay: updatedBarangay
+    });
+
   } catch (error) {
     console.error("Error updating barangay:", error);
     res.status(500).json({ message: "Server error", error });
