@@ -12,7 +12,10 @@ const OrdinanceSchema = new mongoose.Schema({
   description: { type: String, required: true },
   barangayId: { type: mongoose.Schema.Types.ObjectId, ref: "Barangay", required: true },
   fileUrl: { type: String, required: true }, // Store the file path or URL
-  isDeleted: { type: Boolean, default: false }
+  // isDeleted: { type: Boolean, default: false },
+  // isArchived: {type:Boolean, default:false},
+  // deletedAt: {type:Boolean, default:null},
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("Ordinance", OrdinanceSchema);

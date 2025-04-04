@@ -80,11 +80,33 @@ const UserOrdinance = () => {
       ordinance.governanceArea.toLowerCase().includes(query) ||
       ordinance.dateEnacted.includes(query) || // Assuming it's a string (format it if needed)
       ordinance.administrativeYear.toString().includes(query) ||
-      ordinance.authors.some((author) => author.toLowerCase().includes(query)) // Checks if any author matches
+      ordinance.authors.some((author) => author.toLowerCase().includes(query)) || // Checks if any author matches
+      ordinance.status.toLowerCase().includes(query)
     );
   });
 
-
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this ordinance?")) return;
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/ordinances/delete/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming auth is required
+        },
+      });
+  
+      if (!response.ok) throw new Error("Failed to delete ordinance");
+  
+      setOrdinances((prevOrdinances) => prevOrdinances.filter((ordinance) => ordinance._id !== id));
+      alert("Ordinance deleted successfully");
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Error deleting ordinance. Please try again.");
+    }
+  };
+  
 
   return (
     <div className="flex h-screen">
@@ -128,6 +150,7 @@ const UserOrdinance = () => {
                   <p className="font-semibold">{ordinance.documentTitle}</p>
                   <p className="text-sm">Date of Enactment | {new Date(ordinance.dateEnacted).toLocaleDateString()}</p>
                   <p className="text-sm">Author(s) | {ordinance.authors.join(", ")}</p>
+                  <p className="text-lg font-bold uppercase">{ordinance.status}</p>
                   <div className="flex justify-end space-x-3 mt-2">
                     <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" onClick={() => handleEdit(ordinance)} />
                     <Download

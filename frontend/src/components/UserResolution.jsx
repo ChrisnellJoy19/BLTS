@@ -77,7 +77,8 @@ const UserResolution = () => {
         resolution.governanceArea.toLowerCase().includes(query) ||
         resolution.dateEnacted.includes(query) || // Assuming it's a string (format it if needed)
         resolution.administrativeYear.toString().includes(query) ||
-        resolution.authors.some((author) => author.toLowerCase().includes(query)) // Checks if any author matches
+        resolution.authors.some((author) => author.toLowerCase().includes(query)) || // Checks if any author matches
+        resolution.status.toLowerCase().includes(query)
       );
     });
 
@@ -127,6 +128,7 @@ const UserResolution = () => {
                   <p className="font-semibold">{resolution.documentTitle}</p>
                   <p className="text-sm">Date of Enactment | {new Date(resolution.dateEnacted).toLocaleDateString()}</p>
                   <p className="text-sm">Author(s) | {resolution.authors.join(", ")}</p>
+                  <p className="text-lg font-bold uppercase">{resolution.status}</p>
                   <div className="flex justify-end space-x-3 mt-2">
                     <Edit className="cursor-pointer text-[#007bff] hover:text-[#0056b3]" onClick={() => handleEdit(resolution)} />
                     <Download
