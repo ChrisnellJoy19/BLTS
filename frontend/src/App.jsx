@@ -16,7 +16,6 @@ import UserOrdinance from "./components/UserOrdinance";
 import UserResolution from "./components/UserResolution";
 import BarangayProfile from "./components/BarangayProfile";
 import UserEditProfile from "./components/UserEditProfile";
-import UserAddNewProfile from "./components/UserAddNewProfile";
 import UserAddOrdinance from "./components/UserAddOrdinance";
 import UserEditOrdinance from "./components/UserEditOrdinance";
 import UserAddResolution from "./components/UserAddResolution";
@@ -60,7 +59,6 @@ function App() {
         <Route path="/user-resolutions" element={<UserResolution />} />
         <Route path="/barangay-profile" element={<BarangayProfile/>} />
         <Route path="/edit-profile" element={<UserEditProfile/>} />
-        <Route path="/add-new-profile" element={<UserAddNewProfile/>} />        
         <Route path="/add-ordinances" element={<UserAddOrdinance />} />
         <Route path="/edit-ordinance" element={<UserEditOrdinance />} />
         <Route path="/edit-resolution" element={<UserEditResolution />} />

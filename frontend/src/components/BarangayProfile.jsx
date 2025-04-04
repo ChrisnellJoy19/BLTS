@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserBarangay = async () => {
+    const fetchBarangayAndMunicipality = async () => {
       try {
         const token = localStorage.getItem("userToken");
         if (!token) {
@@ -16,8 +16,8 @@ const Dashboard = () => {
           return;
         }
 
-        // Decode the token to extract user details
-        const user = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        // Decode the token to get user details
+        const user = JSON.parse(atob(token.split(".")[1]));
         const barangayId = user.barangayId;
 
         if (!barangayId) {
@@ -26,15 +26,15 @@ const Dashboard = () => {
         }
 
         // Fetch Barangay Data
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+        const barangayResponse = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.ok) {
-          const barangayData = await response.json();
+        if (barangayResponse.ok) {
+          const barangayData = await barangayResponse.json();
           setBarangay(barangayData);
 
-          // Fetch Municipality Name using municipalityId
+          // Fetch Municipality Data using municipalityId
           const municipalityResponse = await fetch(
             `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
           );
@@ -55,7 +55,7 @@ const Dashboard = () => {
       }
     };
 
-    fetchUserBarangay();
+    fetchBarangayAndMunicipality();
   }, []);
 
   if (loading) return <p className="text-center mt-6 text-white">Loading barangay data...</p>;
@@ -74,9 +74,6 @@ const Dashboard = () => {
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 sm:w-72 mt-4" />
 
         <div className="flex flex-col items-end space-y-2 mt-4 mr-2 md:mr-20">
-          <Link to="/add-new-profile" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
-            + Add New Administrative Profile
-          </Link>
           <Link to="/edit-profile" className="bg-[#0c3968] text-white text-sm px-4 py-2 rounded-md hover:bg-[#4d7fb4]">
             Edit Profile
           </Link>

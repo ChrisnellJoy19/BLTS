@@ -35,7 +35,7 @@ const Sidebar = () => {
         if (response.ok) {
           const barangayData = await response.json();
           setBarangayName(barangayData.name);
-          setBarangayLogo(barangayData.logo || "/images/mary.jpg");
+          setBarangayLogo(barangayData.logo || "/images/dilg_logo.png");
 
           const municipalityResponse = await fetch(
             `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
@@ -66,10 +66,10 @@ const Sidebar = () => {
   };
 
   const handleLogout = () => {
-    // Clear the user's token and navigate to the login page
     localStorage.removeItem("userToken");
     navigate("/userlogin");
-  };
+    window.location.reload(); // Ensures a full reload and clears any cached state
+  };  
 
   return (
     <>
@@ -145,8 +145,8 @@ const Sidebar = () => {
 
       {/* Logout Confirmation Popup */}
       {showLogoutPopup && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-black/30">
-          <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-300">
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-black/30 z-[9999]">
+        <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-300">
             <h3 className="text-lg font-semibold">Confirm Logout</h3>
             <p className="mt-2">Are you sure you want to log out?</p>
             <div className="mt-4 flex justify-end space-x-3">
