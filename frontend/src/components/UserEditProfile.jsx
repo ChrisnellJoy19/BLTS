@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 import Sidebar from "./dashboard_components/UserSidebar";
 
 const Dashboard = () => {
+  const navigate = useNavigate(); // ✅ Initialize navigation
   const [formData, setFormData] = useState({
     name: "",
     municipalityId: "",
@@ -15,18 +17,34 @@ const Dashboard = () => {
     sangguniangKabataan: [""],
     file: null,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBarangayData = async () => {
       try {
-        const barangayId = "67e512242f9e47978a4e8564";
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`);
+        const token = localStorage.getItem("userToken");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
+
+        const user = JSON.parse(atob(token.split(".")[1]));
+        const barangayId = user.barangayId;
+
+        if (!barangayId) {
+          console.error("No barangay ID found in token");
+          return;
+        }
+
+        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (response.ok) {
           const barangayData = await response.json();
 
-          const municipalityResponse = await fetch(`http://localhost:5000/api/municipalities/${barangayData.municipalityId}`);
           let municipalityName = "";
+          const municipalityResponse = await fetch(`http://localhost:5000/api/municipalities/${barangayData.municipalityId}`);
           if (municipalityResponse.ok) {
             const municipalityData = await municipalityResponse.json();
             municipalityName = municipalityData.name;
@@ -50,6 +68,8 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching barangay data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -73,24 +93,92 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.punongBarangay || !formData.barangaySecretary || !formData.fromDate || !formData.toDate || !formData.name || !formData.municipalityName) {
-      alert("Please fill out all required fields.");
+  
+    // Check if required fields are filled
+    if (
+      !formData.name ||
+      !formData.municipalityId ||
+      !formData.fromDate ||
+      !formData.toDate ||
+      !formData.punongBarangay ||
+      !formData.barangaySecretary ||
+      !formData.email
+    ) {
+      alert("Please fill out all required fields before saving.");
       return;
     }
-
-    alert("Form submitted successfully!");
+  
+    // Ensure SB Members and SK Members are not empty
+    if (formData.sbMembers.some(member => !member.trim())) {
+      alert("Please fill out all Sangguniang Barangay Member fields before saving.");
+      return;
+    }
+  
+    const confirmSave = window.confirm("Are you sure you want to save the changes?");
+    if (!confirmSave) return;
+  
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+      alert("User not authenticated.");
+      return;
+    }
+  
+    const user = JSON.parse(atob(token.split(".")[1]));
+    const barangayId = user.barangayId;
+  
+    if (!barangayId) {
+      alert("No barangay ID found.");
+      return;
+    }
+  
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("municipalityId", formData.municipalityId);
+    form.append("fromDate", formData.fromDate);
+    form.append("toDate", formData.toDate);
+    form.append("punongBarangay", formData.punongBarangay);
+    form.append("barangaySecretary", formData.barangaySecretary);
+    form.append("email", formData.email);
+    form.append("sbMembers", JSON.stringify(formData.sbMembers));
+    form.append("sangguniangKabataan", JSON.stringify(formData.sangguniangKabataan));
+  
+    if (formData.file) {
+      form.append("file", formData.file);
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: form,
+      });
+  
+      if (response.ok) {
+        alert("Barangay profile updated successfully!");
+        navigate("/barangay-profile"); // Redirect after confirmation
+      } else {
+        const error = await response.json();
+        alert(error.message || "Error updating barangay.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
+  
+
+  if (loading) return <p className="text-center mt-6 text-white">Loading barangay data...</p>;
+  
 
   return (
+    
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       <Sidebar />
-      <main className="flex-1 p-8 bg-gradient-to-br from-[#889FB1] to-[#587D9D]">
-        <div className="flex gap-2 mb-4">
-            <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8" />
-            <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8" />
-            <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-8" />
-            <img src="/images/one_duque.png" alt="oneduque-logo" className="h-8" />
+      <main className="flex-1 p-6 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-black relative">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-1">
+          <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-8 sm:h-10" />
+          <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-8 sm:h-10" />
+          <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-8 sm:h-10" />
+          <img src="/images/one_duque.png" alt="oneduque-logo" className="h-8 sm:h-10" />
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 sm:w-72 mt-4" />
 
@@ -98,15 +186,17 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold">Barangay</label>
-              <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="border p-2 w-full" readOnly/>
+              <input type="text" name="name" value={formData.name} className="border p-2 w-full font-bold" readOnly />
 
               <label className="block font-semibold mt-2">Municipality</label>
-              <input type="text" name="municipalityName" value={formData.municipalityName} onChange={handleInputChange} className="border p-2 w-full" readOnly/>
+              <input type="text" name="municipalityName" value={formData.municipalityName} className="border p-2 w-full font-bold" readOnly />
+
               <label className="block font-semibold mt-2">Administrative Year</label>
               <div className="flex gap-4">
                 <input type="date" name="fromDate" value={formData.fromDate} onChange={handleInputChange} className="border p-2 w-full" />
                 <input type="date" name="toDate" value={formData.toDate} onChange={handleInputChange} className="border p-2 w-full" />
               </div>
+
               <label className="block font-semibold mt-2">Punong Barangay</label>
               <input type="text" name="punongBarangay" value={formData.punongBarangay} onChange={handleInputChange} className="border p-2 w-full" />
 
@@ -124,15 +214,14 @@ const Dashboard = () => {
                   <input key={index} type="text" value={member} onChange={(e) => handleInputChange(e, index)} className="border p-2 w-full mb-1" />
                 ))}
               </div>
-              <label className="block font-semibold mt-2">Sangguniang Kabataan Chairperson</label>
-              <input type="text" name="sangguniangKabataan" value={formData.sangguniangKabataan} onChange={handleInputChange} className="border p-2 w-full" />
-              
-              <label className="block font-semibold mt-2">Upload File</label>
+              <label className="block font-semibold mt-2">Upload Barangay Logo</label>
               <input type="file" onChange={handleFileChange} className="border p-2 w-full" />
-
               <button type="submit" className="bg-black text-white p-2 w-full mt-4 rounded hover:bg-gray-700">Save</button>
-            </div>
+
+            </div>          
+
           </div>
+
         </form>
       </main>
     </div>

@@ -56,7 +56,7 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
       status,
       description,
       barangayId,
-      fileUrl: `/uploads/${req.file.filename}` // Save file path
+      fileUrl: `/uploads/${req.file.filename}`// Save file path
     });
 
     await newOrdinance.save();
@@ -64,7 +64,13 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
     res.status(201).json({ message: "Ordinance uploaded successfully", ordinance: newOrdinance });
   } catch (error) {
     console.error("Error uploading ordinance:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    if (error instanceof multer.MulterError) {
+      // Handling multer-specific errors
+      res.status(400).json({ message: `File upload error: ${error.message}` });
+    } else {
+      // Handling general errors
+      res.status(500).json({ message: "Server error. Please try again later." });
+    }
   }
 });
 

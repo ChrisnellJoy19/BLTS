@@ -4,8 +4,8 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Barangay = require("../models/Barangay");
 
-// Multer setup for file uploads
 const upload = multer({ dest: "uploads/" });
+
 
 // ✅ Create a new barangay with admin profiles
 router.post("/", upload.single("file"), async (req, res) => {
@@ -110,6 +110,56 @@ router.get("/:id/admin-years", async (req, res) => {
 
   } catch (error) {
     console.error("❌ Error fetching administrative years:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+router.put("/:id", upload.single("file"), async (req, res) => {
+  try {
+    console.log("Received data:", req.body); // Debugging the incoming data
+    const { name, municipalityId, adminProfiles } = req.body;
+
+    // Validate required fields
+    if (!name || !municipalityId || !adminProfiles) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    let adminData;
+    try {
+      adminData = typeof adminProfiles === "string" ? JSON.parse(adminProfiles) : adminProfiles;
+    } catch (parseError) {
+      console.error("Error parsing adminProfiles:", parseError);
+      return res.status(400).json({ message: "Invalid adminProfiles format" });
+    }
+
+    // Update Barangay document
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        municipalityId,
+        adminProfiles: adminData.map(profile => ({
+          startYear: profile.startYear,
+          endYear: profile.endYear,
+          punongBarangay: profile.punongBarangay,
+          barangaySecretary: profile.barangaySecretary,
+          email: profile.email,
+          sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
+          sangguniangKabataan: profile.sangguniangKabataan || [],
+        })),
+        file: req.file ? req.file.path : null, // Update file path if uploaded
+      },
+      { new: true, overwrite: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    console.log("Barangay updated:", updatedBarangay);
+    res.json({ message: "Barangay updated successfully", barangay: updatedBarangay });
+  } catch (error) {
+    console.error("Error updating barangay:", error);
     res.status(500).json({ message: "Server error", error });
   }
 });
