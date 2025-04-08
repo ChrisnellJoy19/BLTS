@@ -56,7 +56,7 @@ const DilgSidebar = () => {
           </li>
           <li>
             <Link
-              to="/edit-credentials"
+              to="/AdminEditCredentials"
               className="flex items-center w-full px-4 py-3 text-white font-semibold bg-[#1c3b57] border border-white/20 rounded-lg hover:bg-[#365980] transition"
             >
               <FontAwesomeIcon icon={faUserCog} className="mr-3" />

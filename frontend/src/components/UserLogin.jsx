@@ -112,7 +112,7 @@ const UserLogin = () => {
             Click here to contact DILG Marinduque
           </a>
           <p className="text-sm text-center mt-2">
-            <a href="/forgot-password" className="text-black-200 hover:underline cursor-pointer">
+            <a href="/UserForgotPassword" className="text-black-200 hover:underline cursor-pointer">
               Forgot Password?
             </a>
           </p>

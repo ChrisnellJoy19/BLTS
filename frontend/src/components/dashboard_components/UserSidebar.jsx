@@ -129,7 +129,7 @@ const Sidebar = () => {
             <User className="w-5 h-5" /> <span>Barangay Profile</span>
           </Link>
           <Link
-            to="/edit-credentials"
+            to="/UserEditCredentials"
             className="flex items-center gap-2 p-3 hover:bg-blue-700 rounded"
           >
             <Settings className="w-5 h-5" /> <span>Account Settings</span>
