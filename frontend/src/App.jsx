@@ -23,8 +23,10 @@ import UserEditResolution from "./components/UserEditResolution";
 import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
 import AdminRoute from "./components/AdminRoute";
 import UserRoute from "./components/UserRoute";
-import EditCredentials from "./components/EditCredentials";
-import ForgotPassword from "./components/ForgotPassword"; // adjust path if needed
+import UserEditCredentials from "./components/UserEditCredentials";
+import AdminEditCredentials from "./components/AdminEditCredentials";
+import UserForgotPassword from "./components/UserForgotPassword"; 
+import AdminForgotPassword from "./components/AdminForgotPassword"; 
 
 function App() {
   return (
@@ -64,9 +66,10 @@ function App() {
         <Route path="/edit-resolution" element={<UserEditResolution />} />
         <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
-        <Route path="/edit-credentials" element={<EditCredentials />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/UserEditCredentials" element={<UserEditCredentials />} />
+        <Route path="/AdminEditCredentials" element={<AdminEditCredentials />} />
+        <Route path="/UserForgotPassword" element={<UserForgotPassword />} />
+        <Route path="/AdminForgotPassword" element={<AdminForgotPassword />} />
       </Routes>
     </Router>
   );

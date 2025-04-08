@@ -95,7 +95,7 @@ const DilgAdminLogin = () => {
           {error && <div className="text-red-600 text-sm mt-4">{error}</div>}
           <div className="text-sm text-gray-600 mt-4">Authorized DILG Admins only.</div>
           <div className="text-sm text-center mt-2">
-              <a href="/forgot-password" className="text-black-200 hover:underline cursor-pointer">
+              <a href="/AdminForgotPassword" className="text-black-200 hover:underline cursor-pointer">
                 Forgot Password?
               </a>
           </div>

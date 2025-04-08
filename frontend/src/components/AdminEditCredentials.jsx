@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const EditCredentials = () => {
+const AdminEditCredentials = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch admin data from the server if needed
     if (localStorage.getItem("adminToken")) {
-      setRole("admin");
-      // Fetch admin data here if needed
-    } else if (localStorage.getItem("userToken")) {
-      setRole("user");
-      // Fetch user data here if needed
+      // Admin-specific logic (e.g., fetch admin data)
     }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedData = { username, email, password };
-    console.log(`Updating ${role} credentials`, updatedData);
-    // API call based on role here
+    console.log(`Updating admin credentials`, updatedData);
+    // API call to update admin credentials here
   };
 
   return (
@@ -35,26 +31,21 @@ const EditCredentials = () => {
           ← Back
         </button>
 
-        {/* Logo Row */}
         <div className="flex flex-wrap justify-center gap-2 mb-6 mt-8">
-        <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-10" />
+          <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-10" />
           <img src="/images/dilg_marinduque.png" alt="morion-logo" className="h-10" />
           <img src="/images/lgrc_mimaropa.png" alt="lgrc-logo" className="h-10" />
           <img src="/images/one_duque.png" alt="oneduque-logo" className="h-10" />
         </div>
 
-        {/* BLTS Logo */}
         <img
           src="/images/blts_logo.png"
           alt="blts-logo"
           className="w-60 md:w-72 mb-4 mx-auto"
-          />
+        />
 
-        {/* Edit Credentials Form */}
         <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4 text-black">
-          <h2 className="text-xl font-bold text-center">
-            {role === "admin" ? "Admin" : "User"} Profile Settings
-          </h2>
+          <h2 className="text-xl font-bold text-center">Admin Profile Settings</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
@@ -93,4 +84,4 @@ const EditCredentials = () => {
   );
 };
 
-export default EditCredentials;
+export default AdminEditCredentials;
