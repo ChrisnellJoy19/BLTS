@@ -84,7 +84,7 @@ const Dashboard = () => {
             <div className="flex-shrink-0">
                 <img src={barangay.logoUrl ? `http://localhost:5000${barangay.logoUrl}` : '/default-logo.png'} 
                   alt="barangay-logo"
-                  className="ml-20 w-24 h-24 rounded-full border-1 ">{barangay.adminProfiles[0]?.file}</img>
+                  className="ml-20 w-24 h-24 rounded-full border-1 "/>
             </div>
             <div className="flex-1 text-left px-6 ml-10">
               <h2 className="text-lg font-bold">🏠 BARANGAY {barangay.name.toUpperCase()}</h2>

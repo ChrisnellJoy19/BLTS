@@ -68,12 +68,20 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
 // 🔹 Get All Resolutions
 router.get("/", async (req, res) => {
   try {
-    const { barangayId } = req.query;
+    const { barangayId, isDeleted } = req.query;
 
     if (!barangayId) {
       return res.status(400).json({ message: "Barangay ID is required" });
     }
-    const resolutions = await Resolution.find({ barangayId }).populate("barangayId", "name");
+
+    let query = { barangayId };
+
+    if (isDeleted !== undefined) {
+      // Convert isDeleted to boolean
+      query.isDeleted = isDeleted === "true";  // "true" or "false" as string from frontend
+    }
+
+    const resolutions = await Resolution.find(query).populate("barangayId", "name");
     res.json(resolutions);
   } catch (error) {
     console.error("Error fetching resolutions:", error);
@@ -106,13 +114,68 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
     const updatedResolution = await Resolution.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedResolution) {
-      return res.status(404).json({ message: "Resolution not found" });
+      return res.status(404).json({ message: "Reslution not found" });
     }
 
     res.json({ message: "Resolution updated successfully", resolution: updatedResolution });
   } catch (error) {
     console.error("Error updating resolution:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
+
+
+router.put("/delete/:id", authenticate, async (req, res) => {
+  try {
+    const resolution = await Resolution.findById(req.params.id);
+
+    if (!resolution) {
+      return res.status(404).json({ message: "Resolution not found" });
+    }
+
+    // Ensure the user is authorized to delete the resolution based on barangayId
+    if (resolution.barangayId.toString() !== req.user.barangayId.toString()) {
+      return res.status(403).json({ message: "You are not authorized to delete this resolution" });
+    }
+
+    resolution.isDeleted = true;
+    resolution.deletedAt = new Date();
+
+    await resolution.save();
+
+    // Respond with success
+    res.json({ message: "Resolution deleted", resolution });
+  } catch (error) {
+    console.error("Error deleting resolution:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/restore/:id", async (req, res) => {
+  try {
+    const resolution = await Resolution.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: false, deletedAt: null },
+      { new: true }
+    );
+    if (!resolution) {
+      return res.status(404).json({ message: "Resolution not found" });
+    }
+    res.json(resolution);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.delete("/permanent-delete/:id", async (req, res) => {
+  try {
+    const deleted = await Resolution.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Resolution not found" });
+    }
+    res.json({ message: "Resolution permanently deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
