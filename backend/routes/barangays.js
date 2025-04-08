@@ -4,6 +4,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const Barangay = require("../models/Barangay");
 
+
 // Set up multer with file size limit and type validation
 const upload = multer({
   dest: "uploads/",
@@ -54,8 +55,9 @@ router.post("/", upload.single("file"), async (req, res) => {
         email: profile.email,
         sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
         sangguniangKabataan: profile.sangguniangKabataan || [],
-        file: req.file ? `/uploads/${req.file.filename}` : null, // Save the file URL if uploaded
-      })),
+      })),        
+      file: req.file ? `/uploads/${req.file.filename}` : null, // Save the file URL if uploaded
+
     });
 
     await newBarangay.save();
@@ -64,7 +66,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       message: "Barangay created successfully",
       barangay: {
         ...newBarangay.toObject(),
-        logoUrl: req.file ? `/uploads/${req.file.filename}` : null // Return the full URL of the uploaded file
+        file: req.file ? `/uploads/${req.file.filename}` : null // Return the full URL of the uploaded file
       }
     });
 
@@ -163,8 +165,8 @@ router.put("/:id", upload.single("file"), async (req, res) => {
           email: profile.email,
           sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
           sangguniangKabataan: profile.sangguniangKabataan || [],
-          file: req.file ? `/uploads/${req.file.filename}` : null, // Update file URL if uploaded
         })),
+        file: req.file ? `/uploads/${req.file.filename}` : null, // Update file URL if uploaded
       },
       { new: true, overwrite: true }
     );
@@ -184,5 +186,7 @@ router.put("/:id", upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
+
+
 
 module.exports = router;
