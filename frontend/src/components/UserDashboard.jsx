@@ -93,53 +93,66 @@ const Dashboard = () => {
 
         {/* Charts Section */}
         <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12 mt-6">
-          {/* Ordinances Chart (Now First) */}
-          <div className="text-center w-full md:w-auto text-black">
-            <h2 className="text-lg font-semibold mb-2">ORDINANCES</h2>
-            <div className="flex justify-center">
-              <PieChart width={300} height={250}>
-                <Pie
-                  data={ordinancesData}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  label={renderLabel}
-                  labelLine={false}
-                >
-                  {ordinancesData.map((entry, i) => (
-                    <Cell key={`ord-cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
-              </PieChart>
-            </div>
-          </div>
+          {/* Ordinances Chart */}
+<div className="text-center w-full md:w-auto text-black">
+  <h2 className="text-lg font-semibold mb-2">ORDINANCES</h2>
+  <div className="flex justify-center">
+    {ordinancesData.length > 0 ? (
+      <PieChart width={300} height={250}>
+        <Pie
+          data={ordinancesData}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          innerRadius={40}
+          outerRadius={80}
+          label={renderLabel}
+          labelLine={false}
+        >
+          {ordinancesData.map((entry, i) => (
+            <Cell key={`ord-cell-${i}`} fill={COLORS[i % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
+      </PieChart>
+    ) : (
+      <div className="w-36 h-36 flex items-center justify-center rounded-full bg-gray-300 text-black font-semibold opacity-75">
+        No Ordinance Data
+      </div>
+    )}
+  </div>
+</div>
 
-          {/* Resolutions Chart (Now Second) */}
-          <div className="text-center w-full md:w-auto text-black">
-            <h2 className="text-lg font-semibold mb-2">RESOLUTIONS</h2>
-            <div className="flex justify-center">
-              <PieChart width={300} height={250}>
-                <Pie
-                  data={resolutionsData}
-                  dataKey="value"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  label={renderLabel}
-                  labelLine={false}
-                >
-                  {resolutionsData.map((entry, i) => (
-                    <Cell key={`res-cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
-              </PieChart>
-            </div>
-          </div>
+{/* Resolutions Chart */}
+<div className="text-center w-full md:w-auto text-black relative">
+  <h2 className="text-lg font-semibold mb-2">RESOLUTIONS</h2>
+  <div className="flex justify-center">
+    {resolutionsData.length > 0 ? (
+      <PieChart width={300} height={250}>
+        <Pie
+          data={resolutionsData}
+          dataKey="value"
+          cx="50%"
+          cy="50%"
+          innerRadius={40}
+          outerRadius={80}
+          label={renderLabel}
+          labelLine={false}
+        >
+          {resolutionsData.map((entry, i) => (
+            <Cell key={`res-cell-${i}`} fill={COLORS[i % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(value, name, props) => [`${value} (${(props.percent * 100).toFixed(1)}%)`, name]} />
+      </PieChart>
+    ) : (
+      <div className="w-36 h-36 flex items-center justify-center rounded-full bg-gray-300 text-black font-semibold opacity-50 absolute translate-y-4">
+        No Resolution Data
+      </div>
+    )}
+  </div>
+</div>
+
         </div>
 
         {/* Decorative Images */}
