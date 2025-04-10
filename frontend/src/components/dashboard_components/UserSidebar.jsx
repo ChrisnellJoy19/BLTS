@@ -9,7 +9,8 @@ const Sidebar = () => {
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const [barangayName, setBarangayName] = useState("");
   const [municipalityName, setMunicipalityName] = useState("");
-  const [barangayLogo, setBarangayLogo] = useState("/images/barangay_logo_placeholder.png");
+  const [barangayLogo, setBarangayLogo] = useState(null);
+  
 
   useEffect(() => {
     const fetchUserBarangay = async () => {
@@ -28,14 +29,14 @@ const Sidebar = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+        const barangayResponse = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.ok) {
-          const barangayData = await response.json();
+        if (barangayResponse.ok) {
+          const barangayData = await barangayResponse.json();
           setBarangayName(barangayData.name);
-          setBarangayLogo(barangayData.logo || "/images/dilg_logo.png");
+          setBarangayLogo(barangayData.file); // Assuming file is a string like "/uploads/logo.png"
 
           const municipalityResponse = await fetch(
             `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
@@ -88,18 +89,18 @@ const Sidebar = () => {
         `}
       >
         <div className="flex flex-col items-center text-center mt-4">
-          <img
-            src={barangayLogo}
-            alt="barangay-logo"
-            className="w-25 h-25 rounded-full border-1 border-white"
-          />
-          <div className="text-lg mt-2 font-bold">
+        <img
+          src={barangayLogo ? `http://localhost:5000${barangayLogo}` : '/default-logo.png'}
+          alt="barangay-logo"
+          className="w-30 h-30 rounded-full border-1 border-white"
+        />
+
+        </div>
+        <div className="text-lg text-center mt-2 font-bold">
             {barangayName && municipalityName
               ? ` ${barangayName},  ${municipalityName}, Marinduque`
               : "Loading..."}
-          </div>
         </div>
-
         <nav className="mt-6 flex flex-col space-y-2">
           <Link
             to="/user-dashboard"

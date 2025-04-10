@@ -53,7 +53,7 @@ const BarangayProfileSchema = new mongoose.Schema({
       },
       message: "Invalid file format. Only image or PDF files are allowed.",
     },
-    logoUrl: { // Add this field for the logo
+  logoUrl: { // Add this field for the logo
       type: String,
       required: false,
     },

@@ -36,7 +36,7 @@ const AboutUs = () => {
 
         {/* View Documentation Button */}
         <a
-          href="/files/SAMPLE DOCUMENATION.pdf"
+          href="/files/BLTS Documentation.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-white text-[#1f3b57] font-bold px-4 py-2 mt-4 rounded-md"

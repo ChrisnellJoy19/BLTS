@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const BarangayProfile = () => {
   const [barangay, setBarangay] = useState(null);
   const [municipalityName, setMunicipalityName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -82,9 +82,11 @@ const Dashboard = () => {
         {barangay && (
           <div className="bg-white text-black rounded-lg shadow-md p-4 mt-6 w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center">
             <div className="flex-shrink-0">
-                <img src={barangay.logoUrl ? `http://localhost:5000${barangay.logoUrl}` : '/default-logo.png'} 
-                  alt="barangay-logo"
-                  className="ml-20 w-24 h-24 rounded-full border-1 "/>
+              <img
+                src={barangay.file ? `http://localhost:5000${barangay.file}` : '/default-logo.png'}
+                alt="barangay-logo"
+                className="ml-18 w-35 h-35 rounded-full border"
+              />
             </div>
             <div className="flex-1 text-left px-6 ml-10">
               <h2 className="text-lg font-bold">🏠 BARANGAY {barangay.name.toUpperCase()}</h2>
@@ -112,4 +114,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default BarangayProfile;

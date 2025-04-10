@@ -53,7 +53,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/ordinances", ordinanceRoutes);
 app.use("/api/resolutions", resolutionsRoutes);
 // app.use("/api/archiveordinances", archiveordinancesRoutes);
-app.use("/uploads", express.static("uploads"));
+app.use('/uploads', express.static('uploads'));
 
 app.get("/", (req, res) => {
     res.send("Welcome to the BLTS API");
