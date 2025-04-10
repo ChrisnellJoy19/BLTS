@@ -182,7 +182,7 @@ const UserEditProfile = () => {
         </div>
         <img src="/images/blts_logo.png" alt="blts-logo" className="w-64 sm:w-72 mt-4" />
 
-        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-4xl mx-auto ">
+        <form onSubmit={handleSubmit} className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-4xl mx-auto overflow-auto max-h-[450px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-semibold">Barangay</label>
