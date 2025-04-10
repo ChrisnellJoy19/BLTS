@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
-const ordinancesData = [
-  { name: "Financial Administration and Sustainability", value: 6 },
-  { name: "Disaster Preparedness", value: 4 },
-  { name: "Environmental Management", value: 8 },
-  { name: "Safety, Peace and Order", value: 6 },
-];
+const groupByGovernanceArea = (documents) => {
+  const areaCount = {};
 
-const resolutionsData = [
-  { name: "Financial Administration and Sustainability", value: 5 },
-  { name: "Disaster Preparedness", value: 3 },
-  { name: "Environmental Management", value: 7 },
-  { name: "Safety, Peace and Order", value: 5 },
-];
+  documents.forEach((doc) => {
+    if (!doc.isDeleted) {
+      const area = doc.governanceArea;
+      areaCount[area] = (areaCount[area] || 0) + 1;
+    }
+  });
+
+  return Object.entries(areaCount).map(([name, value]) => ({ name, value }));
+};
 
 const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
 
@@ -22,41 +21,59 @@ const renderLabel = ({ percent }) => `${(percent * 100).toFixed(1)}%`;
 
 const Dashboard = () => {
   const [barangayName, setBarangayName] = useState("User");
+  const [ordinancesData, setOrdinancesData] = useState([]);
+  const [resolutionsData, setResolutionsData] = useState([]);
 
   useEffect(() => {
-    const fetchBarangayName = async () => {
+    const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem("userToken");
         if (!token) {
-          console.error("No authentication token found");
+          console.error("No token found.");
           return;
         }
-
+  
         const user = JSON.parse(atob(token.split(".")[1]));
         const barangayId = user.barangayId;
-
+  
         if (!barangayId) {
-          console.error("No barangay ID found in token");
+          console.error("No barangay ID in token.");
           return;
         }
-
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+  
+        // 1. Fetch barangay name
+        const barangayRes = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (response.ok) {
-          const barangayData = await response.json();
-          setBarangayName(barangayData.name);
-        } else {
-          console.error("Failed to fetch barangay data");
-        }
+  
+        if (!barangayRes.ok) throw new Error("Failed to fetch barangay");
+        const barangayData = await barangayRes.json();
+        setBarangayName(barangayData.name);
+  
+        // 2. Fetch ordinances & resolutions for this barangay
+        const [ordRes, resRes] = await Promise.all([
+          fetch(`http://localhost:5000/api/ordinances/barangay/${barangayId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch(`http://localhost:5000/api/resolutions/barangay/${barangayId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+  
+        const ordinances = await ordRes.json();
+        const resolutions = await resRes.json();
+  
+        setOrdinancesData(groupByGovernanceArea(ordinances));
+        setResolutionsData(groupByGovernanceArea(resolutions));
+  
       } catch (error) {
-        console.error("Error fetching barangay name:", error);
+        console.error("Error loading dashboard data:", error);
       }
     };
-
-    fetchBarangayName();
+  
+    fetchDashboardData();
   }, []);
+  
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-auto">

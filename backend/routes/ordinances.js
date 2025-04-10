@@ -215,6 +215,22 @@ router.delete("/permanent-delete/:id", async (req, res) => {
   }
 });
 
+// 🔹 Get ordinances by barangayId (used for dashboard pie chart)
+router.get("/barangay/:barangayId", authenticate, async (req, res) => {
+  try {
+    const { barangayId } = req.params;
+
+    const ordinances = await Ordinance.find({ 
+      barangayId,
+      isDeleted: false  // Only return active ordinances
+    });
+
+    res.json(ordinances);
+  } catch (error) {
+    console.error("Error fetching ordinances by barangay:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 module.exports = router;

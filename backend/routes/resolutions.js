@@ -179,5 +179,22 @@ router.delete("/permanent-delete/:id", async (req, res) => {
   }
 });
 
+router.get("/barangay/:barangayId", authenticate, async (req, res) => {
+  try {
+    const { barangayId } = req.params;
+
+    const resolutions = await Resolution.find({ 
+      barangayId, 
+      isDeleted: false // Only return active resolutions
+    });
+
+    res.json(resolutions);
+  } catch (error) {
+    console.error("Error fetching resolutions by barangay:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 module.exports = router;
