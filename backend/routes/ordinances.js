@@ -186,12 +186,31 @@ router.put("/restore/:id", async (req, res) => {
 // Permanently delete ordinance
 router.delete("/permanent-delete/:id", async (req, res) => {
   try {
-    const deleted = await Ordinance.findByIdAndDelete(req.params.id);
-    if (!deleted) {
+    const ordinance = await Ordinance.findById(req.params.id);
+
+    if (!ordinance) {
       return res.status(404).json({ message: "Ordinance not found" });
     }
-    res.json({ message: "Ordinance permanently deleted" });
+
+    // Delete associated file if it exists
+    if (ordinance.fileUrl) {
+      const filename = path.basename(ordinance.fileUrl); // Get the filename from fileUrl
+      const filePath = path.join(__dirname, "..", "uploads", filename);
+
+      fs.unlink(filePath, (err) => {
+        if (err && err.code !== "ENOENT") {
+          console.error("Error deleting file:", err);
+          return res.status(500).json({ message: "Failed to delete the associated file" });
+        }
+      });
+    }
+
+    // Delete ordinance from database
+    await Ordinance.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Ordinance and associated file permanently deleted" });
   } catch (err) {
+    console.error("Permanent delete error:", err);
     res.status(500).json({ message: err.message });
   }
 });
