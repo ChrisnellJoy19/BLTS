@@ -116,18 +116,20 @@ const MunicipalityView = () => {
         <div className="mt-6">
           <h2 className="text-2xl font-semibold">Barangays</h2>
           <div className="mt-4 space-y-2">
-            {municipality.barangays.map((barangay) => (
-              <button
-                key={barangay._id}
-                className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white text-black hover:bg-gray-100 transition"
-              >
-                <div className="flex items-center space-x-3">
-                  <Scissors className="text-gray-600" size={20} />
-                  <span className="text-lg font-medium">{barangay.name}</span>
-                </div>
-                <ChevronRight className="text-gray-600" size={20} />
-              </button>
-            ))}
+          {municipality.barangays.map((barangay) => (
+            <Link
+              key={barangay._id}
+              to={`/municipality/${municipality._id}/barangay/${barangay._id}`}
+              className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white text-black hover:bg-gray-100 transition"
+            >
+              <div className="flex items-center space-x-3">
+                <Scissors className="text-gray-600" size={20} />
+                <span className="text-lg font-medium">{barangay.name}</span>
+              </div>
+              <ChevronRight className="text-gray-600" size={20} />
+            </Link>
+          ))}
+
           </div>
         </div>
       </div>

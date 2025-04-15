@@ -10,42 +10,53 @@ const BarangayProfileSchema = new mongoose.Schema({
     ref: "Municipality",
     required: true,
   },
+  ordinances: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ordinance",
+    },
+  ],
+  resolutions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Resolution",
+    },
+  ],
   adminProfiles: [
     {
       startYear: {
         type: Number,
-        required: true,  // Ensures that startYear is required for each profile
+        required: true,
       },
       endYear: {
         type: Number,
-        required: true,  // Ensures that endYear is required for each profile
+        required: true,
       },
       punongBarangay: {
         type: String,
-        required: true,  // Ensures punongBarangay is required
+        required: true,
       },
       barangaySecretary: {
         type: String,
-        required: true,  // Ensures barangaySecretary is required
+        required: true,
       },
       email: {
         type: String,
-        required: true,  // Ensures email is required
-        match: [/\S+@\S+\.\S+/, "Please use a valid email address"], // Regex for email validation
+        required: true,
+        match: [/\S+@\S+\.\S+/, "Please use a valid email address"],
       },
       sangguniangBarangayMembers: {
-        type: [String],  // Array of strings
-        default: [],  // Ensures it defaults to an empty array if no members are provided
+        type: [String],
+        default: [],
       },
       sangguniangKabataan: {
-        type: [String],  // Array of strings
-        default: [],  // Ensures it defaults to an empty array if no members are provided
+        type: [String],
+        default: [],
       },
     },
   ],
-
   file: {
-    type: String, // This will store the file path if an image or document is uploaded
+    type: String,
     default: null,
     validate: {
       validator: function (v) {
@@ -53,10 +64,10 @@ const BarangayProfileSchema = new mongoose.Schema({
       },
       message: "Invalid file format. Only image or PDF files are allowed.",
     },
-  logoUrl: { // Add this field for the logo
-      type: String,
-      required: false,
-    },
+  },
+  logoUrl: {
+    type: String,
+    required: false,
   },
 });
 

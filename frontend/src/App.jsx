@@ -27,7 +27,7 @@ import UserEditCredentials from "./components/UserEditCredentials";
 import AdminEditCredentials from "./components/AdminEditCredentials";
 import UserForgotPassword from "./components/UserForgotPassword"; 
 import AdminForgotPassword from "./components/AdminForgotPassword"; 
-
+import BarangayView from "./components/BarangayView";
 function App() {
   return (
     <Router>
@@ -57,6 +57,7 @@ function App() {
         />
 
         <Route path="/municipality/:id" element={<MunicipalityView />} />
+        <Route path="/municipality/:municipalityId/barangay/:barangayId" element={<BarangayView />} />
         <Route path="/user-ordinances" element={<UserOrdinance />} />
         <Route path="/user-resolutions" element={<UserResolution />} />
         <Route path="/barangay-profile" element={<BarangayProfile/>} />
