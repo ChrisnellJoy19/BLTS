@@ -232,5 +232,43 @@ router.get("/barangay/:barangayId", authenticate, async (req, res) => {
   }
 });
 
+// 🔹 Check for existing documentTitle
+router.get("/check-document-title/:title", async (req, res) => {
+  const { title } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Ordinance.exists({
+      documentTitle: title.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentTitle:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🔹 Check for existing documentNumber
+router.get("/check-document-number/:number", async (req, res) => {
+  const { number } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Ordinance.exists({
+      documentNumber: number.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentNumber:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

@@ -7,11 +7,13 @@ const mongoose = require("mongoose");
 const Resolution = require("../models/Resolution");
 const authenticate = require("../middleware/auth");
 
+// Ensure uploads folder exists
 const uploadFolder = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadFolder)) {
   fs.mkdirSync(uploadFolder);
 }
 
+// Multer setup
 const storage = multer.diskStorage({
   destination: "./uploads/",
   filename: (req, file, cb) => {
@@ -21,11 +23,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10 MB file size limit (adjust as needed)
-  },
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['application/pdf']; // You can add more types if needed
+    const allowedTypes = ['application/pdf'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -34,15 +34,63 @@ const upload = multer({
   }
 });
 
+// 🔹 Check for existing documentTitle
+router.get("/check-document-title/:title", async (req, res) => {
+  const { title } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Resolution.exists({
+      documentTitle: title.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentTitle:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🔹 Check for existing documentNumber
+router.get("/check-document-number/:number", async (req, res) => {
+  const { number } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Resolution.exists({
+      documentNumber: number.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentNumber:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🔹 Upload new Resolution
 router.post("/", authenticate, upload.single("file"), async (req, res) => {
   try {
-    const { documentTitle, documentNumber, governanceArea, dateEnacted, administrativeYear, authors, status, description, barangayId } = req.body;
+    const {
+      documentTitle,
+      documentNumber,
+      governanceArea,
+      dateEnacted,
+      administrativeYear,
+      authors,
+      status,
+      description,
+      barangayId
+    } = req.body;
 
     if (!req.file) {
       return res.status(400).json({ message: "File upload is required" });
     }
 
-    // ✅ Save Resolution in Database
     const newResolution = new Resolution({
       documentTitle,
       documentNumber,
@@ -53,7 +101,7 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
       status,
       description,
       barangayId,
-      fileUrl: `/uploads/${req.file.filename}` // Save file path
+      fileUrl: `/uploads/${req.file.filename}`
     });
 
     await newResolution.save();
@@ -65,7 +113,7 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
   }
 });
 
-// 🔹 Get All Resolutions
+// 🔹 Get all Resolutions (with optional filters)
 router.get("/", async (req, res) => {
   try {
     const { barangayId, isDeleted } = req.query;
@@ -74,11 +122,9 @@ router.get("/", async (req, res) => {
       return res.status(400).json({ message: "Barangay ID is required" });
     }
 
-    let query = { barangayId };
-
+    const query = { barangayId };
     if (isDeleted !== undefined) {
-      // Convert isDeleted to boolean
-      query.isDeleted = isDeleted === "true";  // "true" or "false" as string from frontend
+      query.isDeleted = isDeleted === "true";
     }
 
     const resolutions = await Resolution.find(query).populate("barangayId", "name");
@@ -89,19 +135,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+// 🔹 Get Resolutions by barangay (active only)
+router.get("/barangay/:barangayId", authenticate, async (req, res) => {
+  try {
+    const { barangayId } = req.params;
+
+    const resolutions = await Resolution.find({ barangayId, isDeleted: false });
+    res.json(resolutions);
+  } catch (error) {
+    console.error("Error fetching resolutions by barangay:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// 🔹 Update Resolution
 router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = req.body;
 
-    // Log received data for debugging
-    console.log("Received update data:", updateData);
+    if (updateData.barangayId && !mongoose.Types.ObjectId.isValid(updateData.barangayId)) {
+      return res.status(400).json({ message: "Invalid barangayId format" });
+    }
 
-    // Validate and convert barangayId only if it's provided
     if (updateData.barangayId) {
-      if (!mongoose.Types.ObjectId.isValid(updateData.barangayId)) {
-        return res.status(400).json({ message: "Invalid barangayId format" });
-      }
       updateData.barangayId = new mongoose.Types.ObjectId(updateData.barangayId);
     }
 
@@ -109,12 +166,10 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
       updateData.fileUrl = `/uploads/${req.file.filename}`;
     }
 
-    console.log("Final update data:", updateData);
-
     const updatedResolution = await Resolution.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedResolution) {
-      return res.status(404).json({ message: "Reslution not found" });
+      return res.status(404).json({ message: "Resolution not found" });
     }
 
     res.json({ message: "Resolution updated successfully", resolution: updatedResolution });
@@ -124,7 +179,7 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
   }
 });
 
-
+// 🔹 Soft Delete
 router.put("/delete/:id", authenticate, async (req, res) => {
   try {
     const resolution = await Resolution.findById(req.params.id);
@@ -133,7 +188,6 @@ router.put("/delete/:id", authenticate, async (req, res) => {
       return res.status(404).json({ message: "Resolution not found" });
     }
 
-    // Ensure the user is authorized to delete the resolution based on barangayId
     if (resolution.barangayId.toString() !== req.user.barangayId.toString()) {
       return res.status(403).json({ message: "You are not authorized to delete this resolution" });
     }
@@ -142,8 +196,6 @@ router.put("/delete/:id", authenticate, async (req, res) => {
     resolution.deletedAt = new Date();
 
     await resolution.save();
-
-    // Respond with success
     res.json({ message: "Resolution deleted", resolution });
   } catch (error) {
     console.error("Error deleting resolution:", error);
@@ -151,6 +203,7 @@ router.put("/delete/:id", authenticate, async (req, res) => {
   }
 });
 
+// 🔹 Restore
 router.put("/restore/:id", async (req, res) => {
   try {
     const resolution = await Resolution.findByIdAndUpdate(
@@ -158,43 +211,29 @@ router.put("/restore/:id", async (req, res) => {
       { isDeleted: false, deletedAt: null },
       { new: true }
     );
+
     if (!resolution) {
       return res.status(404).json({ message: "Resolution not found" });
     }
+
     res.json(resolution);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+// 🔹 Permanent Delete
 router.delete("/permanent-delete/:id", async (req, res) => {
   try {
     const deleted = await Resolution.findByIdAndDelete(req.params.id);
     if (!deleted) {
       return res.status(404).json({ message: "Resolution not found" });
     }
+
     res.json({ message: "Resolution permanently deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
-
-router.get("/barangay/:barangayId", authenticate, async (req, res) => {
-  try {
-    const { barangayId } = req.params;
-
-    const resolutions = await Resolution.find({ 
-      barangayId, 
-      isDeleted: false // Only return active resolutions
-    });
-
-    res.json(resolutions);
-  } catch (error) {
-    console.error("Error fetching resolutions by barangay:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
 
 module.exports = router;
