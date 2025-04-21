@@ -24,6 +24,10 @@ const BarangayProfileSchema = new mongoose.Schema({
   ],
   adminProfiles: [
     {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", 
+      },
       startYear: {
         type: Number,
         required: true,

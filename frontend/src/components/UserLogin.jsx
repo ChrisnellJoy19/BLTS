@@ -1,6 +1,7 @@
 import React, { useState } from "react"; // ✅ Import useState
 import { Link } from "react-router-dom";
 import axios from "axios"; // ✅ Import axios
+import { Eye, EyeOff } from "lucide-react";
 
 const UserLogin = () => {
   const [identifier, setIdentifier] = useState(""); // ✅ Fix field name
@@ -25,6 +26,8 @@ const UserLogin = () => {
       setError(err.response?.data?.message || "Login failed. Try again.");
     }
   };
+
+const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden">
@@ -74,22 +77,37 @@ const UserLogin = () => {
             className="w-full max-w-[200px] mx-auto mb-4"
           />
           <form className="user-login-form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Username or Email"
-              value={identifier} // ✅ Fix field name
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-              className="w-[90%] p-2 my-2 border border-gray-300 rounded-md text-sm"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-[90%] p-2 my-2 border border-gray-300 rounded-md text-sm"
-            />
+            {/* Username / Email Field */}
+            <div className="relative w-[90%] mx-3 my-2">
+              <input
+                type="text"
+                placeholder="Username or Email"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                required
+                className="w-full p-2 border border-gray-300 rounded-md text-sm pr-10"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="relative w-[90%] mx-3 my-2">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-2 border border-gray-300 rounded-md text-sm pr-10"
+              />
+              <span
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </span>
+            </div>
+
+
             <button
               type="submit"
               className="w-[90%] bg-gradient-to-r from-[#ca1a07] to-[#e67e22] text-white py-2 text-base rounded-full mt-4 hover:from-[#c0392b] hover:to-[#d35400] transition"

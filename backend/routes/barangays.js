@@ -135,10 +135,10 @@ router.get("/:id/admin-years", async (req, res) => {
 // ✅ Update a Barangay by ID
 router.put("/:id", upload.single("file"), async (req, res) => {
   try {
-    console.log("Received data:", req.body); // Debugging the incoming data
+    console.log("Received data:", req.body);
+
     const { name, municipalityId, adminProfiles } = req.body;
 
-    // Validate required fields
     if (!name || !municipalityId || !adminProfiles) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -151,24 +151,32 @@ router.put("/:id", upload.single("file"), async (req, res) => {
       return res.status(400).json({ message: "Invalid adminProfiles format" });
     }
 
-    // Update Barangay document
+    // ✅ Skip syncing email to User collection
+    const updatedProfiles = adminData.map(profile => ({
+      userId: profile.userId || null,
+      startYear: profile.startYear,
+      endYear: profile.endYear,
+      punongBarangay: profile.punongBarangay,
+      barangaySecretary: profile.barangaySecretary,
+      email: profile.email, // Optional: you can remove this too if no longer needed
+      sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
+      sangguniangKabataan: profile.sangguniangKabataan || [],
+    }));
+
+    const barangayUpdateFields = {
+      name,
+      municipalityId,
+      adminProfiles: updatedProfiles,
+    };
+
+    if (req.file) {
+      barangayUpdateFields.file = `/uploads/${req.file.filename}`;
+    }
+
     const updatedBarangay = await Barangay.findByIdAndUpdate(
       req.params.id,
-      {
-        name,
-        municipalityId,
-        adminProfiles: adminData.map(profile => ({
-          startYear: profile.startYear,
-          endYear: profile.endYear,
-          punongBarangay: profile.punongBarangay,
-          barangaySecretary: profile.barangaySecretary,
-          email: profile.email,
-          sangguniangBarangayMembers: profile.sangguniangBarangayMembers || [],
-          sangguniangKabataan: profile.sangguniangKabataan || [],
-        })),
-        file: req.file ? `/uploads/${req.file.filename}` : null, // Update file URL if uploaded
-      },
-      { new: true, overwrite: true }
+      barangayUpdateFields,
+      { new: true }
     );
 
     if (!updatedBarangay) {
