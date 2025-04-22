@@ -74,22 +74,31 @@ router.post("/", authenticate, upload.single("file"), async (req, res) => {
   }
 });
 
+// Fetch Ordinances Route
 router.get("/", async (req, res) => {
   try {
-    const { barangayId } = req.query;
+    const { barangayId, isDeleted } = req.query;
 
     if (!barangayId) {
       return res.status(400).json({ message: "Barangay ID is required" });
     }
 
-    const ordinances = await Ordinance.find({ barangayId }).populate("barangayId", "name");
-    
+    // Construct query for ordinances, filtering by isDeleted if provided
+    let query = { barangayId };
+
+    if (isDeleted !== undefined) {
+      // Convert isDeleted to boolean
+      query.isDeleted = isDeleted === "true";  // "true" or "false" as string from frontend
+    }
+
+    const ordinances = await Ordinance.find(query).populate("barangayId", "name");
     res.json(ordinances);
   } catch (error) {
     console.error("Error fetching ordinances:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
 
 // 🔹 Update Ordinance Route
 router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
@@ -126,5 +135,140 @@ router.put("/:id", authenticate, upload.single("file"), async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
+// 🔹 Soft Delete Ordinance Route
+router.put("/delete/:id", authenticate, async (req, res) => {
+  try {
+    // Find the ordinance by ID
+    const ordinance = await Ordinance.findById(req.params.id);
+
+    // Check if ordinance exists
+    if (!ordinance) {
+      return res.status(404).json({ message: "Ordinance not found" });
+    }
+
+    // Ensure the user is authorized to delete the ordinance based on barangayId
+    if (ordinance.barangayId.toString() !== req.user.barangayId.toString()) {
+      return res.status(403).json({ message: "You are not authorized to delete this ordinance" });
+    }
+
+    // Soft delete the ordinance (mark as deleted)
+    ordinance.isDeleted = true;
+    ordinance.deletedAt = new Date();
+
+    // Save the updated ordinance
+    await ordinance.save();
+
+    // Respond with success
+    res.json({ message: "Ordinance deleted", ordinance });
+  } catch (error) {
+    console.error("Error deleting ordinance:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/restore/:id", async (req, res) => {
+  try {
+    const ordinance = await Ordinance.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: false, deletedAt: null },
+      { new: true }
+    );
+    if (!ordinance) {
+      return res.status(404).json({ message: "Ordinance not found" });
+    }
+    res.json(ordinance);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Permanently delete ordinance
+router.delete("/permanent-delete/:id", async (req, res) => {
+  try {
+    const ordinance = await Ordinance.findById(req.params.id);
+
+    if (!ordinance) {
+      return res.status(404).json({ message: "Ordinance not found" });
+    }
+
+    // Delete associated file if it exists
+    if (ordinance.fileUrl) {
+      const filename = path.basename(ordinance.fileUrl); // Get the filename from fileUrl
+      const filePath = path.join(__dirname, "..", "uploads", filename);
+
+      fs.unlink(filePath, (err) => {
+        if (err && err.code !== "ENOENT") {
+          console.error("Error deleting file:", err);
+          return res.status(500).json({ message: "Failed to delete the associated file" });
+        }
+      });
+    }
+
+    // Delete ordinance from database
+    await Ordinance.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Ordinance and associated file permanently deleted" });
+  } catch (err) {
+    console.error("Permanent delete error:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 🔹 Get ordinances by barangayId (used for dashboard pie chart)
+router.get("/barangay/:barangayId", authenticate, async (req, res) => {
+  try {
+    const { barangayId } = req.params;
+
+    const ordinances = await Ordinance.find({ 
+      barangayId,
+      isDeleted: false  // Only return active ordinances
+    });
+
+    res.json(ordinances);
+  } catch (error) {
+    console.error("Error fetching ordinances by barangay:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// 🔹 Check for existing documentTitle
+router.get("/check-document-title/:title", async (req, res) => {
+  const { title } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Ordinance.exists({
+      documentTitle: title.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentTitle:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 🔹 Check for existing documentNumber
+router.get("/check-document-number/:number", async (req, res) => {
+  const { number } = req.params;
+  const { barangayId } = req.query;
+
+  try {
+    const exists = await Ordinance.exists({
+      documentNumber: number.trim(),
+      barangayId,
+      isDeleted: false
+    });
+
+    res.json({ exists: !!exists });
+  } catch (error) {
+    console.error("Error checking documentNumber:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

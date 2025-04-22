@@ -12,6 +12,9 @@ const UserAddOrdinance = () => {
   const [administrativeYear, setAdministrativeYear] = useState("");
   const [authors, setAuthors] = useState([]);
   const [authorInput, setAuthorInput] = useState("");
+  const [documentTitleError, setDocumentTitleError] = useState("");
+  const [documentNumberError, setDocumentNumberError] = useState("");
+  
   
   const handleAuthorChange = (e) => {
     setAuthorInput(e.target.value);
@@ -73,10 +76,11 @@ const UserAddOrdinance = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!barangayId) {
-      alert("Barangay ID is required.");
+    if (documentTitleError || documentNumberError) {
+      alert("Please resolve the title/number conflict before submitting.");
       return;
     }
+    
 
     const formData = new FormData();
     formData.append("documentTitle", documentTitle);
@@ -113,6 +117,41 @@ const UserAddOrdinance = () => {
     }
   };
 
+  const checkDocumentTitleExists = async (title) => {
+    if (!title.trim() || !barangayId) return;
+  
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.get(
+        `http://localhost:5000/api/ordinances/check-document-title/${encodeURIComponent(title)}?barangayId=${barangayId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      setDocumentTitleError(response.data.exists ? "This title already exists in your barangay." : "");
+    } catch (err) {
+      console.error("Error checking title:", err);
+      setDocumentTitleError("Error checking title.");
+    }
+  };
+  
+  const checkDocumentNumberExists = async (number) => {
+    if (!number.trim() || !barangayId) return;
+  
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.get(
+        `http://localhost:5000/api/ordinances/check-document-number/${number}?barangayId=${barangayId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      setDocumentNumberError(response.data.exists ? "This number already exists in your barangay." : "");
+    } catch (err) {
+      console.error("Error checking number:", err);
+      setDocumentNumberError("Error checking number.");
+    }
+  };
+  
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
@@ -134,9 +173,14 @@ const UserAddOrdinance = () => {
                 type="text"
                 value={documentTitle}
                 onChange={(e) => setDocumentTitle(e.target.value)}
+                onBlur={() => checkDocumentTitleExists(documentTitle)}
                 className="w-full border p-2 rounded mt-1"
                 required
               />
+              {documentTitleError && (
+                <p className="text-red-500 text-sm">{documentTitleError}</p>
+              )}
+
             </div>
 
             <div>
@@ -155,8 +199,13 @@ const UserAddOrdinance = () => {
                 type="text"
                 value={documentNumber}
                 onChange={(e) => setDocumentNumber(e.target.value)}
+                onBlur={() => checkDocumentNumberExists(documentNumber)}
                 className="w-full border p-2 rounded mt-1"
               />
+              {documentNumberError && (
+                <p className="text-red-500 text-sm">{documentNumberError}</p>
+              )}
+
             </div>
 
             <div>

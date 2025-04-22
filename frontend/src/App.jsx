@@ -1,6 +1,10 @@
-// src/App.jsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import Homepage from "./components/Homepage";
 import UserLogin from "./components/UserLogin";
@@ -23,12 +27,26 @@ import UserEditResolution from "./components/UserEditResolution";
 import DilgAdminCreateAccount from "./components/DilgAdminCreateAccount"; 
 import AdminRoute from "./components/AdminRoute";
 import UserRoute from "./components/UserRoute";
-import EditCredentials from "./components/EditCredentials";
-import ForgotPassword from "./components/ForgotPassword"; // adjust path if needed
+import UserEditCredentials from "./components/UserEditCredentials";
+import AdminEditCredentials from "./components/AdminEditCredentials";
+import UserForgotPassword from "./components/UserForgotPassword"; 
+import AdminForgotPassword from "./components/AdminForgotPassword"; 
+import BarangayView from "./components/BarangayView";
 
-function App() {
+import Loader from "./components/Loader"; 
+function AppRoutes() {
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const timeout = setTimeout(() => setLoading(false), 700); // Fake load delay
+    return () => clearTimeout(timeout);
+  }, [location]);
+
   return (
-    <Router>
+    <>
+      {loading && <Loader />}
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/homepage" element={<Homepage />} />
@@ -36,7 +54,6 @@ function App() {
         <Route path="/get-started" element={<GetStarted />} />
         <Route path="/DilgAdminLogin" element={<DilgAdminLogin />} />
         <Route path="/UserLogin" element={<UserLogin />} />
-        {/* Protected Routes */}
         <Route
           path="/dilgAdminDashboard"
           element={
@@ -53,21 +70,30 @@ function App() {
             </UserRoute>
           }
         />
-
         <Route path="/municipality/:id" element={<MunicipalityView />} />
+        <Route path="/municipality/:municipalityId/barangay/:barangayId" element={<BarangayView />} />
         <Route path="/user-ordinances" element={<UserOrdinance />} />
         <Route path="/user-resolutions" element={<UserResolution />} />
-        <Route path="/barangay-profile" element={<BarangayProfile/>} />
-        <Route path="/edit-profile" element={<UserEditProfile/>} />
+        <Route path="/barangay-profile" element={<BarangayProfile />} />
+        <Route path="/edit-profile" element={<UserEditProfile />} />
         <Route path="/add-ordinances" element={<UserAddOrdinance />} />
         <Route path="/edit-ordinance" element={<UserEditOrdinance />} />
         <Route path="/edit-resolution" element={<UserEditResolution />} />
         <Route path="/add-resolutions" element={<UserAddResolution />} />
         <Route path="/CreateAccount" element={<DilgAdminCreateAccount />} />
-        <Route path="/edit-credentials" element={<EditCredentials />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/UserEditCredentials" element={<UserEditCredentials />} />
+        <Route path="/AdminEditCredentials" element={<AdminEditCredentials />} />
+        <Route path="/UserForgotPassword" element={<UserForgotPassword />} />
+        <Route path="/AdminForgotPassword" element={<AdminForgotPassword />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppRoutes />
     </Router>
   );
 }

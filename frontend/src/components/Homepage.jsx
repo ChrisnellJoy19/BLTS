@@ -51,7 +51,7 @@ const Homepage = () => {
 
         {/* Description */}
         <p className="max-w-3xl text-lg md:text-xl mb-8">
-          Barangay Legislative Tracking System (BLTS) is an online repository platform for archiving Barangay Legislative Records. Barangay Secretary uploads ordinances, resolutions, and others.
+          Barangay Legislative Tracking System (BLTS) is an online repository platform for archiving Barangay Legislative Records. Barangay Secretary uploads ordinances and resolutions.
         </p>
 
         {/* Get Started Button */}

@@ -11,7 +11,15 @@ const ResolutionSchema = new mongoose.Schema({
   status: { type: String, enum: ["Draft", "Active", "Repealed"], required: true },
   description: { type: String, required: true },
   barangayId: { type: mongoose.Schema.Types.ObjectId, ref: "Barangay", required: true },
-  fileUrl: { type: String, required: true }, // Store the file path or URL
+  fileUrl: { type: String, required: true }, 
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedAt: {
+    type: Date,
+    default: null
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Resolution", ResolutionSchema);

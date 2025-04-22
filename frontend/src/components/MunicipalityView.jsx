@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { ChevronRight, Scissors, ArrowLeft} from "lucide-react";
+import { ChevronRight, Landmark, ArrowLeft} from "lucide-react";
 
-const COLORS = ["#FF5733", "#33FFCE", "#FFD133", "#A133FF"];
+const COLORS = ["#000B4F", "#20368F", "#829CD0", "#EBEBEB", "#6D6D6D", "#323232"];
+// const COLORS = ["#005C6C", "#007B7F", "#00A8A9", "#66B2B3", "#99CCCC"];
+
 
 const MunicipalityView = () => {
   const { id } = useParams();
@@ -116,18 +118,20 @@ const MunicipalityView = () => {
         <div className="mt-6">
           <h2 className="text-2xl font-semibold">Barangays</h2>
           <div className="mt-4 space-y-2">
-            {municipality.barangays.map((barangay) => (
-              <button
-                key={barangay._id}
-                className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white text-black hover:bg-gray-100 transition"
-              >
-                <div className="flex items-center space-x-3">
-                  <Scissors className="text-gray-600" size={20} />
-                  <span className="text-lg font-medium">{barangay.name}</span>
-                </div>
-                <ChevronRight className="text-gray-600" size={20} />
-              </button>
-            ))}
+          {municipality.barangays.map((barangay) => (
+            <Link
+              key={barangay._id}
+              to={`/municipality/${municipality._id}/barangay/${barangay._id}`}
+              className="flex items-center justify-between w-full p-4 border rounded-lg shadow-md bg-white text-black hover:bg-gray-100 transition"
+            >
+              <div className="flex items-center space-x-3">
+                <Landmark className="text-gray-600" size={20} />
+                <span className="text-lg font-medium">{barangay.name}</span>
+              </div>
+              <ChevronRight className="text-gray-600" size={20} />
+            </Link>
+          ))}
+
           </div>
         </div>
       </div>
