@@ -63,13 +63,11 @@ router.post("/register", async (req, res) => {
       await foundBarangay.save();
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new User({
       username,
       role,
       email: email.toLowerCase(),
-      password: hashedPassword,
+      password: password.trim(),
       municipalityId: foundMunicipality._id,
       barangayId: foundBarangay._id,
     });
