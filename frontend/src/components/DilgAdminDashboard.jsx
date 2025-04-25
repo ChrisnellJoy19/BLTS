@@ -60,46 +60,17 @@ const DilgAdminDashboard = () => {
           <h1 className="text-xl font-bold">WELCOME, DILG ADMIN!</h1>
         </header>
 
-        {/* Announcement Section */}
-        <div className="mt-6 p-4 bg-white rounded-lg shadow-lg">
-          <h2 className="text-lg font-semibold mb-2">Post an Announcement</h2>
-
-          {/* Announcement Input */}
-          <textarea
-            value={announcement}
-            onChange={(e) => setAnnouncement(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Enter your announcement here"
-            rows="4"
-          ></textarea>
-
-          {/* Select Barangay */}
-          <div className="mt-4">
-            <label className="block font-medium mb-1">Select Barangay:</label>
-            <select
-              value={selectedBarangay}
-              onChange={(e) => setSelectedBarangay(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            >
-              <option value="" disabled>
-                -- Select a Barangay --
-              </option>
-              <option value="all">All Barangays</option>
-              {barangays.map((barangay) => (
-                <option key={barangay._id} value={barangay._id}>
-                  {barangay.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Post Announcement Button */}
-          <button
-            onClick={handlePostAnnouncement}
-            className="mt-4 bg-[#587D9D] text-white py-2 px-4 rounded-md hover:bg-[#445F7A]"
-          >
-            Post Announcement
-          </button>
+        <div className="flex flex-wrap justify-center items-start gap-8 mt-6 px-4">
+        <iframe
+          className="rounded-lg shadow-lg"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d221569.83690051668!2d121.83084090324186!3d13.380381676842799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a318a5c1f65dbf%3A0xe9feb3ea5b6e3b7b!2sMarinduque!5e1!3m2!1sen!2sph!4v1741305863299!5m2!1sen!2sph"
+          width="1200"
+          height="500"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
         </div>
       </div>
     </div>

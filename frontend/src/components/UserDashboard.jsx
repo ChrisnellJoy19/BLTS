@@ -77,7 +77,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-100 overflow-auto">
+    <div className="flex flex-col md:flex-row f-screen bg-gray-100 overflow-auto">
       <Sidebar />
       <main className="flex-1 p-6 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white relative">
         {/* Logo Section */}
