@@ -83,7 +83,7 @@ const DilgAdminCreateAccount = () => {
         <p className="text-lg text-center px-6 py-4">
           The Barangay Legislative Tracking System (BLTS) is an online platform for archiving Barangay Legislative Records, where Barangay Secretaries can upload ordinances, resolutions, and other records.
         </p>
-        <div className="bg-[#163a56] py-2 text-center text-sm z-10">A project by ONE MARINDUQUE DILG - LRC</div>
+        <div className="bg-[#163a56] py-2 text-center text-sm z-10">A project by ONE MARINDUQUE DILG - LGRC</div>
       </div>
       <div className="relative flex flex-col items-center bg-white w-full lg:w-[60%] p-25 overflow-y-auto h-screen">
         <div className="relative z-10 text-center">

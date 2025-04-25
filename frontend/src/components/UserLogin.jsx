@@ -54,7 +54,7 @@ const [showPassword, setShowPassword] = useState(false);
 
         {/* Footer */}
         <div className="bg-[#163a56] text-center text-sm py-2 w-full relative z-10">
-          A project by ONE MARINDUQUE DILG - LRC
+          A project by ONE MARINDUQUE DILG - LGRC
         </div>
       </div>
 

@@ -47,7 +47,7 @@ const DilgAdminLogin = () => {
         </p>
 
         <div className="relative bg-[#163a56] text-center text-sm py-2 z-10">
-          A project by ONE MARINDUQUE DILG - LRC
+          A project by ONE MARINDUQUE DILG - LGRC
         </div>
       </div>
 

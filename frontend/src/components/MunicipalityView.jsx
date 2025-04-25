@@ -138,7 +138,7 @@ const MunicipalityView = () => {
 
       {/* Footer */}
       <footer className="w-full mt-auto bg-[#183248] text-center text-sm py-2">
-        A project by ONE MARINDUQUE DILG - LRC
+        A project by ONE MARINDUQUE DILG - LGRC
       </footer>
     </div>
   );
