@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
       role: user.role,
       barangay: barangay ? barangay.name : "Unknown Barangay",
       municipality: municipality ? municipality.name : "Unknown Municipality",
-      province: "Marinduque", // Fixed province
+      province: "Marinduque", 
       logo: barangay ? barangay.logo : "/images/default_logo.png", // Default logo if none exists
       message: "Login successful",
       token,
@@ -108,13 +108,13 @@ router.get("/me", authenticate, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("🔹 Sending User Data:", user); // 🔥 Log what’s being sent
+    console.log("🔹 Sending User Data:", user); 
     res.json({
       id: user._id,
       username: user.username,
       email: user.email,
       municipalityId: user.municipalityId,
-      barangayId: user.barangayId,  // 🔥 Ensure this is included
+      barangayId: user.barangayId,  
       role: user.role,
     });
   } catch (error) {
@@ -134,16 +134,23 @@ router.put("/update", authenticate, async (req, res) => {
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) return res.status(401).json({ message: "Incorrect current password" });
 
-    user.username = username;
-    user.email = email;
+    if (username && username.trim() !== user.username) user.username = username.trim();
+    if (email && email.trim() !== user.email) user.email = email.trim();
 
+    // ✅ Let the schema handle password hashing
     if (newPassword) {
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(newPassword, salt);
+      user.password = newPassword;
     }
 
     await user.save();
-    res.json({ message: "Profile updated successfully." });
+
+    res.json({
+      message: "Profile updated successfully.",
+      user: {
+        username: user.username,
+        email: user.email,
+      },
+    });
   } catch (error) {
     console.error("❌ Error updating user:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
