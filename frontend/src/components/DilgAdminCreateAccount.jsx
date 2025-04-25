@@ -4,6 +4,8 @@ import axios from "axios";
 
 const DilgAdminCreateAccount = () => {
   const [formData, setFormData] = useState({
+    username: "",
+    role: "",
     municipality: "",
     barangay: "",
     email: "",
@@ -17,7 +19,7 @@ const DilgAdminCreateAccount = () => {
     "Gasan": ["Antipolo", "Bachao Ibaba", "Bachao Ilaya", "Bacongbacong", "Bahi", "Bangbang", "Banot", "Banuyo", "Barangay I", "Barangay II", "Barangay III", "Bognuyan", "Cabugao", "Dawis", "Dili", "Libtangin", "Mahunig", "Mangiliol", "Masiga", "Matandang Gasan", "Pangi", "Pingan", "Tabionan", "Tapuyan", "Tiguion"],
     "Mogpog": ["Anapog-Sibucao", "Argao", "Balanacan", "Banto", "Bintakay", "Bocboc", "Butansapa", "Candahon", "Capayang", "Danao", "Dulong Bayan", "Gitnang Bayan", "Guisian", "Hinadharan", "Hinanggayon", "Ino", "Janagdong", "Lamesa", "Laon", "Magapua", "Malayak", "Malusak", "Mampaitan", "Mangyan-Mababad", "Market Site", "Mataas na Bayan", "Mendez", "Nangka I", "Nangka II", "Paye", "Pili", "Puting Buhangin", "Sayao", "Silangan", "Sumangga", "Tarug", "Villa Mendez"],
     "Torrijos": ["Bangwayin", "Bayakbakin", "Bolo", "Bonliw", "Buangan", "Cabuyo", "Cagpo", "Dampulan", "Kay Duke", "Mabuhay", "Makawayan", "Malibago", "Malinao", "Maranlig", "Marlangga", "Matuyatuya", "Nangka", "Pakaskasan", "Payanas", "Poblacion", "Poctoy", "Sibuyao", "Suha", "Talawan", "Tigwi"],
-    "Buenavista": ["Bacagay", "Bagtingon", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Bicas-bicas", "Caigangan", "Daykitin", "Libas", "Malbog", "Sihi", "Timbo", "Tungib-Lipata", "Yook"],
+    "Buenavista": ["Bagacay", "Bagtingon", "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Bicas-bicas", "Caigangan", "Daykitin", "Libas", "Malbog", "Sihi", "Timbo", "Tungib-Lipata", "Yook"],
     "Sta. Cruz": ["Alobo", "Angas", "Aturan", "Bagong Silang Poblacion", "Baguidbirin", "Baliis", "Balogo", "Banahaw Poblacion", "Bangcuangan", "Banogbog", "Biga", "Botilao", "Buyabod", "Dating Bayan", "Devilla", "Dolores", "Haguimit", "Hupi", "Ipil", "Jolo", "Kaganhao", "Kalangkang", "Kamandugan", "Kasily", "Kilo-kilo", "Kiñaman", "Labo", "Lamesa", "Landy", "Lapu-lapu Poblacion", "Libjo", "Lipa", "Lusok", "Maharlika Poblacion", "Makulapnit", "Maniwaya", "Manlibunan", "Masaguisi", "Masalukot", "Matalaba", "Mongpong", "Morales", "Napo", "Pag-asa Poblacion", "Pantayin", "Polo", "Pulong-Parang", "Punong", "San Antonio", "San Isidro", "Tagum", "Tamayo", "Tambangan", "Tawiran", "Taytay"],
   };
 
@@ -38,13 +40,35 @@ const DilgAdminCreateAccount = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("Form Data Submitted:", formData);
+  
+    try {
+      const response = await axios.post("http://localhost:5000/api/dilgadmincreateaccount/register", formData);
+      alert("Account created successfully!");
+      console.log(response.data);
+      // Optional: Reset form or redirect
+      setFormData({
+        username: "",
+        role: "",
+        municipality: "",
+        barangay: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Something went wrong");
+      }
+      console.error("Registration error:", error);
+    }
   };
 
   return (
@@ -92,6 +116,18 @@ const DilgAdminCreateAccount = () => {
                 <option key={index} value={brgy}>{brgy}</option>
               ))}
             </select>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded px-3 py-2 text-sm"
+            >
+             <option value="" disabled>Select Role...</option>
+             <option value="Secretary">Secretary</option>
+             <option value="Barangay_Captain">Barangay Captain</option>
+            </select>
+            <input type="username" name="username" placeholder="Enter Username" value={formData.username} onChange={handleChange} required className="border border-gray-300 rounded px-3 py-2 text-sm" />
             <input type="email" name="email" placeholder="Enter Gmail" value={formData.email} onChange={handleChange} required className="border border-gray-300 rounded px-3 py-2 text-sm" />
             <input type="password" name="password" placeholder="Enter Password" value={formData.password} onChange={handleChange} required className="border border-gray-300 rounded px-3 py-2 text-sm" />
             <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required className="border border-gray-300 rounded px-3 py-2 text-sm" />

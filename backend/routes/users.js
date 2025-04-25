@@ -13,53 +13,10 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-// 🔹 Fetch User Data Route (Protected)
-router.get("/", authenticate, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password"); // Exclude password field
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error. Please try again later." });
-  }
-});
-
-// 🔹 User Registration Route
-router.post("/register", async (req, res) => {
-  const { username, password, email, municipalityId, barangayId, role } = req.body;
-
-  try {
-    console.log("🔹 Raw Password:", password);
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    console.log("🔹 Hashed Password:", hashedPassword);
-
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      email,
-      municipalityId,
-      barangayId,
-      role,
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error. Please try again later." });
-  }
-});
-
 // 🔹 User Login Route
 router.post("/login", async (req, res) => {
-  const { identifier, password } = req.body;
+  const identifier = req.body.identifier?.trim().toLowerCase();
+  const password = req.body.password?.trim();
 
   try {
     const user = await User.findOne({
@@ -81,7 +38,7 @@ router.post("/login", async (req, res) => {
     // Fetch barangay and municipality names & logo
     const barangay = await Barangay.findById(user.barangayId);
     const municipality = await Municipality.findById(user.municipalityId);
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password.trim(), user.password);
 
     if (!isPasswordValid) {
       console.log("🔴 Password comparison result:", isPasswordValid);
