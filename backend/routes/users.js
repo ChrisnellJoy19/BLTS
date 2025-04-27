@@ -6,7 +6,7 @@ const User = require("../models/User");
 const Municipality = require("../models/Municipality");
 const Barangay = require("../models/Barangay");
 const authenticate = require("../middleware/auth");
-
+const transporter = require("../middleware/mailer");
 // Ensure JWT Secret is set
 if (!process.env.JWT_SECRET) {
   console.error("⚠️ JWT_SECRET is missing from environment variables!");
@@ -157,10 +157,8 @@ router.put("/update", authenticate, async (req, res) => {
   }
 });
 
-const nodemailer = require('nodemailer');
-const crypto = require('crypto'); // generate random token
+const crypto = require('crypto'); 
 
-// Forgot Password Route
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
 
@@ -182,14 +180,7 @@ router.post('/forgot-password', async (req, res) => {
     // Create a reset link using your BASE_URL
     const resetLink = `${process.env.BASE_URL}/reset-password/${resetToken}`;
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
+    // Use the transporter imported from the middleware
     const mailOptions = {
       from: `"BLTS Support" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -211,6 +202,7 @@ router.post('/forgot-password', async (req, res) => {
     res.status(500).json({ message: 'Server error.' });
   }
 });
+
 
 router.post("/reset-password/:token", async (req, res) => {
   const { newPassword } = req.body;

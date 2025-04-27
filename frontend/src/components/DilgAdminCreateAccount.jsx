@@ -51,7 +51,6 @@ const DilgAdminCreateAccount = () => {
       const response = await axios.post("http://localhost:5000/api/dilgadmincreateaccount/register", formData);
       alert("Account created successfully!");
       console.log(response.data);
-      // Optional: Reset form or redirect
       setFormData({
         username: "",
         role: "",
