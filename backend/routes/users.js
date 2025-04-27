@@ -157,6 +157,92 @@ router.put("/update", authenticate, async (req, res) => {
   }
 });
 
+const nodemailer = require('nodemailer');
+const crypto = require('crypto'); // generate random token
+
+// Forgot Password Route
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No user found with this email.' });
+    }
+
+    // Generate a reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    // Set the reset token and expiration time on the user object
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiration
+    await user.save();
+
+    // Create a reset link using your BASE_URL
+    const resetLink = `${process.env.BASE_URL}/reset-password/${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"BLTS Support" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Reset Your Password',
+      html: `
+        <h2>Password Reset</h2>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetLink}" target="_blank">Reset Password</a>
+      `,
+    };
+
+    // Send the email with the reset link
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: 'Reset link sent to your email.' });
+
+  } catch (error) {
+    console.error('Forgot Password Error:', error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+router.post("/reset-password/:token", async (req, res) => {
+  const { newPassword } = req.body;
+  const { token } = req.params;
+
+  if (!newPassword || newPassword.length < 6) {
+    return res.status(400).json({ message: "Password must be at least 6 characters long." });
+  }
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }, // Check if token hasn't expired
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired reset token." });
+    }
+
+    user.password = newPassword; // Schema will auto-hash it
+    user.resetPasswordToken = undefined; // Clear token after use
+    user.resetPasswordExpires = undefined; // Clear expiry time
+    await user.save();
+
+    res.json({ message: "Password has been reset successfully. You can now log in!" });
+
+  } catch (error) {
+    console.error("❌ Reset Password error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+});
+
 
 
 module.exports = router;

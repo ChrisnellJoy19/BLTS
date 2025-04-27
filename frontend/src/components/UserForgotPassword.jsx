@@ -7,11 +7,33 @@ const UserForgotPassword = () => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`Requesting password reset for USER with email: ${email}`);
-    setSubmitted(true);
+  
+    try {
+      const res = await fetch('http://localhost:5000/api/user/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        console.log(data.message);
+        setSubmitted(true);
+      } else {
+        console.error(data.message);
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error sending reset request:', error);
+      alert('An error occurred. Please try again later.');
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white p-4 flex flex-col items-center justify-center">

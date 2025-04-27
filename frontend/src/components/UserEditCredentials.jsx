@@ -5,25 +5,27 @@ import { Eye, EyeOff } from "lucide-react";
 
 const PasswordInput = ({ label, value, onChange, name, autoComplete }) => {
   const [show, setShow] = useState(false);
+
   return (
     <div className="relative">
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <input
-        type={show ? "text" : "password"}
-        value={value}
-        onChange={onChange}
-        name={name}
-        autoComplete={autoComplete}
-        className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-[#183248]"
-        required
-      />
-      <button
-        type="button"
-        onClick={() => setShow((prev) => !prev)}
-        className="absolute right-2 top-9 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-      >
-        {show ? <EyeOff size={18} /> : <Eye size={18} />}
-      </button>
+      <div className="relative">
+        <input
+          type={show ? "text" : "password"}
+          value={value || ""}
+          onChange={onChange}
+          name={name}
+          autoComplete={autoComplete}
+          className="w-full p-2 border rounded pr-10 focus:outline-none focus:ring-2 focus:ring-[#183248]"
+        />
+        <button
+          type="button"
+          onClick={() => setShow((prev) => !prev)}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+        >
+          {show ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
     </div>
   );
 };
@@ -48,8 +50,8 @@ const UserEditCredentials = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setUsername(res.data.username);
-        setEmail(res.data.email);
+        setUsername(res.data.username || "");
+        setEmail(res.data.email || "");
       } catch (error) {
         console.error("Error fetching user:", error);
         setMessage("Failed to load user data.");
@@ -64,42 +66,61 @@ const UserEditCredentials = () => {
     setLoading(true);
     setMessage(null);
 
-    if (newPassword !== confirmPassword) {
-      setMessage("New passwords do not match.");
+    if (!currentPassword) {
+      setMessage("Current password is required.");
       setLoading(false);
       return;
     }
 
+    if (newPassword && newPassword !== confirmPassword) {
+      setMessage("New passwords do not match.");
+      setLoading(false);
+      return;
+    }
     try {
       const token = localStorage.getItem("userToken");
-
-      await axios.put(
-        "/api/user/update",
-        {
-          username,
-          email,
-          currentPassword,
-          newPassword,
+    
+      const updatePayload = {
+        username: username.trim(),
+        email: email.trim(),
+        currentPassword,
+      };
+    
+      if (newPassword) {
+        updatePayload.newPassword = newPassword.trim();
+      }
+    
+      const res = await axios.put("http://localhost:5000/api/user/update", updatePayload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setMessage("Profile updated successfully.");
+      });
+    
+      setMessage(res.data.message || "Profile updated successfully.");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+    
+      // If password was changed, log out the user
+      if (newPassword) {
+        localStorage.removeItem("userToken"); // Clear the stored token
+        navigate("/userlogin"); // Redirect to the login page
+      }
     } catch (error) {
       console.error("Update failed:", error);
-      setMessage("Failed to update credentials.");
+      const statusCode = error?.response?.status;
+    
+      if (statusCode === 401) {
+        setMessage("Incorrect current password.");
+      } else if (statusCode === 404) {
+        setMessage("User not found.");
+      } else {
+        setMessage("Server error. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }
-  };
-
+  }; 
   return (
     <div className="h-screen bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white overflow-hidden">
       <main className="h-full flex flex-col items-center justify-start overflow-y-auto p-6 md:p-10">
@@ -130,7 +151,7 @@ const UserEditCredentials = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
               <input
                 type="text"
-                value={username}
+                value={username || ""}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#183248]"
                 required
@@ -140,7 +161,7 @@ const UserEditCredentials = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
-                value={email}
+                value={email || ""}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#183248]"
                 required
@@ -149,15 +170,15 @@ const UserEditCredentials = () => {
 
             <PasswordInput
               label="Current Password"
-              value={currentPassword}
+              value={currentPassword || ""}
               onChange={(e) => setCurrentPassword(e.target.value)}
               name="currentPassword"
               autoComplete="current-password"
             />
 
             <PasswordInput
-              label="New Password"
-              value={newPassword}
+              label="New Password (optional)"
+              value={newPassword || ""}
               onChange={(e) => setNewPassword(e.target.value)}
               name="newPassword"
               autoComplete="new-password"
@@ -165,7 +186,7 @@ const UserEditCredentials = () => {
 
             <PasswordInput
               label="Confirm New Password"
-              value={confirmPassword}
+              value={confirmPassword || ""}
               onChange={(e) => setConfirmPassword(e.target.value)}
               name="confirmPassword"
               autoComplete="new-password"
@@ -180,13 +201,7 @@ const UserEditCredentials = () => {
             </button>
 
             {message && (
-              <p
-                className={`text-center text-sm ${
-                  message.includes("success")
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
+              <p className={`text-center text-sm ${message.includes("success") ? "text-green-600" : "text-red-600"}`}>
                 {message}
               </p>
             )}

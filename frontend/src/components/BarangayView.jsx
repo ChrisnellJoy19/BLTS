@@ -192,8 +192,6 @@ const BarangayView = () => {
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
-            <option value="az">Document No. A-Z</option>
-            <option value="za">Document No. Z-A</option>
           </select>
         </div>
 

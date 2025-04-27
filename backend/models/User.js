@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema({
   barangayId: { type: mongoose.Schema.Types.ObjectId, ref: 'Barangay', required: true },
   role: { type: String, required: true, enum: ['Secretary', 'Barangay_Captain'] },
   profile: { type: Object, default: {} },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+
+  resetPasswordToken: {type: String},
+  resetPasswordExpires: {type: Date},
 });
 
 userSchema.pre('save', async function(next) {
@@ -22,5 +25,6 @@ userSchema.pre('save', async function(next) {
     next(err);
   }
 });
+
 
 module.exports = mongoose.model('User', userSchema);

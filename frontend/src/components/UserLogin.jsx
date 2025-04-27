@@ -1,10 +1,10 @@
-import React, { useState } from "react"; // ✅ Import useState
+import React, { useState } from "react"; 
 import { Link } from "react-router-dom";
-import axios from "axios"; // ✅ Import axios
+import axios from "axios"; 
 import { Eye, EyeOff } from "lucide-react";
 
 const UserLogin = () => {
-  const [identifier, setIdentifier] = useState(""); // ✅ Fix field name
+  const [identifier, setIdentifier] = useState(""); 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -12,13 +12,13 @@ const UserLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/api/user/login", {
-        identifier, // ✅ Match backend field
+        identifier, 
         password,
       });
 
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user)); // ✅ Store user info
+        localStorage.setItem("user", JSON.stringify(response.data.user)); 
         alert("Login successful!");
         window.location.href = "/user-dashboard";
       }

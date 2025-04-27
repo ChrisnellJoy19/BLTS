@@ -32,6 +32,7 @@ import AdminEditCredentials from "./components/AdminEditCredentials";
 import UserForgotPassword from "./components/UserForgotPassword"; 
 import AdminForgotPassword from "./components/AdminForgotPassword"; 
 import BarangayView from "./components/BarangayView";
+import UserResetPassword from "./components/UserResetPassword"; 
 
 import Loader from "./components/Loader"; 
 function AppRoutes() {
@@ -85,6 +86,7 @@ function AppRoutes() {
         <Route path="/AdminEditCredentials" element={<AdminEditCredentials />} />
         <Route path="/UserForgotPassword" element={<UserForgotPassword />} />
         <Route path="/AdminForgotPassword" element={<AdminForgotPassword />} />
+        <Route path="/reset-password/:token" element={<UserResetPassword />} />
       </Routes>
     </>
   );

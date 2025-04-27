@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./dashboard_components/UserSidebar";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Sector } from "recharts";
 
 // Group documents by governance area
 const groupByGovernanceArea = (documents) => {
@@ -16,16 +16,49 @@ const groupByGovernanceArea = (documents) => {
   return Object.entries(areaCount).map(([name, value]) => ({ name, value }));
 };
 
-// Professional color palette
 const COLORS = ["#005C6C", "#007B7F", "#00A8A9", "#66B2B3", "#99CCCC"];
 
 // Label formatter for pie slices
 const renderCustomLabel = ({ percent }) => `${(percent * 100).toFixed(0)}%`;
 
+// Active (hovered) slice
+const renderActiveShape = (props) => {
+  const RADIAN = Math.PI / 180;
+  const {
+    cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent
+  } = props;
+  
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+
+  return (
+    <g>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius + 10}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <text x={mx} y={my} textAnchor="middle" fill="#333">
+        {`${payload.name} (${(percent * 100).toFixed(0)}%)`}
+      </text>
+    </g>
+  );
+};
+
 const Dashboard = () => {
   const [barangayName, setBarangayName] = useState("User");
   const [ordinancesData, setOrdinancesData] = useState([]);
   const [resolutionsData, setResolutionsData] = useState([]);
+  const [activeOrdIndex, setActiveOrdIndex] = useState(null);
+  const [activeResIndex, setActiveResIndex] = useState(null);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -44,7 +77,6 @@ const Dashboard = () => {
           return;
         }
 
-        // Fetch barangay name
         const barangayRes = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -53,7 +85,6 @@ const Dashboard = () => {
         const barangayData = await barangayRes.json();
         setBarangayName(barangayData.name);
 
-        // Fetch ordinances and resolutions
         const [ordRes, resRes] = await Promise.all([
           fetch(`http://localhost:5000/api/ordinances/barangay/${barangayId}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -80,6 +111,7 @@ const Dashboard = () => {
     <div className="flex flex-col md:flex-row f-screen bg-gray-100 overflow-auto">
       <Sidebar />
       <main className="flex-1 p-6 md:p-10 bg-gradient-to-br from-[#889FB1] to-[#587D9D] text-white relative">
+        
         {/* Logo Section */}
         <div className="flex flex-wrap items-center gap-2 mb-6 ml-2 justify-center md:justify-start">
           <img src="/images/dilg_logo.png" alt="dilg-logo" className="h-10" />
@@ -94,6 +126,7 @@ const Dashboard = () => {
 
         {/* Charts Section */}
         <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-12 mt-6">
+          
           {/* Ordinances Chart */}
           <div className="text-center w-full md:w-auto text-black">
             <h2 className="text-lg font-semibold mb-4 text-gray-300">ORDINANCES</h2>
@@ -110,6 +143,11 @@ const Dashboard = () => {
                     label={renderCustomLabel}
                     labelLine={false}
                     isAnimationActive={true}
+                    animationDuration={1500}
+                    activeIndex={activeOrdIndex}
+                    activeShape={renderActiveShape}
+                    onMouseEnter={(_, index) => setActiveOrdIndex(index)}
+                    onMouseLeave={() => setActiveOrdIndex(null)}
                   >
                     {ordinancesData.map((entry, i) => (
                       <Cell key={`ord-cell-${i}`} fill={COLORS[i % COLORS.length]} />
@@ -149,6 +187,11 @@ const Dashboard = () => {
                     label={renderCustomLabel}
                     labelLine={false}
                     isAnimationActive={true}
+                    animationDuration={1500}
+                    activeIndex={activeResIndex}
+                    activeShape={renderActiveShape}
+                    onMouseEnter={(_, index) => setActiveResIndex(index)}
+                    onMouseLeave={() => setActiveResIndex(null)}
                   >
                     {resolutionsData.map((entry, i) => (
                       <Cell key={`res-cell-${i}`} fill={COLORS[i % COLORS.length]} />
@@ -171,6 +214,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Decorative Images */}
