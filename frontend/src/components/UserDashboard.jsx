@@ -16,7 +16,7 @@ const groupByGovernanceArea = (documents) => {
   return Object.entries(areaCount).map(([name, value]) => ({ name, value }));
 };
 
-const COLORS = ["#005C6C", "#007B7F", "#00A8A9", "#66B2B3", "#99CCCC"];
+const COLORS = ["#005C6C", "#007B7F", "#00A8A9", "#66B2B3", "#99CCCC","#003F5C"];
 
 // Label formatter for pie slices
 const renderCustomLabel = ({ percent }) => `${(percent * 100).toFixed(0)}%`;
@@ -46,9 +46,9 @@ const renderActiveShape = (props) => {
         endAngle={endAngle}
         fill={fill}
       />
-      <text x={mx} y={my} textAnchor="middle" fill="#333">
+      {/* <text x={mx} y={my} textAnchor="middle" fill="#333">
         {`${payload.name} (${(percent * 100).toFixed(0)}%)`}
-      </text>
+      </text> */}
     </g>
   );
 };
