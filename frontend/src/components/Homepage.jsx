@@ -66,7 +66,7 @@ const Homepage = () => {
       {/* Footer */}
       <footer className="bg-[#183248] w-full text-center py-2">
         <p className="text-white text-sm md:text-base">
-          A project by ONE MARINDUQUE DILG - LRC
+          A project by ONE MARINDUQUE DILG - LGRC
         </p>
       </footer>
 
