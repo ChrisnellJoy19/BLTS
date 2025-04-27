@@ -14,9 +14,9 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'dist', // Ensures that the output goes into the 'dist' folder
+    outDir: 'dist',
     rollupOptions: {
-      input: path.resolve(__dirname, 'frontend/index.html'), // Explicitly point to the index.html file
+      input: path.resolve(__dirname, 'index.html'), // Ensure correct input HTML file
     },
   },
 });
