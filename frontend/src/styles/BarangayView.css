@@ -1,0 +1,13 @@
+.tab-button {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .active {
+    background-color: #d5d7f5; /* Light blue */
+    font-weight: bold;
+  }
+  
