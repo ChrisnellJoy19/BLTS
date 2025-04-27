@@ -31,7 +31,7 @@ const AboutUs = () => {
 
         {/* About Description */}
         <p className="mt-4 max-w-3xl text-center text-sm md:text-base">
-          This aims to aid Barangay Officials in managing and keeping their records through an online website wherein the documents stored, such as Ordinance, Resolution, Proposal, and others which are proposed and enacted by Barangays, are distinguished with which administrative term they were uploaded.
+          This aims to aid Barangay Secretaries in managing and keeping their records through an online website wherein the Ordinance and Resolution documents stored are distinguished with which administrative term they were uploaded.
         </p>
 
         {/* View Documentation Button */}
