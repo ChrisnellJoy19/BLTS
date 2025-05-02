@@ -11,10 +11,12 @@ const UserLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/user/login", {
+      const protocol = window.location.protocol === "https:" ? "https" : "http";
+      const response = await axios.post(`${protocol}://${window.location.hostname}:5000/api/user/login`, {
         identifier, 
         password,
       });
+
 
       if (response.data.token) {
         localStorage.setItem("userToken", response.data.token);

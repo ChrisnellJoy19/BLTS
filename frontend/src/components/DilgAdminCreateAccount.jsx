@@ -26,11 +26,12 @@ const DilgAdminCreateAccount = () => {
   useEffect(() => {
     const fetchMunicipalities = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/municipalities");
+        const response = await axios.get(`http://${window.location.hostname}:5000/api/municipalities`);
         setMunicipalities(response.data);
       } catch (error) {
         console.error("Error fetching municipalities:", error);
       }
+      
     };
     fetchMunicipalities();
   }, []);
@@ -48,9 +49,10 @@ const DilgAdminCreateAccount = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5000/api/dilgadmincreateaccount/register", formData);
+      const response = await axios.post(`http://${window.location.hostname}:5000/api/dilgadmincreateaccount/register`, formData);
       alert("Account created successfully!");
       console.log(response.data);
+
       setFormData({
         username: "",
         role: "",

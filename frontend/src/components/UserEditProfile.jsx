@@ -36,19 +36,26 @@ const UserEditProfile = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await fetch(
+          `http://${window.location.hostname}:5000/api/barangays/${barangayId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        
 
         if (response.ok) {
           const barangayData = await response.json();
 
           let municipalityName = "";
-          const municipalityResponse = await fetch(`http://localhost:5000/api/municipalities/${barangayData.municipalityId}`);
+          const municipalityResponse = await fetch(
+            `http://${window.location.hostname}:5000/api/municipalities/${barangayData.municipalityId}`
+          );
           if (municipalityResponse.ok) {
             const municipalityData = await municipalityResponse.json();
             municipalityName = municipalityData.name;
           }
+          
 
           setFormData({
             name: barangayData.name,
@@ -150,11 +157,15 @@ const UserEditProfile = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: form,
-      });
+      const response = await fetch(
+        `http://${window.location.hostname}:5000/api/barangays/${barangayId}`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+          body: form,
+        }
+      );
+      
 
       if (response.ok) {
         alert("Barangay profile updated successfully!");

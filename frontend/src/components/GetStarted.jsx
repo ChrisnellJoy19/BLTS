@@ -6,11 +6,12 @@ const GetStarted = () => {
   const [selectedMunicipality, setSelectedMunicipality] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/municipalities")
+    fetch(`http://${window.location.hostname}:5000/api/municipalities`)
       .then((response) => response.json())
       .then((data) => setMunicipalities(data))
       .catch((error) => console.error("Error fetching municipalities:", error));
   }, []);
+  
 
   const handleMunicipalityClick = (municipality) => {
     setSelectedMunicipality(municipality);

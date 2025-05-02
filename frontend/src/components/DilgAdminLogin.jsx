@@ -10,10 +10,11 @@ const DilgAdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/dilgadmin/login", {
+      const response = await axios.post(`http://${window.location.hostname}:5000/api/dilgadmin/login`, {
         email,
         password,
       });
+      
 
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);

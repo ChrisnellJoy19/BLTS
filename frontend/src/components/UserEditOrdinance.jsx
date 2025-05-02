@@ -65,13 +65,16 @@ const UserEditOrdinance = () => {
   });
   
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("userToken");
-        const response = await axios.get("http://localhost:5000/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.get(
+        `http://${window.location.hostname}:5000/api/user/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       if (response.data.barangayId) {
         setBarangayId(response.data.barangayId);
       } else {
@@ -81,7 +84,7 @@ const UserEditOrdinance = () => {
       console.error("❌ Error fetching user data:", error);
     }
   };
-  
+
   fetchUserData();
   }, []);
   
@@ -113,12 +116,17 @@ const UserEditOrdinance = () => {
 
     try {
       const token = localStorage.getItem("userToken");
-      const response = await axios.put(`http://localhost:5000/api/ordinances/${ordinance._id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data", // This is needed for FormData requests
-        },
-      });
+      const response = await axios.put(
+        `http://${window.location.hostname}:5000/api/ordinances/${ordinance._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // This is needed for FormData requests
+          },
+        }
+      );
+      
 
       alert("Document updated successfully!");
       navigate("/user-ordinances");

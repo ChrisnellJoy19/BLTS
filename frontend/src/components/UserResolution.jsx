@@ -20,10 +20,14 @@ const UserResolution = () => {
     const fetchResolutions = async () => {
       try {
         const isDeletedParam = showDeleted ? "true" : "false";
+        const baseUrl = `http://${window.location.hostname}:5000`; // Auto-use localhost or your LAN IP
+    
         const response = await fetch(
-          `http://localhost:5000/api/resolutions?barangayId=${encodeURIComponent(barangayId)}&isDeleted=${isDeletedParam}`
+          `${baseUrl}/api/resolutions?barangayId=${encodeURIComponent(barangayId)}&isDeleted=${isDeletedParam}`
         );
+    
         if (!response.ok) throw new Error("Failed to fetch resolutions");
+    
         const data = await response.json();
         setResolutions(data);
       } catch (err) {
@@ -32,6 +36,8 @@ const UserResolution = () => {
         setLoading(false);
       }
     };
+    
+    
 
     fetchResolutions();
   }, [barangayId, showDeleted]);
@@ -42,46 +48,55 @@ const UserResolution = () => {
 
   const handleDownload = async (fileUrl, documentTitle) => {
     try {
-      const fullUrl = `http://localhost:5000${fileUrl}`;
+      const protocol = window.location.protocol === "https:" ? "https" : "http";
+      const fullUrl = `${protocol}://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
       const response = await fetch(fullUrl, { mode: "cors" });
 
       if (!response.ok) throw new Error("Failed to download file");
-
+  
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-
+  
       const link = document.createElement("a");
       link.href = url;
       link.download = `${documentTitle}.pdf`;
       document.body.appendChild(link);
       link.click();
-
+  
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Download error:", err);
     }
   };
-
+  
+  
   const handleView = (fileUrl) => {
-    const fullUrl = `http://localhost:5000${fileUrl}`;
+    const protocol = window.location.protocol === "https:" ? "https" : "http";
+    const fullUrl = `${protocol}://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
     window.open(fullUrl, "_blank");
   };
-
+  
+  
+  
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this resolution?")) return;
-
+  
     try {
-      const response = await fetch(`http://localhost:5000/api/resolutions/delete/${id}`, {
+      const baseUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://your-production-url.com'; // Replace with your production URL
+  
+      const response = await fetch(`${baseUrl}/api/resolutions/delete/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
-
+  
       if (!response.ok) throw new Error("Failed to delete resolution");
-
+  
       setResolutions((prevResolutions) => prevResolutions.filter((resolution) => resolution._id !== id));
       alert("Resolution deleted successfully");
     } catch (err) {
@@ -89,19 +104,24 @@ const UserResolution = () => {
       alert("Error deleting resolution. Please try again.");
     }
   };
+  
 
   const handleRestore = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/resolutions/restore/${id}`, {
+      const baseUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://your-production-url.com'; // Replace with your production URL
+  
+      const response = await fetch(`${baseUrl}/api/resolutions/restore/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
-
+  
       if (!response.ok) throw new Error("Failed to restore resolution");
-
+  
       setResolutions((prev) => prev.filter((res) => res._id !== id));
       alert("Resolution restored successfully");
     } catch (err) {
@@ -109,21 +129,27 @@ const UserResolution = () => {
       alert("Error restoring resolution. Please try again.");
     }
   };
+  
 
   const handlePermanentDelete = async (id) => {
     if (!window.confirm("Permanently delete this resolution? This cannot be undone.")) return;
-
+  
     try {
-      const response = await fetch(`http://localhost:5000/api/resolutions/permanent-delete/${id}`, {
+      // Dynamically determine the base URL based on the environment
+      const baseUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://your-production-url.com'; // Replace with your production URL
+  
+      const response = await fetch(`${baseUrl}/api/resolutions/permanent-delete/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
-
+  
       if (!response.ok) throw new Error("Failed to permanently delete resolution");
-
+  
       setResolutions((prev) => prev.filter((resolution) => resolution._id !== id));
       alert("Resolution permanently deleted.");
     } catch (err) {
@@ -131,6 +157,7 @@ const UserResolution = () => {
       alert("Error permanently deleting resolution. Please try again.");
     }
   };
+  
 
     const [searchQuery, setSearchQuery] = useState("");
   

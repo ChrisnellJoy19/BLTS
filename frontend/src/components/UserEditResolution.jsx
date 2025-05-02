@@ -65,13 +65,16 @@ const UserEditResolution = () => {
   });
   
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("userToken");
-        const response = await axios.get("http://localhost:5000/api/user/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.get(
+        `http://${window.location.hostname}:5000/api/user/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       if (response.data.barangayId) {
         setBarangayId(response.data.barangayId);
       } else {
@@ -113,19 +116,24 @@ const UserEditResolution = () => {
 
     try {
       const token = localStorage.getItem("userToken");
-      const response = await axios.put(`http://localhost:5000/api/resolutions/${resolution._id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data", // This is needed for FormData requests
-        },
-      });
-
+      const response = await axios.put(
+        `http://${window.location.hostname}:5000/api/resolutions/${resolution._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // This is needed for FormData requests
+          },
+        }
+      );
+    
       alert("Document updated successfully!");
       navigate("/user-resolutions");
     } catch (error) {
       console.error("❌ Error updating document:", error.response?.data || error.message);
       alert("Failed to update document.");
     }
+    
   };
 
   return (

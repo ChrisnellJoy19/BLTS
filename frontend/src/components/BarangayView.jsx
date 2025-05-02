@@ -17,7 +17,7 @@ const BarangayView = () => {
   const [viewedItem, setViewedItem] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/municipalities/${municipalityId}/barangays/${barangayId}`)
+    fetch(`http://${window.location.hostname}:5000/api/municipalities/${municipalityId}/barangays/${barangayId}`)
       .then((res) => res.json())
       .then((data) => {
         setBarangay(data);
@@ -28,6 +28,7 @@ const BarangayView = () => {
         setLoading(false);
       });
   }, [municipalityId, barangayId]);
+  
 
   const getAvailableAdminYears = (items) => {
     const years = new Set();
@@ -78,9 +79,9 @@ const BarangayView = () => {
 
   const handleDownload = async (fileUrl, documentTitle) => {
     try {
-      const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+      const fullUrl = `http://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
       const response = await fetch(fullUrl, { mode: "cors" });
-
+      
       if (!response.ok) throw new Error("Failed to download file");
 
       const blob = await response.blob();
@@ -100,9 +101,10 @@ const BarangayView = () => {
   };
 
   const handleView = (fileUrl) => {
-    const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+    const fullUrl = `http://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
     window.open(fullUrl, "_blank");
   };
+  
 
   if (loading) return <p className="text-white p-6">Loading...</p>;
   if (!barangay) return <p className="text-white p-6">Barangay not found.</p>;
@@ -243,13 +245,14 @@ const BarangayView = () => {
                         {item.fileUrl && (
                           <>
                             <a
-                              href={`http://localhost:5000${item.fileUrl}`}
+                              href={`http://${window.location.hostname}:5000${item.fileUrl}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 transition"
                             >
                               View PDF
                             </a>
+
                             <a
                               href="#"
                               onClick={() => handleDownload(item.fileUrl, item.documentTitle)} // Use handleDownload for downloading

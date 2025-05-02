@@ -77,22 +77,24 @@ const Dashboard = () => {
           return;
         }
 
-        const barangayRes = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+        const barangayRes = await fetch(`http://${window.location.hostname}:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
 
         if (!barangayRes.ok) throw new Error("Failed to fetch barangay");
         const barangayData = await barangayRes.json();
         setBarangayName(barangayData.name);
 
         const [ordRes, resRes] = await Promise.all([
-          fetch(`http://localhost:5000/api/ordinances/barangay/${barangayId}`, {
+          fetch(`http://${window.location.hostname}:5000/api/ordinances/barangay/${barangayId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`http://localhost:5000/api/resolutions/barangay/${barangayId}`, {
+          fetch(`http://${window.location.hostname}:5000/api/resolutions/barangay/${barangayId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
+        
 
         const ordinances = await ordRes.json();
         const resolutions = await resRes.json();

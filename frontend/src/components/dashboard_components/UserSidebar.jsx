@@ -29,18 +29,26 @@ const Sidebar = () => {
           return;
         }
 
-        const barangayResponse = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const baseUrl = `http://${window.location.hostname}:5000`;
+
+        const barangayResponse = await fetch(`${baseUrl}/api/barangays/${barangayId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
 
         if (barangayResponse.ok) {
           const barangayData = await barangayResponse.json();
           setBarangayName(barangayData.name);
           setBarangayLogo(barangayData.file); // Assuming file is a string like "/uploads/logo.png"
 
+          const baseUrl = `http://${window.location.hostname}:5000`;
+
           const municipalityResponse = await fetch(
-            `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
+            `${baseUrl}/api/municipalities/${barangayData.municipalityId}`
           );
+
 
           if (municipalityResponse.ok) {
             const municipalityData = await municipalityResponse.json();
@@ -90,10 +98,11 @@ const Sidebar = () => {
       >
         <div className="flex flex-col items-center text-center mt-4">
         <img
-          src={barangayLogo ? `http://localhost:5000${barangayLogo}` : '/default-logo.png'}
+          src={barangayLogo ? `http://${window.location.hostname}:5000${barangayLogo}` : '/default-logo.png'}
           alt="barangay-logo"
           className="w-30 h-30 rounded-full border-1 border-white"
         />
+
 
         </div>
         <div className="text-lg text-center mt-2 font-bold">

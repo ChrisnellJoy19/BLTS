@@ -9,16 +9,17 @@ const DilgAdminDashboard = () => {
   const [announcement, setAnnouncement] = useState(""); // To hold the announcement text
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/municipalities") 
+    fetch(`http://${window.location.hostname}:5000/api/municipalities`)
       .then((response) => response.json())
       .then((data) => setMunicipalities(data))
       .catch((error) => console.error("Error fetching municipalities:", error));
-
-    fetch("http://localhost:5000/api/barangays") // Fetch barangays
+  
+    fetch(`http://${window.location.hostname}:5000/api/barangays`) // Fetch barangays
       .then((response) => response.json())
       .then((data) => setBarangays(data))
       .catch((error) => console.error("Error fetching barangays:", error));
   }, []);
+  
 
   const handlePostAnnouncement = () => {
     const payload = {
@@ -27,7 +28,7 @@ const DilgAdminDashboard = () => {
     };
 
     // Post the announcement (example API request)
-    fetch("http://localhost:5000/api/announcements", {
+    fetch(`http://${window.location.hostname}:5000/api/announcements`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,6 +42,7 @@ const DilgAdminDashboard = () => {
         setSelectedBarangay(""); // Reset barangay selection
       })
       .catch((error) => console.error("Error posting announcement:", error));
+    
   };
 
   return (

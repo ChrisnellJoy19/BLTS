@@ -45,9 +45,10 @@ const UserAddOrdinance = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("userToken");
-        const response = await axios.get("http://localhost:5000/api/user/me", {
+        const response = await axios.get(`http://${window.location.hostname}:5000/api/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
 
         if (response.data.barangayId) {
           setBarangayId(response.data.barangayId);
@@ -102,12 +103,13 @@ const UserAddOrdinance = () => {
     try {
       const token = localStorage.getItem("userToken");
 
-      await axios.post("http://localhost:5000/api/ordinances", formData, {
+      await axios.post(`http://${window.location.hostname}:5000/api/ordinances`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
+      
 
       alert("Document uploaded successfully!");
       navigate("/user-ordinances");
@@ -123,9 +125,10 @@ const UserAddOrdinance = () => {
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.get(
-        `http://localhost:5000/api/ordinances/check-document-title/${encodeURIComponent(title)}?barangayId=${barangayId}`,
+        `http://${window.location.hostname}:5000/api/ordinances/check-document-title/${encodeURIComponent(title)}?barangayId=${barangayId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
   
       setDocumentTitleError(response.data.exists ? "This title already exists in your barangay." : "");
     } catch (err) {
@@ -140,9 +143,10 @@ const UserAddOrdinance = () => {
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.get(
-        `http://localhost:5000/api/ordinances/check-document-number/${number}?barangayId=${barangayId}`,
+        `http://${window.location.hostname}:5000/api/ordinances/check-document-number/${number}?barangayId=${barangayId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
   
       setDocumentNumberError(response.data.exists ? "This number already exists in your barangay." : "");
     } catch (err) {

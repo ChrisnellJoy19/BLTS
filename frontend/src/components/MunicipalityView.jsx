@@ -15,7 +15,7 @@ const MunicipalityView = () => {
   useEffect(() => {
     const fetchMunicipalityData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/municipalities/${id}`);
+        const response = await fetch(`http://${window.location.hostname}:5000/api/municipalities/${id}`);
         if (!response.ok) throw new Error("Failed to fetch data");
         const data = await response.json();
         setMunicipality(data);
@@ -24,6 +24,7 @@ const MunicipalityView = () => {
         setError(err.message);
       }
     };
+    
 
     fetchMunicipalityData();
   }, [id]);

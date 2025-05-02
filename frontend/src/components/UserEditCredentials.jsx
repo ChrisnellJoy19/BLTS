@@ -90,11 +90,16 @@ const UserEditCredentials = () => {
         updatePayload.newPassword = newPassword.trim();
       }
     
-      const res = await axios.put("http://localhost:5000/api/user/update", updatePayload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `http://${window.location.hostname}:5000/api/user/update`,
+        updatePayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
     
       setMessage(res.data.message || "Profile updated successfully.");
       setCurrentPassword("");

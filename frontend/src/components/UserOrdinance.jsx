@@ -19,9 +19,10 @@ const UserOrdinance = () => {
 
     const fetchOrdinances = async () => {
       try {
+        const protocol = window.location.protocol === "https:" ? "https" : "http";
         const isDeletedParam = showDeleted ? "true" : "false";
         const response = await fetch(
-          `http://localhost:5000/api/ordinances?barangayId=${encodeURIComponent(barangayId)}&isDeleted=${isDeletedParam}`
+          `${protocol}://${window.location.hostname}:5000/api/ordinances?barangayId=${encodeURIComponent(barangayId)}&isDeleted=${isDeletedParam}`
         );
         if (!response.ok) throw new Error("Failed to fetch ordinances");
         const data = await response.json();
@@ -32,6 +33,7 @@ const UserOrdinance = () => {
         setLoading(false);
       }
     };
+    
 
     fetchOrdinances();
   }, [barangayId, showDeleted]); // Re-fetch when showDeleted changes
@@ -42,9 +44,10 @@ const UserOrdinance = () => {
 
   const handleDownload = async (fileUrl, documentTitle) => {
     try {
-      const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+      const protocol = window.location.protocol === "https:" ? "https" : "http";
+      const fullUrl = `${protocol}://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
       const response = await fetch(fullUrl, { mode: "cors" });
-  
+
       if (!response.ok) throw new Error("Failed to download file");
   
       const blob = await response.blob();
@@ -64,9 +67,11 @@ const UserOrdinance = () => {
   };
 
   const handleView = (fileUrl) => {
-    const fullUrl = `http://localhost:5000${fileUrl}`; // Ensure absolute URL
+    const protocol = window.location.protocol === "https:" ? "https" : "http";
+    const fullUrl = `${protocol}://${window.location.hostname}:5000${fileUrl}`; // Ensure absolute URL
     window.open(fullUrl, "_blank");
   };
+  
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -87,13 +92,14 @@ const UserOrdinance = () => {
     if (!window.confirm("Are you sure you want to delete this ordinance?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/ordinances/delete/${id}`, {
+      const response = await fetch(`http://${window.location.hostname}:5000/api/ordinances/delete/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
+      
 
       if (!response.ok) throw new Error("Failed to delete ordinance");
 
@@ -107,13 +113,14 @@ const UserOrdinance = () => {
 
   const handleRestore = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/ordinances/restore/${id}`, {
+      const response = await fetch(`http://${window.location.hostname}:5000/api/ordinances/restore/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
+      
   
       if (!response.ok) throw new Error("Failed to restore ordinance");
   
@@ -129,13 +136,14 @@ const UserOrdinance = () => {
     if (!window.confirm("Permanently delete this ordinance? This cannot be undone.")) return;
   
     try {
-      const response = await fetch(`http://localhost:5000/api/ordinances/permanent-delete/${id}`, {
+      const response = await fetch(`http://${window.location.hostname}:5000/api/ordinances/permanent-delete/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("userToken")}`,
         },
       });
+      
   
       if (!response.ok) throw new Error("Failed to permanently delete ordinance");
   

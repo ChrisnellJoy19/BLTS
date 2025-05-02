@@ -26,9 +26,9 @@ const BarangayProfile = () => {
         }
 
         // Fetch Barangay Data
-        const barangayResponse = await fetch(`http://localhost:5000/api/barangays/${barangayId}`, {
+        const barangayResponse = await fetch(`http://${window.location.hostname}:5000/api/barangays/${barangayId}`, {
           headers: { Authorization: `Bearer ${token}` },
-        });
+        });        
 
         if (barangayResponse.ok) {
           const barangayData = await barangayResponse.json();
@@ -36,8 +36,9 @@ const BarangayProfile = () => {
 
           // Fetch Municipality Data using municipalityId
           const municipalityResponse = await fetch(
-            `http://localhost:5000/api/municipalities/${barangayData.municipalityId}`
+            `http://${window.location.hostname}:5000/api/municipalities/${barangayData.municipalityId}`
           );
+          
 
           if (municipalityResponse.ok) {
             const municipalityData = await municipalityResponse.json();
@@ -82,11 +83,12 @@ const BarangayProfile = () => {
         {barangay && (
           <div className="bg-white text-black text-lg rounded-lg shadow-md p-4 mt-6 w-full max-w-4xl mx-auto flex flex-col sm:flex-row items-center min-h-[300px]">
           <div className="flex-shrink-0 mb-4 sm:mb-0">
-              <img
-                src={barangay.file ? `http://localhost:5000${barangay.file}` : '/default-logo.png'}
-                alt="barangay-logo"
-                className="ml-10 w-40 h-40 rounded-full border"
-              />
+          <img
+            src={barangay.file ? `http://${window.location.hostname}:5000${barangay.file}` : '/default-logo.png'}
+            alt="barangay-logo"
+            className="ml-10 w-40 h-40 rounded-full border"
+          />
+
             </div>
             <div className="flex-1 px-6 ml-10 text-center sm:text-left">
               <h2 className="text-lg font-bold">🏠 BARANGAY {barangay.name.toUpperCase()}</h2>

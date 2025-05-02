@@ -45,9 +45,11 @@ const UserAddResolution = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("userToken");
-        const response = await axios.get("http://localhost:5000/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `http://${window.location.hostname}:5000/api/user/me`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
         
   
         console.log("🟢 User Data from /me:", response.data);
@@ -111,9 +113,11 @@ const UserAddResolution = () => {
     
       console.log("FormData being sent:", Object.fromEntries(formData.entries())); // Debugging
     
-      await axios.post("http://localhost:5000/api/resolutions", formData, { 
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } 
-      });
+      await axios.post(
+        `http://${window.location.hostname}:5000/api/resolutions`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" } }
+      );
       
     
       alert("Document uploaded successfully!");
@@ -131,9 +135,10 @@ const UserAddResolution = () => {
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.get(
-        `http://localhost:5000/api/resolutions/check-document-title/${encodeURIComponent(title)}?barangayId=${barangayId}`,
+        `http://${window.location.hostname}:5000/api/resolutions/check-document-title/${encodeURIComponent(title)}?barangayId=${barangayId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
   
       setDocumentTitleError(response.data.exists ? "This title already exists in your barangay." : "");
     } catch (err) {
@@ -148,9 +153,10 @@ const UserAddResolution = () => {
     try {
       const token = localStorage.getItem("userToken");
       const response = await axios.get(
-        `http://localhost:5000/api/resolutions/check-document-number/${number}?barangayId=${barangayId}`,
+        `http://${window.location.hostname}:5000/api/resolutions/check-document-number/${number}?barangayId=${barangayId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
   
       setDocumentNumberError(response.data.exists ? "This number already exists in your barangay." : "");
     } catch (err) {
